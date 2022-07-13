@@ -71,50 +71,77 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logintekst" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
+
         android:id="@+id/emailText"
-        style="@android:style/Widget.Holo.EditText"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="27dp"
         android:layout_marginRight="25dp"
-        android:background="@drawable/input_bg"
-        android:contentDescription="Your account email"
-        android:fontFamily="@font/robotoregular"
         android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:padding="15dp"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
+        app:boxStrokeColor="#FFFFFF"
+        app:hintTextColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="#FFFFFF">
+        <EditText
+            android:id="@+id/emailTexttxt"
+            style="@android:style/Widget.Holo.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/robotoregular"
+            android:inputType="textEmailAddress"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
+
         android:id="@+id/passwordText"
-        style="@android:style/Widget.Holo.EditText"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="27dp"
         android:layout_marginRight="25dp"
-        android:background="@drawable/input_bg"
-        android:contentDescription="Your account password"
-        android:fontFamily="@font/robotoregular"
         android:hint="Password"
-        android:inputType="textPassword"
-        android:padding="15dp"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
+        app:boxStrokeColor="#FFFFFF"
+        app:hintTextColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailText"
-    />
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="#FFFFFF">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordTexttxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:background="@drawable/input_bg"
+            android:contentDescription="Your account password"
+            android:fontFamily="@font/robotoregular"
+            android:inputType="textPassword"
+            android:padding="15dp"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailText" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         style="@style/Widget.Material3.Button"

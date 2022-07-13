@@ -1,6 +1,8 @@
 package com.example.shows_your_name
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Color.red
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.widget.doAfterTextChanged
@@ -19,22 +21,24 @@ class MainActivity : AppCompatActivity() {
         var emailCorrect = false;
         var passCorrect = false;
 
-        binding.emailText.doAfterTextChanged {
+        binding.emailTexttxt.doAfterTextChanged {
             emailCorrect =
-                android.util.Patterns.EMAIL_ADDRESS.matcher(binding.emailText.text.toString()).matches()
+                android.util.Patterns.EMAIL_ADDRESS.matcher(binding.emailTexttxt.text.toString()).matches()
 
             binding.loginbtn.isEnabled = emailCorrect && passCorrect
         }
-        binding.passwordText.doAfterTextChanged {
-            passCorrect = binding.passwordText.text.toString() != ""
+        binding.passwordTexttxt.doAfterTextChanged {
+            passCorrect = binding.passwordTexttxt.text.toString() != ""
 
             binding.loginbtn.isEnabled = emailCorrect && passCorrect
         }
 
         binding.loginbtn.setOnClickListener{
             val intent = Intent(this,Activity2::class.java)
-            intent.putExtra("Username",binding.emailText.text.toString().substringBefore("@"))
+            intent.putExtra("Username",binding.emailTexttxt.text.toString().substringBefore("@"))
             startActivity(intent)
         }
     }
 }
+
+
