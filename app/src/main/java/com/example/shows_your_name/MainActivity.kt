@@ -16,10 +16,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.loginbtn.isEnabled = false
+        var emailCorrect = false;
+        var passCorrect = false;
 
         binding.emailText.doAfterTextChanged {
-            binding.loginbtn.isEnabled =
+            emailCorrect =
                 android.util.Patterns.EMAIL_ADDRESS.matcher(binding.emailText.text.toString()).matches()
+
+            binding.loginbtn.isEnabled = emailCorrect && passCorrect
+        }
+        binding.passwordText.doAfterTextChanged {
+            passCorrect = binding.passwordText.text.toString() != ""
+
+            binding.loginbtn.isEnabled = emailCorrect && passCorrect
         }
 
         binding.loginbtn.setOnClickListener{
