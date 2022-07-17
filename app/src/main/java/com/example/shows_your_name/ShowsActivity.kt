@@ -64,7 +64,10 @@ class ShowsActivity : AppCompatActivity() {
 
     private fun initShowsRecycler(){
         adapter = ShowsAdapter(shows) { show ->
-            Toast.makeText(this, show.title, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, show.title, Toast.LENGTH_SHORT).show()
+            val intent = Intent(this,ShowDetailsActivity::class.java)
+            intent.putExtra("Title",show.title)
+            startActivity(intent)
         }
 
         binding.showsRecycler.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
