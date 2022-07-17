@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Shows-your-name</string>
+    <string name="developers_name">DorianBadel</string>
+    <string name="login_app_title">Shows</string>
+    <string name="login_action_title">Login</string>
+    <string name="login_description">In order to continue please log in</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_password_desc">Your account password</string>
 </resources>
