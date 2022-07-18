@@ -23,6 +23,11 @@ class ReviewsAdapter(
         return items.count()
     }
 
+    fun addItem(review: Review) {
+        items = items + review
+        notifyItemInserted(0)
+    }
+
     inner class ReviewsViewHolder(private val binding: ViewItemReviewBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: Review){

@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shows_your_name.databinding.ActivityShowDetailsBinding
+import com.example.shows_your_name.databinding.DialogAddReviewBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class ShowDetailsActivity : AppCompatActivity() {
     companion object{
@@ -56,12 +58,15 @@ class ShowDetailsActivity : AppCompatActivity() {
         binding.showTitle.text = intent.extras?.getString("Title")
         binding.showDescription.text = intent.extras?.getString("Description")
         binding.showCoverImage.setImageResource(intent.extras!!.getInt("Image"))
-        binding.reviewsText.text = reviews.count().toString() + " REVIEWS, " + getAverageRating() + " AVERAGE"
-        binding.ratingBar.rating = getAverageRating()
+
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         initShowsRecycler()
+
+        binding.addReviewBtn.setOnClickListener {
+            showAddReviewBottomSheet()
+        }
 
 
     }
@@ -83,10 +88,34 @@ class ShowDetailsActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL,false)
 
+        binding.reviewsText.text = reviews.count().toString() + " REVIEWS, " + getAverageRating() + " AVERAGE"
+        binding.ratingBar.rating = getAverageRating()
+
         binding.recyclerView.adapter = adapter
 
         binding.recyclerView.addItemDecoration(
             DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         )
+    }
+
+    private fun showAddReviewBottomSheet(){
+        val dialog = BottomSheetDialog(this)
+
+        val bottomSheetBinding =DialogAddReviewBinding.inflate(layoutInflater)
+        dialog.setContentView(bottomSheetBinding.root)
+
+        bottomSheetBinding.submitReviewButton.setOnClickListener {
+            addShowToList(bottomSheetBinding.reviewSetRating.rating.toInt(),bottomSheetBinding.commentText.text.toString())
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun addShowToList(rating: Int, comment: String){
+        adapter.addItem(Review(reviews.last().ID+1,"name",comment,rating))
+        reviews += Review(reviews.last().ID+1,"name",comment,rating)
+        binding.reviewsText.text = reviews.count().toString() + " REVIEWS, " + getAverageRating() + " AVERAGE"
+        binding.ratingBar.rating = getAverageRating()
     }
 }
