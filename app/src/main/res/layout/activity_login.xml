@@ -46,7 +46,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/logintekst"
+        android:id="@+id/loginText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -69,7 +69,7 @@
         android:textColor="#FFFFFF"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logintekst" />
+        app:layout_constraintTop_toBottomOf="@+id/loginText" />
 
     <com.google.android.material.textfield.TextInputLayout
 
@@ -89,7 +89,6 @@
         app:layout_constraintTop_toBottomOf="@+id/loginDesc">
         <EditText
             android:id="@+id/emailTexttxt"
-            style="@android:style/Widget.Holo.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/robotoregular"
