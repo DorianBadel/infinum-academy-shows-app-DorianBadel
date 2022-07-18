@@ -109,6 +109,10 @@ class ShowDetailsActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
+        bottomSheetBinding.closeIcon.setOnClickListener {
+            dialog.dismiss()
+        }
+
         dialog.show()
     }
 
