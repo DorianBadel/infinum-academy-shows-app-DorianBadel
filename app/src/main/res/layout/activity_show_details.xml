@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".ShowDetailsActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@id/addNewBar"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+
+            >
+
+            <TextView
+                android:id="@+id/showTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="64dp"
+                android:fontFamily="@font/robotobold"
+                android:text="Shows"
+                android:textColor="@color/black"
+                android:textSize="36dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardContainer"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginRight="24dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/showTitle">
+
+                <ImageView
+                    android:id="@+id/showCoverImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:src="@drawable/ic_office" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/showDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="20dp"
+                android:text="The Office is an American mockumentary sitcom television series that depicts the everyday work lives of office employees in the Scranton, Pennsylvania, branch of the fictional Dunder Mifflin Paper Company. It aired on NBC from March 24, 2005, to May 16, 2013, lasting a total of nine seasons."
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardContainer" />
+
+            <TextView
+                android:id="@+id/reviewTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="29dp"
+                android:fontFamily="@font/robotobold"
+                android:text="Reviews"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/showDescription" />
+
+            <TextView
+                android:id="@+id/reviewsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/robotoregular"
+                android:text="REVIEWS"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@+id/reviewTitle"
+                tools:layout_editor_absoluteX="24dp" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="241dp"
+                android:layout_height="54dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="6dp"
+                android:contentDescription="rating"
+                android:isIndicator="true"
+                android:max="5"
+                android:numStars="5"
+                android:progressTint="#52368C"
+                android:rating="3.7"
+                android:stepSize="0.1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reviewsText" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ratingBar"
+                tools:listitem="@layout/view_item_review" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/addNewBar"
+        android:layout_width="match_parent"
+        android:layout_height="93dp"
+        android:background="@color/black"
+        app:cardBackgroundColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <Button
+            android:id="@+id/addReviewBtn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="24dp"
+            android:text="Write a review"
+            />
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="40dp"
+                android:layout_height="wrap_content"
+                android:text="Write a review"
+                android:fontFamily="@font/robotobold"
+                android:textSize="24dp"
+                android:textColor="@color/black"
+                />
+            <ImageView
+                android:id="@+id/close_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/close_icon"
+                android:layout_marginTop="45dp"
+                android:layout_marginLeft="157dp"
+                />
+        </LinearLayout>
+
+        <RatingBar
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="40dp"
+            android:id="@+id/reviewSetRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:progressTint="#52368C"
+            android:rating="1"
+            android:stepSize="1" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="27dp"
+            android:layout_marginRight="25dp"
+            android:hint="Comment"
+            android:textColorHint="#52368C"
+            app:boxStrokeColor="#52368C"
+            app:hintTextColor="#52368C"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reviewSetRating">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/commentText"
+                style="@android:style/Widget.Holo.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/robotoregular"
+                android:inputType="textEmailAddress"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:textColorHint="#52368C"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/submitReviewButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="24dp"
+            android:text="Write a review"
+            android:background="#52368C"
+            />
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
