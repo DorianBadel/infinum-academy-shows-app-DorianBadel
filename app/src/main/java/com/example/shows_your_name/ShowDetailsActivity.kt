@@ -16,16 +16,39 @@ class ShowDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private var reviews = listOf(
+    lateinit var reviews: List<Review>
+
+    private var reviews1 = listOf(
         Review(1,"renato.ruric","",3),
         Review(2,"gan.dalf","joooj pre dobrooooo",5)
     )
+
+    private var reviews2 = listOf(
+        Review(1,"renato.ruric","",5),
+        Review(2,"gan.dalf","joooj pre dobrooooo",5),
+        Review(3,"mark.twain","Sve u svemu savrseno",5)
+    )
+    private var reviews3 = listOf(
+        Review(1,"plenky","meh",1)
+    )
+
 
     private lateinit var binding: ActivityShowDetailsBinding
     private lateinit var adapter: ReviewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        if(intent.extras!!.getInt("ID") == 2){
+            reviews = reviews2
+
+        } else if (intent.extras!!.getInt("ID") == 3){
+            reviews = reviews3
+        } else{
+            reviews = reviews1
+        }
+
         binding = ActivityShowDetailsBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
@@ -33,7 +56,7 @@ class ShowDetailsActivity : AppCompatActivity() {
         binding.showTitle.text = intent.extras?.getString("Title")
         binding.showDescription.text = intent.extras?.getString("Description")
         binding.showCoverImage.setImageResource(intent.extras!!.getInt("Image"))
-        binding.reviewsText.text = " AVERAGE"
+        binding.reviewsText.text = reviews.count().toString() + " REVIEWS, " + getAverageRating() + " AVERAGE"
         binding.ratingBar.rating = getAverageRating()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

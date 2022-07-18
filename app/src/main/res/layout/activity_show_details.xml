@@ -77,16 +77,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/showDescription" />
 
-        <TextView
-            android:id="@+id/reviewsText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/robotoregular"
-            android:text="REVIEWS"
-            android:textSize="14sp"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
-            tools:layout_editor_absoluteX="24dp" />
+            <TextView
+                android:id="@+id/reviewsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/robotoregular"
+                android:text="REVIEWS"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                tools:layout_editor_absoluteX="24dp" />
 
             <RatingBar
                 android:id="@+id/ratingBar"

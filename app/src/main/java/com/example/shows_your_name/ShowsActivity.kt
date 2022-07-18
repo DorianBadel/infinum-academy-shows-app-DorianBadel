@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shows_your_name.databinding.ActivityShowsBinding
+import java.io.Serializable
 
 class ShowsActivity : AppCompatActivity() {
     companion object{
@@ -20,8 +21,8 @@ class ShowsActivity : AppCompatActivity() {
 
     private var shows = listOf(
         Show(1,"Office","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_office),
-        Show(2,"Stranger Things","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_stranger_things),
-        Show(3,"Krv nije voda","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_krv_nije_voda)
+        Show(2,"Stranger Things","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_stranger_things ),
+        Show(3,"Krv nije voda","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_krv_nije_voda )
     )
 
     private lateinit var binding: ActivityShowsBinding
@@ -69,6 +70,7 @@ class ShowsActivity : AppCompatActivity() {
             intent.putExtra("Title",show.title)
             intent.putExtra("Description",show.desc)
             intent.putExtra("Image",show.imageResourceId)
+            intent.putExtra("ID",show.ID)
             startActivity(intent)
         }
 

@@ -41,7 +41,6 @@
         android:text="3"
         android:textColor="#52368C"
         android:textSize="15sp"
-        android:layout_marginRight="45dp"
         android:layout_marginLeft="334dp"
         app:layout_constraintEnd_toStartOf="@+id/ratingBar2"
         app:layout_constraintTop_toTopOf="parent" />
