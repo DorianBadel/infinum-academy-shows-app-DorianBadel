@@ -67,6 +67,8 @@ class ShowsActivity : AppCompatActivity() {
             //Toast.makeText(this, show.title, Toast.LENGTH_SHORT).show()
             val intent = Intent(this,ShowDetailsActivity::class.java)
             intent.putExtra("Title",show.title)
+            intent.putExtra("Description",show.desc)
+            intent.putExtra("Image",show.imageResourceId)
             startActivity(intent)
         }
 
