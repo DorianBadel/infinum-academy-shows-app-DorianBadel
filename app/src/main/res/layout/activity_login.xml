@@ -59,7 +59,7 @@
         app:layout_constraintTop_toBottomOf="@+id/playicon" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/loginDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -86,7 +86,7 @@
         app:hintTextColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
+        app:layout_constraintTop_toBottomOf="@+id/loginDesc">
         <EditText
             android:id="@+id/emailTexttxt"
             style="@android:style/Widget.Holo.EditText"
@@ -97,10 +97,7 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            android:textColorHint="#FFFFFF"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

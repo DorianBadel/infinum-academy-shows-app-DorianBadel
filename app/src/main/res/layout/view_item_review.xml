@@ -43,11 +43,11 @@
             android:text="3"
             android:textColor="#52368C"
             android:textSize="15sp"
-            app:layout_constraintEnd_toStartOf="@+id/ratingBar2"
+            app:layout_constraintEnd_toStartOf="@+id/reviewStarIcon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <RatingBar
-            android:id="@+id/ratingBar2"
+            android:id="@+id/reviewStarIcon"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="16dp"
             android:layout_height="16dp"
