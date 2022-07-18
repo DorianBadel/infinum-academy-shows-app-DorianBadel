@@ -64,12 +64,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/showDescription" />
 
+    <TextView
+        android:id="@+id/reviewsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="<n> REVIEWS, <n> AVERAGE"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:fontFamily="@font/robotoregular"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="241dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="6dp"
+        android:max="5"
+        android:numStars="5"
+        android:progressTint="#52368C"
+        android:rating="5"
+        android:stepSize="2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reviewsText" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        tools:listitem="@layout/view_show_card"
-    />
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
+        tools:listitem="@layout/view_show_card" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
