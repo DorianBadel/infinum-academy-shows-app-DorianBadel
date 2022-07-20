@@ -10,11 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.shows_your_name.databinding.ActivityShowsBinding
-import com.example.shows_your_name.databinding.FragmentLoginFraagmentBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
 
 
@@ -77,7 +73,7 @@ class ShowsFragment : Fragment() {
 
     companion object{
         fun buildIntent(activity: Activity): Intent {
-            return Intent(activity, ShowsActivity::class.java)
+            return Intent(activity, ShowsFragment::class.java)
         }
     }
 

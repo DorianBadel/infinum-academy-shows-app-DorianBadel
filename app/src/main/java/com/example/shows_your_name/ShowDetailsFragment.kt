@@ -14,16 +14,14 @@ import androidx.fragment.app.commit
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.shows_your_name.databinding.ActivityShowDetailsBinding
 import com.example.shows_your_name.databinding.DialogAddReviewBinding
-import com.example.shows_your_name.databinding.FragmentLoginFraagmentBinding
 import com.example.shows_your_name.databinding.FragmentShowDetailsBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class ShowDetailsFragment : Fragment() {
     companion object {
         fun buildIntent(activity: Activity): Intent {
-            return Intent(activity, ShowDetailsActivity::class.java)
+            return Intent(activity, ShowDetailsFragment::class.java)
         }
     }
 
