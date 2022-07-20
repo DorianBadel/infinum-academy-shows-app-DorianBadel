@@ -34,13 +34,11 @@ class ShowDetailsActivity : AppCompatActivity() {
         Review(1,"plenky","meh",1)
     )
 
-
     private lateinit var binding: ActivityShowDetailsBinding
     private lateinit var adapter: ReviewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         if(intent.extras!!.getInt("ID") == 2){
             reviews = reviews2
@@ -58,9 +56,6 @@ class ShowDetailsActivity : AppCompatActivity() {
         binding.showTitle.text = intent.extras?.getString("Title")
         binding.showDescription.text = intent.extras?.getString("Description")
         binding.showCoverImage.setImageResource(intent.extras!!.getInt("Image"))
-
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         initShowsRecycler()
 
@@ -84,6 +79,8 @@ class ShowDetailsActivity : AppCompatActivity() {
         adapter = ReviewsAdapter(reviews) { review ->
             Toast.makeText(this, review.username, Toast.LENGTH_SHORT).show()
         }
+
+
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL,false)
@@ -117,8 +114,10 @@ class ShowDetailsActivity : AppCompatActivity() {
     }
 
     private fun addShowToList(rating: Int, comment: String){
-        adapter.addItem(Review(reviews.last().ID+1,"name",comment,rating))
-        reviews += Review(reviews.last().ID+1,"name",comment,rating)
+        adapter.addItem(Review(reviews.last().ID+1,intent.extras?.getString("Username").toString(),comment,rating))
+        reviews += Review(reviews.last().ID+1,intent.extras?.getString("Username").toString(),comment,rating)
+
+        //updates statistics
         binding.reviewsText.text = reviews.count().toString() + " REVIEWS, " + getAverageRating() + " AVERAGE"
         binding.ratingBar.rating = getAverageRating()
     }

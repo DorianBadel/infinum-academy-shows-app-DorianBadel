@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.loginbtn.setOnClickListener{
             val intent = ShowsActivity.buildIntent(this)
-            //intent.putExtra("Username",binding.emailTexttxt.text.toString().substringBefore("@"))
+            intent.putExtra("Username",binding.emailTexttxt.text.toString().substringBefore("@"))
             startActivity(intent)
         }
     }

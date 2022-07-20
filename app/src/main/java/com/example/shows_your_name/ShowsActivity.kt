@@ -27,12 +27,15 @@ class ShowsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityShowsBinding
     private lateinit var adapter: ShowsAdapter
+    lateinit var username : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityShowsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        username = intent.extras?.getString("Username").toString()
 
 
         binding.showHideShows.setOnClickListener{
@@ -71,16 +74,14 @@ class ShowsActivity : AppCompatActivity() {
             intent.putExtra("Description",show.desc)
             intent.putExtra("Image",show.imageResourceId)
             intent.putExtra("ID",show.ID)
+            intent.putExtra("Username", username)
+
             startActivity(intent)
         }
 
         binding.showsRecycler.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
 
         binding.showsRecycler.adapter = adapter
-
-        binding.showsRecycler.addItemDecoration(
-            DividerItemDecoration(this,DividerItemDecoration.VERTICAL)
-        )
     }
 
     private fun initLoadItemsButton(){
