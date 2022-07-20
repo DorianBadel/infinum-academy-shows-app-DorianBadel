@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shows_your_name.databinding.FragmentShowsBinding
 
@@ -53,7 +54,7 @@ class ShowsFragment : Fragment() {
                 binding.noShowsIco.isVisible = false
                 binding.noShowsText.isVisible = false
                 binding.showsRecycler.isVisible = true
-                initShowsRecycler(view)
+                initShowsRecycler()
                 binding.showHideShows.text = "Hide"
             }
         }
@@ -65,7 +66,7 @@ class ShowsFragment : Fragment() {
         } else{
             binding.noShowsIco.isVisible = false
             binding.noShowsText.isVisible = false
-            initShowsRecycler(view)
+            initShowsRecycler()
         }
 
 
@@ -77,8 +78,9 @@ class ShowsFragment : Fragment() {
         }
     }
 
-    private fun initShowsRecycler(view: View){
+    private fun initShowsRecycler(){
         adapter = ShowsAdapter(shows) { show ->
+
             val bundle = bundleOf(
                 "Title" to show.title,
                 "Description" to show.desc,
@@ -86,12 +88,8 @@ class ShowsFragment : Fragment() {
                 "ID" to show.ID,
                 "Username" to username
             )
-            val activity = requireView().context as AppCompatActivity
-            val test = ShowDetailsFragment()
-            activity.supportFragmentManager.beginTransaction().replace(R.id.to_showDetailsFragment, test)
-            //val intent = Intent(this,findNavController().navigate(R.id.to_showsFragment,bundle))
 
-            //startActivity(intent)
+            findNavController().navigate(R.id.to_showDetailsFragment,bundle)
         }
 
         binding.showsRecycler.layoutManager = LinearLayoutManager(requireView().context,
