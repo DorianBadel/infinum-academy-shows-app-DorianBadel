@@ -57,6 +57,13 @@ class ShowDetailsActivity : AppCompatActivity() {
         binding.showDescription.text = intent.extras?.getString("Description")
         binding.showCoverImage.setImageResource(intent.extras!!.getInt("Image"))
 
+        binding.toolbarBackBtn.setOnClickListener {
+            val intent = ShowsActivity.buildIntent(this)
+            intent.putExtra("Username",intent.extras?.getString("Username").toString())
+            startActivity(intent)
+        }
+
+
         initShowsRecycler()
 
         binding.addReviewBtn.setOnClickListener {
