@@ -30,5 +30,8 @@
         <action
             android:id="@+id/to_showDetailsFragment"
             app:destination="@id/showDetailsFragment" />
+        <action
+            android:id="@+id/to_loginFraagment"
+            app:destination="@id/loginFraagment" />
     </fragment>
 </navigation>

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.commit
 import androidx.navigation.fragment.findNavController
@@ -30,8 +31,6 @@ class ShowDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: ReviewsAdapter
 
-
-    private var username: String? = null
 
     private var reviews1 = listOf(
         Review(1, "renato.ruric", "", 3),
@@ -62,7 +61,7 @@ class ShowDetailsFragment : Fragment() {
         val title = arguments?.getString("Title").toString()
         val description = arguments?.getString("Description").toString()
         val imageId = arguments?.getInt("Image")
-        username = arguments?.getString("Username")
+        var username = arguments?.getString("Username")
 
 
 
@@ -85,7 +84,7 @@ class ShowDetailsFragment : Fragment() {
             val bundle = bundleOf("Username" to username)
             findNavController().navigate(R.id.to_showsFragment, bundle)
         }
-        initShowsRecycler(view)
+        initShowsRecycler()
 
         binding.addReviewBtn.setOnClickListener {
             showAddReviewBottomSheet()
@@ -101,9 +100,10 @@ class ShowDetailsFragment : Fragment() {
         return total.toFloat() / reviews.count()
     }
 
-    private fun initShowsRecycler(view: View) {
+    private fun initShowsRecycler() {
         adapter = ReviewsAdapter(reviews) { review ->
         }
+
         binding.recyclerView.layoutManager = LinearLayoutManager(
             requireView().context,
             LinearLayoutManager.VERTICAL, false
@@ -142,8 +142,8 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun addShowToList(rating: Int, comment: String) {
-        adapter.addItem(Review(reviews.last().ID + 1, username.toString(), comment, rating))
-        reviews += Review(reviews.last().ID + 1, username.toString(), comment, rating)
+        adapter.addItem(Review(reviews.last().ID + 1, arguments?.getString("Username").toString(), comment, rating))
+        reviews += Review(reviews.last().ID + 1, arguments?.getString("Username").toString(), comment, rating)
 
 
         //updates statistics

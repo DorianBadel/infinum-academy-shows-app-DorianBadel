@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         >
 
-        <Toolbar
+        <com.google.android.material.navigation.NavigationView
             android:id="@+id/detailShowsNav"
             android:layout_width="0dp"
             android:layout_height="56dp"
@@ -39,7 +39,7 @@
                 />
 
 
-        </Toolbar>
+        </com.google.android.material.navigation.NavigationView>
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/showScrollView"

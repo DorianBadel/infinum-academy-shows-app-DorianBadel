@@ -69,6 +69,10 @@ class ShowsFragment : Fragment() {
             initShowsRecycler()
         }
 
+        binding.navbarLogoutBtn.setOnClickListener{
+            findNavController().navigate(R.id.to_loginFraagment)
+        }
+
 
     }
 
@@ -86,7 +90,7 @@ class ShowsFragment : Fragment() {
                 "Description" to show.desc,
                 "Image" to show.imageResourceId,
                 "ID" to show.ID,
-                "Username" to username
+                "Username" to arguments?.getString("Username").toString()
             )
 
             findNavController().navigate(R.id.to_showDetailsFragment,bundle)
