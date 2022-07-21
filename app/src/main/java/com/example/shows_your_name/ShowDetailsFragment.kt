@@ -102,9 +102,8 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun initShowsRecycler(view: View) {
-        /*adapter = ReviewsAdapter(reviews) { review ->
-            Toast.makeText(this, review.username, Toast.LENGTH_SHORT).show()
-        }*/
+        adapter = ReviewsAdapter(reviews) { review ->
+        }
         binding.recyclerView.layoutManager = LinearLayoutManager(
             requireView().context,
             LinearLayoutManager.VERTICAL, false

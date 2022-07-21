@@ -27,7 +27,7 @@ class ShowsFragment : Fragment() {
         Show(3,"Krv nije voda","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_krv_nije_voda )
     )
 
-    private lateinit var adapter: ShowsAdapter //TODO
+    private lateinit var adapter: ShowsAdapter
     lateinit var username : String
 
     override fun onCreateView(
@@ -92,7 +92,7 @@ class ShowsFragment : Fragment() {
             findNavController().navigate(R.id.to_showDetailsFragment,bundle)
         }
 
-        binding.showsRecycler.layoutManager = LinearLayoutManager(requireView().context,
+        binding.showsRecycler.layoutManager = LinearLayoutManager(activity,
             LinearLayoutManager.VERTICAL,false)
 
         binding.showsRecycler.adapter = adapter
