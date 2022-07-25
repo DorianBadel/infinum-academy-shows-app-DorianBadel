@@ -1,22 +1,22 @@
 package com.example.shows_your_name
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.shows_your_name.databinding.DialogAddReviewBinding
 import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -29,9 +29,11 @@ class ShowsFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var sharedPreferencesValue: SharedPreferences
+    private lateinit var sharedPreferencesProfileImage: SharedPreferences
 
     private val IS_REMEMBERED = "IS_REMEMBERED"
     private val REMEMBERED_USER = "REMEMBERED_USER"
+    private val REMEMBERED_PHOTO = "REMEMBERED_PHOTO"
 
     private var shows = listOf(
         Show(1,"Office","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_office),
@@ -47,6 +49,7 @@ class ShowsFragment : Fragment() {
 
         sharedPreferences = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE)
         sharedPreferencesValue = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
+        sharedPreferencesProfileImage = requireContext().getSharedPreferences("Image",Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -61,6 +64,9 @@ class ShowsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         username = arguments?.getString("Username").toString()
+        sharedPreferencesProfileImage.edit{
+            //TODO set default image
+        }
 
         binding.showHideShows.setOnClickListener{
             if(binding.showHideShows.text == "Hide"){
@@ -127,6 +133,18 @@ class ShowsFragment : Fragment() {
 
         bottomSheetBinding.txtUsername.text = arguments?.getString("Username").toString()
 
+        //Change profile picture btn
+
+        bottomSheetBinding.btnChangeProfilePic.setOnClickListener {
+            val takePictureIntent =  Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+            if(true){
+                startActivityForResult(takePictureIntent,123)
+            }
+        }
+
+        //Logout button
+
         bottomSheetBinding.btnDialogLogOut.setOnClickListener{
 
             var builder = AlertDialog.Builder(activity)
@@ -160,4 +178,13 @@ class ShowsFragment : Fragment() {
 
         dialog.show()
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 123 && resultCode == RESULT_OK){
+            //TODO get the data from the camera and save it
+            //data?.extras?.get("data") as Int
+        }
+    }
+
 }
