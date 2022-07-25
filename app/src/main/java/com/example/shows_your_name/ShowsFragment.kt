@@ -1,6 +1,7 @@
 package com.example.shows_your_name
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -128,17 +129,33 @@ class ShowsFragment : Fragment() {
 
         bottomSheetBinding.btnDialogLogOut.setOnClickListener{
 
-            sharedPreferences = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE)
-            sharedPreferencesValue = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
-            sharedPreferences.edit {
-                putBoolean(IS_REMEMBERED, false)
-            }
-            sharedPreferencesValue.edit{
-                putString(REMEMBERED_USER, "")
-            }
+            var builder = AlertDialog.Builder(activity)
 
-            findNavController().navigate(R.id.to_loginFraagment)
-            dialog.dismiss()
+            builder.setTitle("You will leave your shows behind")
+                .setMessage("Are you sure you want to log out?")
+                .setCancelable(true)
+                .setPositiveButton("Yes"){dialogInterface,it ->
+                    //Log out
+                    sharedPreferences = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE)
+                    sharedPreferencesValue = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
+                    sharedPreferences.edit {
+                        putBoolean(IS_REMEMBERED, false)
+                    }
+                    sharedPreferencesValue.edit{
+                        putString(REMEMBERED_USER, "")
+                    }
+
+                    findNavController().navigate(R.id.to_loginFraagment)
+                    dialog.dismiss()
+                    //Log out
+
+                }
+                .setNegativeButton("No"){dialogInterface,it ->
+                    dialogInterface.cancel()
+                }
+                .show()
+
+
         }
 
         dialog.show()
