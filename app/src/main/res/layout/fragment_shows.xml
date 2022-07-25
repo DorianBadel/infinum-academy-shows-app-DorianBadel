@@ -33,6 +33,16 @@
                 android:text="Log out"
                 />
 
+            <ImageView
+                android:id="@+id/btnProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="344dp"
+                android:layout_marginRight="34dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/profile_ico"
+                />
+
         </com.google.android.material.navigation.NavigationView>
 
         <TextView

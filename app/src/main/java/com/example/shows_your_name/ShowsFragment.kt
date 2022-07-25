@@ -15,8 +15,10 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.shows_your_name.databinding.DialogAddReviewBinding
+import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
-
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
 class ShowsFragment : Fragment() {
@@ -59,9 +61,6 @@ class ShowsFragment : Fragment() {
 
         username = arguments?.getString("Username").toString()
 
-        binding.navbarLogoutBtn.text = arguments?.getString("Username").toString()
-
-
         binding.showHideShows.setOnClickListener{
             if(binding.showHideShows.text == "Hide"){
                 binding.noShowsIco.isVisible = true
@@ -77,7 +76,6 @@ class ShowsFragment : Fragment() {
             }
         }
 
-
         if(shows.isNullOrEmpty()){
             binding.noShowsIco.isVisible = true
             binding.noShowsText.isVisible = true
@@ -87,18 +85,8 @@ class ShowsFragment : Fragment() {
             initShowsRecycler()
         }
 
-        binding.navbarLogoutBtn.setOnClickListener{
-
-            sharedPreferences = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE)
-            sharedPreferencesValue = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
-            sharedPreferences.edit {
-                putBoolean(IS_REMEMBERED, false)
-            }
-            sharedPreferencesValue.edit{
-                putString(REMEMBERED_USER, "")
-            }
-
-            findNavController().navigate(R.id.to_loginFraagment)
+        binding.btnProfile.setOnClickListener {
+            showProfileBottomSheet()
         }
 
 
@@ -128,5 +116,31 @@ class ShowsFragment : Fragment() {
             LinearLayoutManager.VERTICAL,false)
 
         binding.showsRecycler.adapter = adapter
+    }
+
+    private fun showProfileBottomSheet(){
+        val dialog = BottomSheetDialog(requireView().context)
+
+        val bottomSheetBinding = DialogProfileBinding.inflate(layoutInflater)
+        dialog.setContentView(bottomSheetBinding.root)
+
+        bottomSheetBinding.txtUsername.text = arguments?.getString("Username").toString()
+
+        bottomSheetBinding.btnDialogLogOut.setOnClickListener{
+
+            sharedPreferences = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE)
+            sharedPreferencesValue = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
+            sharedPreferences.edit {
+                putBoolean(IS_REMEMBERED, false)
+            }
+            sharedPreferencesValue.edit{
+                putString(REMEMBERED_USER, "")
+            }
+
+            findNavController().navigate(R.id.to_loginFraagment)
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
