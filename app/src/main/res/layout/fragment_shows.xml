@@ -21,17 +21,6 @@
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/navbar"
             >
-            <Button
-                android:id="@+id/navbarLogoutBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/robotobold"
-                android:textSize="16sp"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="16dp"
-                android:textColor="#FFFFFF"
-                android:text="Log out"
-                />
 
             <ImageView
                 android:id="@+id/btnProfile"
