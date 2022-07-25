@@ -1,13 +1,16 @@
 package com.example.shows_your_name
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -21,6 +24,12 @@ class ShowsFragment : Fragment() {
     private var _binding: FragmentShowsBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var sharedPreferencesValue: SharedPreferences
+
+    private val IS_REMEMBERED = "IS_REMEMBERED"
+    private val REMEMBERED_USER = "REMEMBERED_USER"
+
     private var shows = listOf(
         Show(1,"Office","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_office),
         Show(2,"Stranger Things","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_stranger_things ),
@@ -29,6 +38,13 @@ class ShowsFragment : Fragment() {
 
     private lateinit var adapter: ShowsAdapter
     lateinit var username : String
+
+    override fun onCreate(savedInstanceState: Bundle?){
+        super.onCreate(savedInstanceState)
+
+        sharedPreferences = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE)
+        sharedPreferencesValue = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +58,8 @@ class ShowsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         username = arguments?.getString("Username").toString()
+
+        binding.navbarLogoutBtn.text = arguments?.getString("Username").toString()
 
 
         binding.showHideShows.setOnClickListener{
@@ -70,6 +88,16 @@ class ShowsFragment : Fragment() {
         }
 
         binding.navbarLogoutBtn.setOnClickListener{
+
+            sharedPreferences = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE)
+            sharedPreferencesValue = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
+            sharedPreferences.edit {
+                putBoolean(IS_REMEMBERED, false)
+            }
+            sharedPreferencesValue.edit{
+                putString(REMEMBERED_USER, "")
+            }
+
             findNavController().navigate(R.id.to_loginFraagment)
         }
 
