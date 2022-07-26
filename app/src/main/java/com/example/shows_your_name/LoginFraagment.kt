@@ -20,14 +20,18 @@ class LoginFraagment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
+
+    //Constants
     private val IS_REMEMBERED = "IS_REMEMBERED"
     private val REMEMBERED_USER = "REMEMBERED_USER"
+    private val ctUser = "User"
+    private val ctUsername = "Username"
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
 
-        sharedPreferences = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE)
-        sharedPreferences = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -47,7 +51,7 @@ class LoginFraagment : Fragment() {
         val username = sharedPreferences.getString(REMEMBERED_USER, "")
 
         if(isRemembered){
-            val bundle = bundleOf("Username" to username)
+            val bundle = bundleOf(ctUsername to username)
             findNavController().navigate(R.id.to_showsFragment,bundle)
         }
 
@@ -70,7 +74,7 @@ class LoginFraagment : Fragment() {
 
         binding.loginbtn.setOnClickListener{
 
-            val bundle = bundleOf("Username" to binding.emailTexttxt.text.toString().substringBefore("@"))
+            val bundle = bundleOf(ctUsername to binding.emailTexttxt.text.toString().substringBefore("@"))
 
             findNavController().navigate(R.id.to_showsFragment,bundle)
             //val intent = ShowsActivity.buildIntent(this)
