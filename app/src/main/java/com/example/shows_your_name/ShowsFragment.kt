@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shows_your_name.databinding.DialogProfileBinding
@@ -39,11 +40,9 @@ class ShowsFragment : Fragment() {
     private val REMEMBERED_USER = "REMEMBERED_USER"
     private val REMEMBERED_PHOTO = "REMEMBERED_PHOTO"
 
-    private var shows = listOf(
-        Show(1,"Office","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_office),
-        Show(2,"Stranger Things","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_stranger_things ),
-        Show(3,"Krv nije voda","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_krv_nije_voda )
-    )
+    private val viewModel by viewModels<ShowsViewModel>()
+
+
 
     private lateinit var adapter: ShowsAdapter
     lateinit var username : String
@@ -85,7 +84,7 @@ class ShowsFragment : Fragment() {
             }
         }
 
-        if(shows.isNullOrEmpty()){
+        if(viewModel.listOfShowsLiveData.value.isNullOrEmpty()){
             binding.noShowsIco.isVisible = true
             binding.noShowsText.isVisible = true
         } else{
@@ -108,7 +107,7 @@ class ShowsFragment : Fragment() {
     }
 
     private fun initShowsRecycler(){
-        adapter = ShowsAdapter(shows) { show ->
+        adapter = ShowsAdapter(viewModel.listOfShowsLiveData.value!!) { show ->
 
             val bundle = bundleOf(
                 "Title" to show.title,
