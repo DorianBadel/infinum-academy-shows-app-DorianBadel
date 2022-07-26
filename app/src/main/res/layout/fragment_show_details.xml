@@ -62,23 +62,23 @@
                     android:id="@+id/showTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="23dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="64dp"
                     android:fontFamily="@font/robotobold"
                     android:text="Shows"
                     android:textColor="@color/black"
-                    android:textSize="36dp"
+                    android:textSize="32dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="350dp"
+                    android:layout_height="352dp"
                     android:layout_marginLeft="24dp"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginTop="32dp"
                     android:layout_marginRight="24dp"
-                    app:cardCornerRadius="12dp"
+                    app:cardCornerRadius="16dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/showTitle">
 
@@ -95,10 +95,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="24dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="24dp"
                     android:text="The Office is an American mockumentary sitcom television series that depicts the everyday work lives of office employees in the Scranton, Pennsylvania, branch of the fictional Dunder Mifflin Paper Company. It aired on NBC from March 24, 2005, to May 16, 2013, lasting a total of nine seasons."
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cardContainer" />
 
@@ -107,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="24dp"
-                    android:layout_marginTop="29dp"
+                    android:layout_marginTop="32dp"
                     android:fontFamily="@font/robotobold"
                     android:text="Reviews"
                     android:textColor="@color/black"
@@ -124,16 +124,16 @@
                     android:fontFamily="@font/robotoregular"
                     android:text="REVIEWS"
                     android:textColor="#000000"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     app:layout_constraintTop_toBottomOf="@+id/reviewTitle"
                     tools:layout_editor_absoluteX="24dp" />
 
                 <RatingBar
                     android:id="@+id/ratingBar"
-                    android:layout_width="241dp"
-                    android:layout_height="54dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_width="240dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
                     android:contentDescription="rating"
                     android:isIndicator="true"
                     android:max="5"
@@ -161,7 +161,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/addNewBar"
             android:layout_width="match_parent"
-            android:layout_height="93dp"
+            android:layout_height="96dp"
             android:background="@color/black"
             app:cardBackgroundColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent">

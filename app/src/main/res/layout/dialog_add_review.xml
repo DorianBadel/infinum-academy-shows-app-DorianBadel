@@ -32,8 +32,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/close_icon"
-                android:layout_marginTop="45dp"
-                android:layout_marginLeft="157dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginLeft="152dp"
                 />
         </LinearLayout>
 
@@ -52,9 +52,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="27dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="24dp"
             android:hint="Comment"
             android:textColorHint="#52368C"
             app:boxStrokeColor="#52368C"

@@ -3,18 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#FFFFFF"
-    android:paddingBottom="34dp">
+    android:paddingBottom="32dp">
 
     <ImageView
         android:id="@+id/imgProfile"
-        android:layout_width="95dp"
-        android:layout_height="95dp"
-        android:src="@drawable/profile_ico"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        tools:src="@drawable/profile_ico"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="32dp"
         />
 
     <TextView
@@ -23,11 +24,11 @@
         android:layout_height="wrap_content"
         android:textSize="24dp"
         android:fontFamily="@font/robotobold"
-        android:text="Test"
+        tools:text="Test"
         app:layout_constraintTop_toBottomOf="@id/imgProfile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="32dp"
         />
 
     <Button
@@ -43,7 +44,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textSize="17sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtUsername" />
@@ -62,7 +63,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textSize="17sp"
+        android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@+id/btnChangeProfilePic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

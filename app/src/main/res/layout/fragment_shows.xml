@@ -24,10 +24,10 @@
 
             <ImageView
                 android:id="@+id/btnProfile"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginLeft="344dp"
-                android:layout_marginRight="34dp"
+                android:layout_marginRight="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="24dp"
                 android:src="@drawable/profile_ico"
@@ -39,12 +39,12 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="23dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/robotobold"
             android:text="Shows"
             android:textColor="@color/black"
-            android:textSize="36dp"
+            android:textSize="32dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/navbar" />
 
@@ -75,7 +75,7 @@
             android:text="Your shows are not showing. Get it? "
             android:textAlignment="center"
             android:textColor="#808080"
-            android:textSize="17dp"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/noShowsIco" />
 
@@ -83,7 +83,7 @@
             android:id="@+id/showHideShows"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:padding="8dp"
             android:text="Hide"
             android:layout_marginRight="16dp"
             android:textColor="@color/white"

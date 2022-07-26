@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardContainer"
         android:layout_width="match_parent"
-        android:layout_height="302dp"
+        android:layout_height="304dp"
         android:layout_margin="16dp"
         app:cardCornerRadius="8dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,13 +21,13 @@
             <ImageView
                 android:id="@+id/cardImage"
                 android:layout_width="match_parent"
-                android:layout_height="193dp"
+                android:layout_height="192dp"
                 android:scaleType="centerCrop"
                 tools:src="@drawable/ic_office" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="109dp"
+                android:layout_height="104dp"
                 android:layout_gravity="bottom"
                 android:background="#FFFFFF" />
 
@@ -35,10 +35,10 @@
                 android:id="@+id/cardTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="193dp"
+                android:layout_marginTop="192dp"
                 android:padding="16dp"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 tools:text="The Office" />
 
@@ -46,10 +46,10 @@
                 android:id="@+id/cardDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="237dp"
+                android:layout_marginTop="240dp"
                 android:padding="16dp"
                 android:textColor="#60000000"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" />
 
