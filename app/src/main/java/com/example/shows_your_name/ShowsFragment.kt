@@ -70,6 +70,7 @@ class ShowsFragment : Fragment() {
         sharedPreferencesProfileImage = requireContext().getSharedPreferences("HAS_PHOTO",Context.MODE_PRIVATE)
 
         binding.showHideShows.setOnClickListener{
+
             if(binding.showHideShows.text == "Hide"){
                 binding.noShowsIco.isVisible = true
                 binding.noShowsText.isVisible = true
@@ -82,6 +83,7 @@ class ShowsFragment : Fragment() {
                 initShowsRecycler()
                 binding.showHideShows.text = "Hide"
             }
+
         }
 
         if(viewModel.listOfShowsLiveData.value.isNullOrEmpty()){
@@ -107,23 +109,30 @@ class ShowsFragment : Fragment() {
     }
 
     private fun initShowsRecycler(){
-        adapter = ShowsAdapter(viewModel.listOfShowsLiveData.value!!) { show ->
+        viewModel.listOfShowsLiveData.observe(viewLifecycleOwner){ Shows ->
 
-            val bundle = bundleOf(
-                "Title" to show.title,
-                "Description" to show.desc,
-                "Image" to show.imageResourceId,
-                "ID" to show.ID,
-                "Username" to arguments?.getString("Username").toString()
-            )
+            adapter = ShowsAdapter(Shows) { show ->
 
-            findNavController().navigate(R.id.to_showDetailsFragment,bundle)
+                val bundle = bundleOf(
+                    "Title" to show.title,
+                    "Description" to show.desc,
+                    "Image" to show.imageResourceId,
+                    "ID" to show.ID,
+                    "Username" to arguments?.getString("Username").toString()
+                )
+
+                findNavController().navigate(R.id.to_showDetailsFragment, bundle)
+            }
+            binding.showsRecycler.layoutManager = LinearLayoutManager(activity,
+                LinearLayoutManager.VERTICAL,false)
+
+            binding.showsRecycler.adapter = adapter
+
         }
 
-        binding.showsRecycler.layoutManager = LinearLayoutManager(activity,
-            LinearLayoutManager.VERTICAL,false)
 
-        binding.showsRecycler.adapter = adapter
+
+
     }
 
     private fun showProfileBottomSheet(){
@@ -144,12 +153,10 @@ class ShowsFragment : Fragment() {
                 dialog.dismiss()
             }
         }
-        val byteArr = ByteArrayOutputStream()
-        val img = BitmapFactory.decodeResource(getResources(), R.drawable.profile_ico)
-        img.compress(Bitmap.CompressFormat.PNG, 100, byteArr)
-        val base64 = byteArr.toByteArray()
-        val encoded = Base64.encodeToString(base64,Base64.DEFAULT)
+        val encoded = viewModel.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profile_ico))
+
         val profilePhoto = sharedPreferencesProfileImage.getString(REMEMBERED_PHOTO, encoded )
+
         val decoded = Base64.decode(profilePhoto, Base64.DEFAULT)
         bottomSheetBinding.imgProfile.setImageBitmap(BitmapFactory.decodeByteArray(decoded, 0, decoded.size))
 
@@ -173,11 +180,7 @@ class ShowsFragment : Fragment() {
                         putString(REMEMBERED_USER, "")
                     }
                     sharedPreferencesProfileImage.edit{
-                        val byteArr = ByteArrayOutputStream()
-                        val img = BitmapFactory.decodeResource(getResources(), R.drawable.profile_ico)
-                        img.compress(Bitmap.CompressFormat.PNG, 100, byteArr)
-                        val base64 = byteArr.toByteArray()
-                        val encoded = Base64.encodeToString(base64,Base64.DEFAULT)
+                        val encoded = viewModel.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profile_ico))
                         putString(REMEMBERED_PHOTO,encoded)
                     }
 
@@ -202,11 +205,7 @@ class ShowsFragment : Fragment() {
         if(requestCode == 123 && resultCode == RESULT_OK){
             sharedPreferencesProfileImage.edit{
                 //An image becomes a string voodoo
-                val byteArr = ByteArrayOutputStream()
-                val img = data?.extras?.get("data") as Bitmap
-                img.compress(Bitmap.CompressFormat.PNG, 100, byteArr)
-                val base64 = byteArr.toByteArray()
-                val encoded = Base64.encodeToString(base64,Base64.DEFAULT)
+                val encoded = viewModel.getStringFromBitmap(data?.extras?.get("data") as Bitmap)
                putString(REMEMBERED_PHOTO,encoded)
             }
         }
