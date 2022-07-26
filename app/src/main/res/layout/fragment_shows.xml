@@ -37,7 +37,7 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
@@ -46,14 +46,19 @@
             android:textColor="@color/black"
             android:textSize="32dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/navbar" />
+            app:layout_constraintTop_toBottomOf="@id/navbar"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="136dp"
+            android:layout_marginTop="8dp"
             android:id="@+id/showsRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             tools:listitem="@layout/view_show_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
 
         <ImageView
@@ -68,16 +73,18 @@
 
         <TextView
             android:id="@+id/noShowsText"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
             android:layout_marginTop="26dp"
             android:text="Your shows are not showing. Get it? "
             android:textAlignment="center"
             android:textColor="#808080"
             android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/noShowsIco" />
+            app:layout_constraintTop_toBottomOf="@+id/noShowsIco"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <Button
             android:id="@+id/showHideShows"

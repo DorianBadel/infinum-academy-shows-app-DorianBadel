@@ -68,8 +68,7 @@
                     android:text="Shows"
                     android:textColor="@color/black"
                     android:textSize="32dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardContainer"
@@ -78,9 +77,7 @@
                     android:layout_marginLeft="24dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginRight="24dp"
-                    app:cardCornerRadius="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/showTitle">
+                    app:cardCornerRadius="16dp">
 
                     <ImageView
                         android:id="@+id/showCoverImage"
@@ -98,9 +95,7 @@
                     android:layout_marginTop="24dp"
                     android:text="The Office is an American mockumentary sitcom television series that depicts the everyday work lives of office employees in the Scranton, Pennsylvania, branch of the fictional Dunder Mifflin Paper Company. It aired on NBC from March 24, 2005, to May 16, 2013, lasting a total of nine seasons."
                     android:textColor="@color/black"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cardContainer" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/reviewTitle"
@@ -111,9 +106,7 @@
                     android:fontFamily="@font/robotobold"
                     android:text="Reviews"
                     android:textColor="@color/black"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/showDescription" />
+                    android:textSize="24sp"/>
 
                 <TextView
                     android:id="@+id/reviewsText"
@@ -125,7 +118,6 @@
                     android:text="REVIEWS"
                     android:textColor="#000000"
                     android:textSize="16sp"
-                    app:layout_constraintTop_toBottomOf="@+id/reviewTitle"
                     tools:layout_editor_absoluteX="24dp" />
 
                 <RatingBar
@@ -140,9 +132,7 @@
                     android:numStars="5"
                     android:progressTint="#52368C"
                     android:rating="3.7"
-                    android:stepSize="0.1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/reviewsText" />
+                    android:stepSize="0.1" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
@@ -150,8 +140,6 @@
                     android:layout_height="match_parent"
                     android:background="#FFFFFF"
                     android:nestedScrollingEnabled="false"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ratingBar"
                     tools:listitem="@layout/view_item_review" />
 
             </LinearLayout>
@@ -160,11 +148,13 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/addNewBar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="96dp"
             android:background="@color/black"
             app:cardBackgroundColor="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
             <Button
                 android:id="@+id/addReviewBtn"
                 android:layout_width="match_parent"

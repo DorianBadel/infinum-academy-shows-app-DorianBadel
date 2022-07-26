@@ -18,8 +18,7 @@
             android:layout_marginLeft="24dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/profile_ico"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            />
 
         <TextView
             android:id="@+id/reviewUsername"
@@ -30,9 +29,7 @@
             android:fontFamily="@font/robotoregular"
             android:text="neil.the.navy.seal"
             android:textColor="#52368C"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/reviewProfileImage"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/reviewRating"
@@ -43,9 +40,7 @@
             android:fontFamily="@font/robotoregular"
             tools:text="3"
             android:textColor="#52368C"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/reviewStarIcon"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="16sp" />
 
         <RatingBar
             android:id="@+id/reviewStarIcon"
@@ -57,9 +52,7 @@
             android:layout_marginEnd="16dp"
             android:numStars="1"
             android:progressTint="#52368C"
-            android:rating="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:rating="1" />
 
         <TextView
             android:id="@+id/reviewText"
@@ -72,8 +65,7 @@
             android:textColor="@color/black"
             android:text="This show was a complete masterpiece, I really liked it."
             android:textSize="16sp"
-            android:paddingBottom="30dp"
-            app:layout_constraintTop_toBottomOf="@+id/reviewProfileImage" />
+            android:paddingBottom="30dp" />
 
     </androidx.cardview.widget.CardView>
 
