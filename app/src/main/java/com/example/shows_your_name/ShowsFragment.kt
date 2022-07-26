@@ -33,8 +33,6 @@ class ShowsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var sharedPreferencesValue: SharedPreferences
-    private lateinit var sharedPreferencesProfileImage: SharedPreferences
 
     private val IS_REMEMBERED = "IS_REMEMBERED"
     private val REMEMBERED_USER = "REMEMBERED_USER"
@@ -51,8 +49,8 @@ class ShowsFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         sharedPreferences = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE)
-        sharedPreferencesValue = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
-        sharedPreferencesProfileImage = requireContext().getSharedPreferences("Image",Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences("Image",Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -67,7 +65,7 @@ class ShowsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         username = arguments?.getString("Username").toString()
-        sharedPreferencesProfileImage = requireContext().getSharedPreferences("HAS_PHOTO",Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences("HAS_PHOTO",Context.MODE_PRIVATE)
 
         binding.showHideShows.setOnClickListener{
 
@@ -155,7 +153,7 @@ class ShowsFragment : Fragment() {
         }
         val encoded = viewModel.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profile_ico))
 
-        val profilePhoto = sharedPreferencesProfileImage.getString(REMEMBERED_PHOTO, encoded )
+        val profilePhoto = sharedPreferences.getString(REMEMBERED_PHOTO, encoded )
 
         val decoded = Base64.decode(profilePhoto, Base64.DEFAULT)
         bottomSheetBinding.imgProfile.setImageBitmap(BitmapFactory.decodeByteArray(decoded, 0, decoded.size))
@@ -172,14 +170,14 @@ class ShowsFragment : Fragment() {
                 .setPositiveButton("Yes"){_,_ ->
                     //Log out
                     sharedPreferences = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE)
-                    sharedPreferencesValue = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
+                    sharedPreferences = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
                     sharedPreferences.edit {
                         putBoolean(IS_REMEMBERED, false)
                     }
-                    sharedPreferencesValue.edit{
+                    sharedPreferences.edit{
                         putString(REMEMBERED_USER, "")
                     }
-                    sharedPreferencesProfileImage.edit{
+                    sharedPreferences.edit{
                         val encoded = viewModel.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profile_ico))
                         putString(REMEMBERED_PHOTO,encoded)
                     }
@@ -203,7 +201,7 @@ class ShowsFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 123 && resultCode == RESULT_OK){
-            sharedPreferencesProfileImage.edit{
+            sharedPreferences.edit{
                 //An image becomes a string voodoo
                 val encoded = viewModel.getStringFromBitmap(data?.extras?.get("data") as Bitmap)
                putString(REMEMBERED_PHOTO,encoded)

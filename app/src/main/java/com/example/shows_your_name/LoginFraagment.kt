@@ -19,7 +19,6 @@ class LoginFraagment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var sharedPreferencesValue: SharedPreferences
 
     private val IS_REMEMBERED = "IS_REMEMBERED"
     private val REMEMBERED_USER = "REMEMBERED_USER"
@@ -28,7 +27,7 @@ class LoginFraagment : Fragment() {
         super.onCreate(savedInstanceState)
 
         sharedPreferences = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE)
-        sharedPreferencesValue = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -45,7 +44,7 @@ class LoginFraagment : Fragment() {
         val isRemembered = sharedPreferences.getBoolean(IS_REMEMBERED, false)
         binding.cbRememberMe.isChecked = isRemembered
 
-        val username = sharedPreferencesValue.getString(REMEMBERED_USER, "")
+        val username = sharedPreferences.getString(REMEMBERED_USER, "")
 
         if(isRemembered){
             val bundle = bundleOf("Username" to username)
@@ -85,7 +84,7 @@ class LoginFraagment : Fragment() {
             sharedPreferences.edit {
                 putBoolean(IS_REMEMBERED, isChecked)
             }
-            sharedPreferencesValue.edit{
+            sharedPreferences.edit{
                 putString(REMEMBERED_USER, binding.emailTexttxt.text.toString().substringBefore("@"))
             }
         }
