@@ -11,15 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-
-
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/top_left_illustration"
             app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="Top left img"
+            android:contentDescription="Top left image"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -147,21 +144,15 @@
 
         <CheckBox
             android:id="@+id/cbRememberMe"
-            android:layout_width="32dp"
+            android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_margin="24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/passwordText"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Remember Me"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toEndOf="@+id/cbRememberMe"
-            app:layout_constraintTop_toTopOf="@id/cbRememberMe" />
+            android:text="@string/remember_me_txt"
+            android:textSize="16dp"
+            />
 
         <Button
             style="@style/Widget.Material3.Button"
@@ -176,7 +167,7 @@
             android:backgroundTint="#BBBBBB"
             android:backgroundTintMode="add"
             android:fontFamily="@font/robotobold"
-            android:text="Login"
+            android:text="@string/login_txt"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"

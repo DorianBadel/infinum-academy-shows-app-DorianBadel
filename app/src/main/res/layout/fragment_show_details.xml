@@ -65,9 +65,9 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="64dp"
                     android:fontFamily="@font/robotobold"
-                    android:text="Shows"
+                    tools:text="The Office"
                     android:textColor="@color/black"
-                    android:textSize="32dp"
+                    android:textSize="32sp"
                     />
 
                 <androidx.cardview.widget.CardView
@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="24dp"
                     android:layout_marginTop="24dp"
-                    android:text="The Office is an American mockumentary sitcom television series that depicts the everyday work lives of office employees in the Scranton, Pennsylvania, branch of the fictional Dunder Mifflin Paper Company. It aired on NBC from March 24, 2005, to May 16, 2013, lasting a total of nine seasons."
+                    tools:text="The Office is an American mockumentary sitcom television series that depicts the everyday work lives of office employees in the Scranton, Pennsylvania, branch of the fictional Dunder Mifflin Paper Company. It aired on NBC from March 24, 2005, to May 16, 2013, lasting a total of nine seasons."
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -104,7 +104,7 @@
                     android:layout_marginLeft="24dp"
                     android:layout_marginTop="32dp"
                     android:fontFamily="@font/robotobold"
-                    android:text="Reviews"
+                    android:text="@string/string_detail_show_review_title"
                     android:textColor="@color/black"
                     android:textSize="24sp"/>
 
@@ -115,7 +115,7 @@
                     android:layout_marginLeft="24dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/robotoregular"
-                    android:text="REVIEWS"
+                    tools:text="REVIEWS"
                     android:textColor="#000000"
                     android:textSize="16sp"
                     tools:layout_editor_absoluteX="24dp" />
@@ -126,7 +126,7 @@
                     android:layout_height="56dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="8dp"
-                    android:contentDescription="rating"
+                    android:contentDescription="@string/rating"
                     android:isIndicator="true"
                     android:max="5"
                     android:numStars="5"
@@ -160,7 +160,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="24dp"
-                android:text="Write a review"
+                android:text="@string/string_write_a_review"
                 />
 
         </androidx.cardview.widget.CardView>

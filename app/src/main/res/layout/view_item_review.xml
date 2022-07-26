@@ -27,7 +27,7 @@
             android:layout_marginStart="96dp"
             android:layout_marginTop="32dp"
             android:fontFamily="@font/robotoregular"
-            android:text="neil.the.navy.seal"
+            tools:text="neil.the.navy.seal"
             android:textColor="#52368C"
             android:textSize="16sp" />
 
@@ -63,7 +63,7 @@
             android:layout_marginRight="24dp"
             android:fontFamily="@font/robotoregular"
             android:textColor="@color/black"
-            android:text="This show was a complete masterpiece, I really liked it."
+            tools:text="This show was a complete masterpiece, I really liked it."
             android:textSize="16sp"
             android:paddingBottom="30dp" />
 
