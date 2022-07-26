@@ -6,8 +6,11 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import java.io.ByteArrayOutputStream
 
 
 class ShowsFragment : Fragment() {
@@ -64,9 +68,7 @@ class ShowsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         username = arguments?.getString("Username").toString()
-        sharedPreferencesProfileImage.edit{
-            //TODO set default image
-        }
+        sharedPreferencesProfileImage = requireContext().getSharedPreferences("HAS_PHOTO",Context.MODE_PRIVATE)
 
         binding.showHideShows.setOnClickListener{
             if(binding.showHideShows.text == "Hide"){
@@ -140,8 +142,17 @@ class ShowsFragment : Fragment() {
 
             if(true){
                 startActivityForResult(takePictureIntent,123)
+                dialog.dismiss()
             }
         }
+        val byteArr = ByteArrayOutputStream()
+        val img = BitmapFactory.decodeResource(getResources(), R.drawable.profile_ico)
+        img.compress(Bitmap.CompressFormat.PNG, 100, byteArr)
+        val base64 = byteArr.toByteArray()
+        val encoded = Base64.encodeToString(base64,Base64.DEFAULT)
+        val profilePhoto = sharedPreferencesProfileImage.getString(REMEMBERED_PHOTO, encoded )
+        val decoded = Base64.decode(profilePhoto, Base64.DEFAULT)
+        bottomSheetBinding.imgProfile.setImageBitmap(BitmapFactory.decodeByteArray(decoded, 0, decoded.size))
 
         //Logout button
 
@@ -152,7 +163,7 @@ class ShowsFragment : Fragment() {
             builder.setTitle("You will leave your shows behind")
                 .setMessage("Are you sure you want to log out?")
                 .setCancelable(true)
-                .setPositiveButton("Yes"){dialogInterface,it ->
+                .setPositiveButton("Yes"){_,_ ->
                     //Log out
                     sharedPreferences = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE)
                     sharedPreferencesValue = requireContext().getSharedPreferences("Username", Context.MODE_PRIVATE)
@@ -161,6 +172,14 @@ class ShowsFragment : Fragment() {
                     }
                     sharedPreferencesValue.edit{
                         putString(REMEMBERED_USER, "")
+                    }
+                    sharedPreferencesProfileImage.edit{
+                        val byteArr = ByteArrayOutputStream()
+                        val img = BitmapFactory.decodeResource(getResources(), R.drawable.profile_ico)
+                        img.compress(Bitmap.CompressFormat.PNG, 100, byteArr)
+                        val base64 = byteArr.toByteArray()
+                        val encoded = Base64.encodeToString(base64,Base64.DEFAULT)
+                        putString(REMEMBERED_PHOTO,encoded)
                     }
 
                     findNavController().navigate(R.id.to_loginFraagment)
@@ -182,8 +201,15 @@ class ShowsFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 123 && resultCode == RESULT_OK){
-            //TODO get the data from the camera and save it
-            //data?.extras?.get("data") as Int
+            sharedPreferencesProfileImage.edit{
+                //An image becomes a string voodoo
+                val byteArr = ByteArrayOutputStream()
+                val img = data?.extras?.get("data") as Bitmap
+                img.compress(Bitmap.CompressFormat.PNG, 100, byteArr)
+                val base64 = byteArr.toByteArray()
+                val encoded = Base64.encodeToString(base64,Base64.DEFAULT)
+               putString(REMEMBERED_PHOTO,encoded)
+            }
         }
     }
 
