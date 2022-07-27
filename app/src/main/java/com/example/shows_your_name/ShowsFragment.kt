@@ -6,18 +6,14 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,11 +29,6 @@ class ShowsFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
-
-    //Constants
-    private val IS_REMEMBERED = "IS_REMEMBERED"
-    private val REMEMBERED_USER = "REMEMBERED_USER"
-    private val REMEMBERED_PHOTO = "REMEMBERED_PHOTO"
     private val ctUser = "User"
     private val ctUsername = "Username"
     private val ctImage = "Image"
@@ -45,13 +36,6 @@ class ShowsFragment : Fragment() {
     private val ctID = "ID"
     private val ctTitle = "Title"
     private val HAS_PHOTO = "HAS_PHOTO"
-    private val ctHideOff = "Hide"
-    private val ctHideOn = "Show"
-    private val ctLogoutAlertTitle = "You will leave your shows behind"
-    private val ctLogoutAlertDescription = "Are you sure you want to log out?"
-    private val ctLogoutAlertNegativeText = "No"
-    private val ctLogoutAlertPossitiveText = "Yes"
-    private val ctExtrasData = "data"
 
     private val viewModel by viewModels<ShowsViewModel>()
     private lateinit var adapter: ShowsAdapter
@@ -76,7 +60,7 @@ class ShowsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences = requireContext().getSharedPreferences(HAS_PHOTO,Context.MODE_PRIVATE)
 
-        viewModel.initiateViewModel(arguments,binding)
+        viewModel.initiateViewModel(arguments,binding,this)
         initShowsRecycler()
 
         binding.showHideShows.setOnClickListener{
@@ -120,64 +104,7 @@ class ShowsFragment : Fragment() {
     }
 
     private fun showProfileBottomSheet(){
-        val dialog = BottomSheetDialog(requireView().context)
-
-        val bottomSheetBinding = DialogProfileBinding.inflate(layoutInflater)
-        dialog.setContentView(bottomSheetBinding.root)
-
-        bottomSheetBinding.txtUsername.text = viewModel.username.value
-
-        //Change profile picture btn
-
-        bottomSheetBinding.btnChangeProfilePic.setOnClickListener {
-            val takePictureIntent =  Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-            if(true){
-                startActivityForResult(takePictureIntent,123)
-                dialog.dismiss()
-            }
-        }
-
-        viewModel.setProfileImage(sharedPreferences,bottomSheetBinding,getResources())
-
-        //Logout button
-
-        bottomSheetBinding.btnDialogLogOut.setOnClickListener{
-
-            var builder = AlertDialog.Builder(activity)
-
-            builder.setTitle(ctLogoutAlertTitle)
-                .setMessage(ctLogoutAlertDescription)
-                .setCancelable(true)
-                .setPositiveButton(ctLogoutAlertPossitiveText){_,_ ->
-
-                    sharedPreferences = requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
-                    sharedPreferences = requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
-
-                    viewModel.logOut(sharedPreferences,resources)
-
-                    findNavController().navigate(R.id.to_loginFraagment)
-                    dialog.dismiss()
-
-                }
-                .setNegativeButton(ctLogoutAlertNegativeText){dialogInterface,it ->
-                    dialogInterface.cancel()
-                }
-                .show()
-
-
-        }
-
-        dialog.show()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == 123 && resultCode == RESULT_OK){
-            sharedPreferences.edit{
-               putString(REMEMBERED_PHOTO,viewModel.encodeBitmapToString(data))
-            }
-        }
+        viewModel.createProfileBottomSheet(resources,sharedPreferences)
     }
 
 }

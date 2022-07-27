@@ -1,5 +1,7 @@
 package com.example.shows_your_name
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -10,7 +12,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import androidx.core.content.edit
-import androidx.core.view.accessibility.AccessibilityViewCommand
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,6 +19,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
 
 class ShowsViewModel : ViewModel(){
@@ -26,20 +28,17 @@ class ShowsViewModel : ViewModel(){
     private val IS_REMEMBERED = "IS_REMEMBERED"
     private val REMEMBERED_USER = "REMEMBERED_USER"
     private val REMEMBERED_PHOTO = "REMEMBERED_PHOTO"
+
     private val ctUser = "User"
     private val ctUsername = "Username"
-    private val ctImage = "Image"
-    private val ctDescription = "Description"
-    private val ctID = "ID"
-    private val ctTitle = "Title"
-    private val HAS_PHOTO = "HAS_PHOTO"
     private val ctHideOff = "Hide"
     private val ctHideOn = "Show"
+    private val ctImage = "Image"
+    private val ctExtrasData = "data"
     private val ctLogoutAlertTitle = "You will leave your shows behind"
     private val ctLogoutAlertDescription = "Are you sure you want to log out?"
     private val ctLogoutAlertNegativeText = "No"
     private val ctLogoutAlertPossitiveText = "Yes"
-    private val ctExtrasData = "data"
 
     //The list of data
     private val _listOfShowsLiveData = MutableLiveData<List<Show>>()
@@ -47,6 +46,9 @@ class ShowsViewModel : ViewModel(){
 
     private val _username = MutableLiveData<String>()
     val username: LiveData<String> = _username
+
+    private val _fragment = MutableLiveData<ShowsFragment>()
+    val fragment: LiveData<ShowsFragment> = _fragment
 
 
     init {
@@ -57,9 +59,10 @@ class ShowsViewModel : ViewModel(){
         )
     }
 
-    fun initiateViewModel(arguments: Bundle?,binding: FragmentShowsBinding){
+    fun initiateViewModel(arguments: Bundle?,binding: FragmentShowsBinding,fragment: ShowsFragment){
         _username.value = arguments?.getString(ctUsername).toString()
         showShows(binding)
+        _fragment.value = fragment
     }
 
     fun getStringFromBitmap(bitmap: Bitmap): String {
@@ -110,12 +113,73 @@ class ShowsViewModel : ViewModel(){
     fun logOut(sharedPreferences: SharedPreferences, resources: Resources){
         sharedPreferences.edit {
             putBoolean(IS_REMEMBERED, false)
-        }
-        sharedPreferences.edit{
             putString(REMEMBERED_USER, "")
-        }
-        sharedPreferences.edit{
             putString(REMEMBERED_PHOTO,encodeString(resources))
+        }
+    }
+
+    fun createAlert(resources: Resources, dialog: BottomSheetDialog){
+
+        var builder = AlertDialog.Builder(_fragment.value!!.activity)
+        var sharedPreferences: SharedPreferences
+
+        builder.setTitle(ctLogoutAlertTitle)
+            .setMessage(ctLogoutAlertDescription)
+            .setCancelable(true)
+            .setPositiveButton(ctLogoutAlertPossitiveText){_,_ ->
+
+                sharedPreferences = _fragment.value!!.requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
+                sharedPreferences = _fragment.value!!.requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
+
+                logOut(sharedPreferences,resources)
+
+                _fragment.value!!.findNavController().navigate(R.id.to_loginFraagment)
+                dialog.dismiss()
+
+            }
+            .setNegativeButton(ctLogoutAlertNegativeText){dialogInterface,it ->
+                dialogInterface.cancel()
+            }
+            .show()
+    }
+
+    fun createProfileBottomSheet(resources: Resources,sharedPreferences: SharedPreferences){
+        val dialog = BottomSheetDialog(_fragment.value!!.requireView().context)
+
+        val bottomSheetBinding = DialogProfileBinding.inflate(_fragment.value!!.layoutInflater)
+        dialog.setContentView(bottomSheetBinding.root)
+
+        bottomSheetBinding.txtUsername.text = username.value
+
+        //Change profile picture btn
+
+        bottomSheetBinding.btnChangeProfilePic.setOnClickListener {
+            val takePictureIntent =  Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+            if(true){
+                _fragment.value!!.startActivityForResult(takePictureIntent,123)
+                dialog.dismiss()
+            }
+        }
+
+        setProfileImage(sharedPreferences,bottomSheetBinding,resources)
+
+        bottomSheetBinding.btnDialogLogOut.setOnClickListener{
+            createAlert(resources,dialog)
+        }
+
+        dialog.show()
+    }
+
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 123 && resultCode == Activity.RESULT_OK){
+
+            val sharedPreferences: SharedPreferences =
+                _fragment.value?.requireContext()!!.getSharedPreferences(ctImage,Context.MODE_PRIVATE)
+            sharedPreferences.edit{
+                putString(REMEMBERED_PHOTO,encodeBitmapToString(data))
+            }
         }
     }
 }
