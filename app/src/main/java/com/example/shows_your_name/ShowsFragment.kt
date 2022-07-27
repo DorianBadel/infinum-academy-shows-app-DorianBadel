@@ -150,22 +150,14 @@ class ShowsFragment : Fragment() {
                 .setMessage(ctLogoutAlertDescription)
                 .setCancelable(true)
                 .setPositiveButton(ctLogoutAlertPossitiveText){_,_ ->
-                    //Log out
+
                     sharedPreferences = requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
                     sharedPreferences = requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
-                    sharedPreferences.edit {
-                        putBoolean(IS_REMEMBERED, false)
-                    }
-                    sharedPreferences.edit{
-                        putString(REMEMBERED_USER, "")
-                    }
-                    sharedPreferences.edit{
-                        putString(REMEMBERED_PHOTO,viewModel.encodeString(resources))
-                    }
+
+                    viewModel.logOut(sharedPreferences,resources)
 
                     findNavController().navigate(R.id.to_loginFraagment)
                     dialog.dismiss()
-                    //Log out
 
                 }
                 .setNegativeButton(ctLogoutAlertNegativeText){dialogInterface,it ->
@@ -183,9 +175,7 @@ class ShowsFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 123 && resultCode == RESULT_OK){
             sharedPreferences.edit{
-                //An image becomes a string voodoo
-                val encoded = viewModel.getStringFromBitmap(data?.extras?.get(ctExtrasData) as Bitmap)
-               putString(REMEMBERED_PHOTO,encoded)
+               putString(REMEMBERED_PHOTO,viewModel.encodeBitmapToString(data))
             }
         }
     }

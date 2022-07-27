@@ -1,5 +1,6 @@
 package com.example.shows_your_name
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
@@ -8,11 +9,13 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
+import androidx.core.content.edit
 import androidx.core.view.accessibility.AccessibilityViewCommand
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
 import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
 import java.io.ByteArrayOutputStream
@@ -98,5 +101,21 @@ class ShowsViewModel : ViewModel(){
 
     fun encodeString(resources: Resources): String{
         return getStringFromBitmap(BitmapFactory.decodeResource(resources, R.drawable.profile_ico))
+    }
+
+    fun encodeBitmapToString(data: Intent?): String{
+        return getStringFromBitmap(data?.extras?.get(ctExtrasData) as Bitmap)
+    }
+
+    fun logOut(sharedPreferences: SharedPreferences, resources: Resources){
+        sharedPreferences.edit {
+            putBoolean(IS_REMEMBERED, false)
+        }
+        sharedPreferences.edit{
+            putString(REMEMBERED_USER, "")
+        }
+        sharedPreferences.edit{
+            putString(REMEMBERED_PHOTO,encodeString(resources))
+        }
     }
 }
