@@ -7,11 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,20 +28,7 @@ class ShowDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: ReviewsAdapter
 
-
-    private var reviews1 = listOf(
-        Review(1, "renato.ruric", "", 3),
-        Review(2, "gan.dalf", "joooj pre dobrooooo", 5)
-    )
-
-    private var reviews2 = listOf(
-        Review(1, "renato.ruric", "", 5),
-        Review(2, "gan.dalf", "joooj pre dobrooooo", 5),
-        Review(3, "mark.twain", "Sve u svemu savrseno", 5)
-    )
-    private var reviews3 = listOf(
-        Review(1, "plenky", "meh", 1)
-    )
+    private val viewModel by viewModels<ShowDetailsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,47 +41,24 @@ class ShowDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val id = arguments?.getInt("ID")
-        val title = arguments?.getString("Title").toString()
-        val description = arguments?.getString("Description").toString()
-        val imageId = arguments?.getInt("Image")
-        var username = arguments?.getString("Username")
+        viewModel.initiateViewModel(arguments)
+        reviews = viewModel.getReviews()
 
+        binding.showTitle.text = viewModel.title.value
+        binding.showDescription.text = viewModel.description.value
 
-
-        if (id == 2) {
-            reviews = reviews2
-
-        } else if (id == 3) {
-            reviews = reviews3
-        } else {
-            reviews = reviews1
-        }
-
-        binding.showTitle.text = title
-        binding.showDescription.text = description
-        if (imageId != null) {
-            binding.showCoverImage.setImageResource(imageId)
-        }
+        binding.showCoverImage.setImageResource(viewModel.imageId.value!!)
 
         binding.toolbarBackBtn.setOnClickListener {
-            val bundle = bundleOf("Username" to username)
+            val bundle = bundleOf("Username" to viewModel.username.value)
             findNavController().navigate(R.id.to_showsFragment, bundle)
         }
+
         initShowsRecycler()
 
         binding.addReviewBtn.setOnClickListener {
             showAddReviewBottomSheet()
         }
-    }
-
-    private fun getAverageRating(): Float {
-        var total = 0
-        for (i in reviews) {
-            total += i.rating
-        }
-
-        return total.toFloat() / reviews.count()
     }
 
     private fun initShowsRecycler() {
@@ -109,9 +70,7 @@ class ShowDetailsFragment : Fragment() {
             LinearLayoutManager.VERTICAL, false
         )
 
-        binding.reviewsText.text =
-            reviews.count().toString() + " REVIEWS, " + getAverageRating() + " AVERAGE"
-        binding.ratingBar.rating = getAverageRating()
+        viewModel.updateStatistics(binding,reviews)
 
         binding.recyclerView.adapter = adapter
 
@@ -127,29 +86,15 @@ class ShowDetailsFragment : Fragment() {
         dialog.setContentView(bottomSheetBinding.root)
 
         bottomSheetBinding.submitReviewButton.setOnClickListener {
-            addShowToList(
-                bottomSheetBinding.reviewSetRating.rating.toInt(),
-                bottomSheetBinding.commentText.text.toString()
-            )
+            reviews += viewModel.addReview(bottomSheetBinding, adapter, reviews)
+            viewModel.updateStatistics(binding,reviews)
             dialog.dismiss()
         }
 
         bottomSheetBinding.closeIcon.setOnClickListener {
             dialog.dismiss()
         }
-
         dialog.show()
-    }
-
-    private fun addShowToList(rating: Int, comment: String) {
-        adapter.addItem(Review(reviews.last().ID + 1, arguments?.getString("Username").toString(), comment, rating))
-        reviews += Review(reviews.last().ID + 1, arguments?.getString("Username").toString(), comment, rating)
-
-
-        //updates statistics
-        binding.reviewsText.text =
-            reviews.count().toString() + " REVIEWS, " + getAverageRating() + " AVERAGE"
-        binding.ratingBar.rating = getAverageRating()
     }
 
     override fun onDestroyView() {
