@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import java.io.ByteArrayOutputStream
 
 
 class ShowsFragment : Fragment() {
@@ -77,30 +76,11 @@ class ShowsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences = requireContext().getSharedPreferences(HAS_PHOTO,Context.MODE_PRIVATE)
 
+        viewModel.initiateViewModel(arguments,binding)
+        initShowsRecycler()
+
         binding.showHideShows.setOnClickListener{
-
-            if(binding.showHideShows.text == ctHideOff){
-                binding.noShowsIco.isVisible = true
-                binding.noShowsText.isVisible = true
-                binding.showsRecycler.isVisible = false
-                binding.showHideShows.text = ctHideOn
-            } else if (binding.showHideShows.text == ctHideOn){
-                binding.noShowsIco.isVisible = false
-                binding.noShowsText.isVisible = false
-                binding.showsRecycler.isVisible = true
-                initShowsRecycler()
-                binding.showHideShows.text = ctHideOff
-            }
-
-        }
-
-        if(viewModel.listOfShowsLiveData.value.isNullOrEmpty()){
-            binding.noShowsIco.isVisible = true
-            binding.noShowsText.isVisible = true
-        } else{
-            binding.noShowsIco.isVisible = false
-            binding.noShowsText.isVisible = false
-            initShowsRecycler()
+            viewModel.showOrHideShows(binding)
         }
 
         binding.btnProfile.setOnClickListener {
@@ -126,7 +106,7 @@ class ShowsFragment : Fragment() {
                     ctDescription to show.desc,
                     ctImage to show.imageResourceId,
                     ctID to show.ID,
-                    ctUsername to arguments?.getString(ctUsername).toString()
+                    ctUsername to viewModel.username.value
                 )
 
                 findNavController().navigate(R.id.to_showDetailsFragment, bundle)
@@ -137,10 +117,6 @@ class ShowsFragment : Fragment() {
             binding.showsRecycler.adapter = adapter
 
         }
-
-
-
-
     }
 
     private fun showProfileBottomSheet(){
@@ -149,7 +125,7 @@ class ShowsFragment : Fragment() {
         val bottomSheetBinding = DialogProfileBinding.inflate(layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
 
-        bottomSheetBinding.txtUsername.text = arguments?.getString(ctUsername).toString()
+        bottomSheetBinding.txtUsername.text = viewModel.username.value
 
         //Change profile picture btn
 
@@ -161,12 +137,8 @@ class ShowsFragment : Fragment() {
                 dialog.dismiss()
             }
         }
-        val encoded = viewModel.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profile_ico))
 
-        val profilePhoto = sharedPreferences.getString(REMEMBERED_PHOTO, encoded )
-
-        val decoded = Base64.decode(profilePhoto, Base64.DEFAULT)
-        bottomSheetBinding.imgProfile.setImageBitmap(BitmapFactory.decodeByteArray(decoded, 0, decoded.size))
+        viewModel.setProfileImage(sharedPreferences,bottomSheetBinding,getResources())
 
         //Logout button
 
@@ -188,8 +160,7 @@ class ShowsFragment : Fragment() {
                         putString(REMEMBERED_USER, "")
                     }
                     sharedPreferences.edit{
-                        val encoded = viewModel.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profile_ico))
-                        putString(REMEMBERED_PHOTO,encoded)
+                        putString(REMEMBERED_PHOTO,viewModel.encodeString(resources))
                     }
 
                     findNavController().navigate(R.id.to_loginFraagment)
