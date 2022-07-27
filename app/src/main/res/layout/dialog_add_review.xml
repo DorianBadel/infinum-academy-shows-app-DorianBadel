@@ -7,10 +7,11 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         >
 
         <LinearLayout
@@ -22,7 +23,7 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginTop="40dp"
                 android:layout_height="wrap_content"
-                android:text="Write a review"
+                android:text="@string/write_a_review"
                 android:fontFamily="@font/robotobold"
                 android:textSize="24dp"
                 android:textColor="@color/black"
@@ -32,8 +33,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/close_icon"
-                android:layout_marginTop="45dp"
-                android:layout_marginLeft="157dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginLeft="152dp"
                 />
         </LinearLayout>
 
@@ -52,10 +53,10 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="27dp"
-            android:layout_marginRight="25dp"
-            android:hint="Comment"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="24dp"
+            android:hint="@string/hint_comment"
             android:textColorHint="#52368C"
             app:boxStrokeColor="#52368C"
             app:hintTextColor="#52368C"
@@ -83,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="24dp"
-            android:text="Write a review"
+            android:text="@string/write_a_review"
             android:background="#52368C"
             />
 

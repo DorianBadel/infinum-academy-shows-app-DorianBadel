@@ -21,39 +21,44 @@
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/navbar"
             >
-            <Button
-                android:id="@+id/navbarLogoutBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/robotobold"
-                android:textSize="16sp"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="16dp"
-                android:textColor="#FFFFFF"
-                android:text="Log out"
+
+            <ImageView
+                android:id="@+id/btnProfile"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="344dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
+                android:src="@drawable/profile_ico"
                 />
 
         </com.google.android.material.navigation.NavigationView>
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="23dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/robotobold"
-            android:text="Shows"
+            android:text="@string/string_shows_title"
             android:textColor="@color/black"
-            android:textSize="36dp"
+            android:textSize="32sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/navbar" />
+            app:layout_constraintTop_toBottomOf="@id/navbar"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="136dp"
+            android:layout_marginTop="8dp"
             android:id="@+id/showsRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             tools:listitem="@layout/view_show_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
 
         <ImageView
@@ -68,23 +73,25 @@
 
         <TextView
             android:id="@+id/noShowsText"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
             android:layout_marginTop="26dp"
-            android:text="Your shows are not showing. Get it? "
+            android:text="@string/string_no_shows_message"
             android:textAlignment="center"
             android:textColor="#808080"
-            android:textSize="17dp"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/noShowsIco" />
+            app:layout_constraintTop_toBottomOf="@+id/noShowsIco"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <Button
             android:id="@+id/showHideShows"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Hide"
+            android:padding="8dp"
+            android:text="@string/string_hide_button"
             android:layout_marginRight="16dp"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/textView"

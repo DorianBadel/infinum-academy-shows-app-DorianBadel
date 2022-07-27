@@ -11,13 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/top_left_illustration"
             app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="Top left img"
+            android:contentDescription="Top left image"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -31,7 +30,7 @@
             android:id="@+id/playicon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="54dp"
+            android:layout_marginStart="56dp"
             android:layout_marginTop="184dp"
             android:src="@drawable/triangle"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,12 +39,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="184dp"
             android:fontFamily="@font/robotobold"
             android:text="@string/login_app_title"
             android:textColor="#FFFFFF"
-            android:textSize="34sp"
+            android:textSize="32sp"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/playicon"
             app:layout_constraintTop_toTopOf="parent" />
@@ -55,11 +54,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
-            android:layout_marginTop="153dp"
+            android:layout_marginTop="152dp"
             android:fontFamily="@font/robotoblack"
             android:text="@string/login_action_title"
             android:textColor="#FFFFFF"
-            android:textSize="34sp"
+            android:textSize="32sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/playicon" />
 
@@ -72,7 +71,7 @@
             android:fontFamily="@font/robotoregular"
             android:text="@string/login_description"
             android:textColor="#FFFFFF"
-            android:textSize="17sp"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/loginText" />
 
@@ -80,11 +79,11 @@
 
             android:id="@+id/emailText"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="27dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="24dp"
             android:hint="@string/login_email_hint"
             android:textColorHint="#FFFFFF"
             app:boxStrokeColor="#FFFFFF"
@@ -109,11 +108,11 @@
 
             android:id="@+id/passwordText"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="27dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="24dp"
             android:hint="@string/login_password_hint"
             android:textColorHint="#FFFFFF"
             app:boxStrokeColor="#FFFFFF"
@@ -128,12 +127,12 @@
                 android:id="@+id/passwordTexttxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="27dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/input_bg"
                 android:contentDescription="@string/login_password_desc"
                 android:fontFamily="@font/robotoregular"
                 android:inputType="textPassword"
-                android:padding="15dp"
+                android:padding="16dp"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
                 android:textColor="#FFFFFF"
@@ -143,10 +142,22 @@
                 app:layout_constraintTop_toBottomOf="@+id/emailText" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <CheckBox
+            android:id="@+id/cbRememberMe"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_margin="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordText"
+            android:textColor="#FFFFFF"
+            android:text="@string/remember_me_txt"
+            android:textSize="16dp"
+            />
+
         <Button
             style="@style/Widget.Material3.Button"
             android:id="@+id/loginbtn"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
@@ -156,14 +167,16 @@
             android:backgroundTint="#BBBBBB"
             android:backgroundTintMode="add"
             android:fontFamily="@font/robotobold"
-            android:text="Login"
+            android:text="@string/login_txt"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
-            android:textSize="17sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

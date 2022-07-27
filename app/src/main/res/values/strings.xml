@@ -9,4 +9,16 @@
     <string name="login_password_desc">Your account password</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="write_a_review">Write a review</string>
+    <string name="hint_comment">Comment</string>
+    <string name="change_profile_photo_txt">Change profile photo</string>
+    <string name="logout_txt">Logout</string>
+    <string name="remember_me_txt">Remember Me</string>
+    <string name="login_txt">Login</string>
+    <string name="string_detail_show_review_title">Reviews</string>
+    <string name="rating">rating</string>
+    <string name="string_write_a_review">Write a review</string>
+    <string name="string_no_shows_message">Your shows are not showing. Get it?</string>
+    <string name="string_shows_title">Shows</string>
+    <string name="string_hide_button">Hide</string>
 </resources>

@@ -1,19 +1,25 @@
 package com.example.shows_your_name
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
-
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
 class ShowsFragment : Fragment() {
@@ -21,14 +27,26 @@ class ShowsFragment : Fragment() {
     private var _binding: FragmentShowsBinding? = null
     private val binding get() = _binding!!
 
-    private var shows = listOf(
-        Show(1,"Office","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_office),
-        Show(2,"Stranger Things","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_stranger_things ),
-        Show(3,"Krv nije voda","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_krv_nije_voda )
-    )
+    private lateinit var sharedPreferences: SharedPreferences
 
+    private val ctUser = "User"
+    private val ctUsername = "Username"
+    private val ctImage = "Image"
+    private val ctDescription = "Description"
+    private val ctID = "ID"
+    private val ctTitle = "Title"
+    private val HAS_PHOTO = "HAS_PHOTO"
+
+    private val viewModel by viewModels<ShowsViewModel>()
     private lateinit var adapter: ShowsAdapter
-    lateinit var username : String
+
+    override fun onCreate(savedInstanceState: Bundle?){
+        super.onCreate(savedInstanceState)
+
+        sharedPreferences = requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(ctImage,Context.MODE_PRIVATE)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,37 +58,17 @@ class ShowsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreferences = requireContext().getSharedPreferences(HAS_PHOTO,Context.MODE_PRIVATE)
 
-        username = arguments?.getString("Username").toString()
-
+        viewModel.initiateViewModel(arguments,binding,this)
+        initShowsRecycler()
 
         binding.showHideShows.setOnClickListener{
-            if(binding.showHideShows.text == "Hide"){
-                binding.noShowsIco.isVisible = true
-                binding.noShowsText.isVisible = true
-                binding.showsRecycler.isVisible = false
-                binding.showHideShows.text = "Show"
-            } else if (binding.showHideShows.text == "Show"){
-                binding.noShowsIco.isVisible = false
-                binding.noShowsText.isVisible = false
-                binding.showsRecycler.isVisible = true
-                initShowsRecycler()
-                binding.showHideShows.text = "Hide"
-            }
+            viewModel.showOrHideShows(binding)
         }
 
-
-        if(shows.isNullOrEmpty()){
-            binding.noShowsIco.isVisible = true
-            binding.noShowsText.isVisible = true
-        } else{
-            binding.noShowsIco.isVisible = false
-            binding.noShowsText.isVisible = false
-            initShowsRecycler()
-        }
-
-        binding.navbarLogoutBtn.setOnClickListener{
-            findNavController().navigate(R.id.to_loginFraagment)
+        binding.btnProfile.setOnClickListener {
+            showProfileBottomSheet()
         }
 
 
@@ -83,22 +81,30 @@ class ShowsFragment : Fragment() {
     }
 
     private fun initShowsRecycler(){
-        adapter = ShowsAdapter(shows) { show ->
+        viewModel.listOfShowsLiveData.observe(viewLifecycleOwner){ Shows ->
 
-            val bundle = bundleOf(
-                "Title" to show.title,
-                "Description" to show.desc,
-                "Image" to show.imageResourceId,
-                "ID" to show.ID,
-                "Username" to arguments?.getString("Username").toString()
-            )
+            adapter = ShowsAdapter(Shows) { show ->
 
-            findNavController().navigate(R.id.to_showDetailsFragment,bundle)
+                val bundle = bundleOf(
+                    ctTitle to show.title,
+                    ctDescription to show.desc,
+                    ctImage to show.imageResourceId,
+                    ctID to show.ID,
+                    ctUsername to viewModel.username.value
+                )
+
+                findNavController().navigate(R.id.to_showDetailsFragment, bundle)
+            }
+            binding.showsRecycler.layoutManager = LinearLayoutManager(activity,
+                LinearLayoutManager.VERTICAL,false)
+
+            binding.showsRecycler.adapter = adapter
+
         }
-
-        binding.showsRecycler.layoutManager = LinearLayoutManager(activity,
-            LinearLayoutManager.VERTICAL,false)
-
-        binding.showsRecycler.adapter = adapter
     }
+
+    private fun showProfileBottomSheet(){
+        viewModel.createProfileBottomSheet(resources,sharedPreferences)
+    }
+
 }
