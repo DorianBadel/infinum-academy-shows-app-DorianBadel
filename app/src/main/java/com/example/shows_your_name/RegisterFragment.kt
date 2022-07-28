@@ -7,18 +7,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.shows_your_name.databinding.DialogRegistrationStateBinding
 import com.example.shows_your_name.databinding.FragmentRegisterFragmentBinding
+import com.example.shows_your_name.newtworking.ApiModule
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var sharedPreferences: SharedPreferences
+    private val viewModel: RegistrationViewModel by viewModels()
 
 
     //Constants
@@ -33,6 +39,13 @@ class RegisterFragment : Fragment() {
 
         sharedPreferences = requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
         sharedPreferences = requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
+
+        ApiModule.initRetrofit(requireContext())
+
+        viewModel.getRegistrationResultLiveData().observe(this){ registrationSuccess ->
+            displayRegistrationMessage(registrationSuccess)
+
+        }
     }
 
     override fun onCreateView(
@@ -88,11 +101,31 @@ class RegisterFragment : Fragment() {
 
         binding.registerButton.setOnClickListener{
 
-            val bundle = bundleOf(ctEmail to binding.emailTexttxt.text.toString())
+            viewModel.onRegisterButtonClicked(
+                binding.emailTexttxt.text.toString(),
+                binding.passwordTexttxt.text.toString(),
+                binding.passwordRepeatTexttxt.text.toString()
+            )
 
-            findNavController().navigate(R.id.reg_to_loginFraagment,bundle)
+            //val bundle = bundleOf(ctEmail to binding.emailTexttxt.text.toString())
+
+            //findNavController().navigate(R.id.reg_to_loginFraagment,bundle)
 
         }
+    }
+
+    private fun displayRegistrationMessage(isSuccessful: Boolean) {
+        val dialog = BottomSheetDialog(requireContext())
+        val bottomSheetBinding = DialogRegistrationStateBinding.inflate(layoutInflater)
+
+        if (isSuccessful) {
+            bottomSheetBinding.registrationMessage.text = "Registration successful"
+        } else {
+            bottomSheetBinding.registrationMessage.text = "Registration not successful"
+        }
+        dialog.setContentView(bottomSheetBinding.root)
+        dialog.show()
+
     }
 
     override fun onDestroyView() {
