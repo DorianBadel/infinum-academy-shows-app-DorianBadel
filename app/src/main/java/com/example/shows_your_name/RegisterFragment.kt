@@ -9,14 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
-import androidx.core.view.marginBottom
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.commit
 import androidx.navigation.fragment.findNavController
-import com.example.shows_your_name.databinding.FragmentLoginFraagmentBinding
+import com.example.shows_your_name.databinding.FragmentRegisterFragmentBinding
 
-class LoginFraagment : Fragment() {
-    private var _binding: FragmentLoginFraagmentBinding? = null
+class RegisterFragment : Fragment() {
+    private var _binding: FragmentRegisterFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var sharedPreferences: SharedPreferences
@@ -40,7 +39,7 @@ class LoginFraagment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentLoginFraagmentBinding.inflate(inflater,container,false)
+        _binding = FragmentRegisterFragmentBinding.inflate(inflater,container,false)
         return binding.root
     }
 
@@ -48,11 +47,6 @@ class LoginFraagment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val isRemembered = sharedPreferences.getBoolean(IS_REMEMBERED, false)
-        binding.cbRememberMe.isChecked = isRemembered
-        if(!arguments?.getString(ctEmail).isNullOrBlank()){
-            binding.loginText.text = "Registration successfull!"
-            binding.registerbtn.isVisible = false
-        }
 
         val username = sharedPreferences.getString(REMEMBERED_USER, "")
 
@@ -61,43 +55,43 @@ class LoginFraagment : Fragment() {
             findNavController().navigate(R.id.to_showsFragment,bundle)
         }
 
-        binding.loginbtn.isEnabled = false
-        var emailCorrect = false;
-        var passCorrect = false;
+        binding.registerButton.isEnabled = false
+        var emailCorrect = false
+        var passCorrect = false
+        var repeatPassCorrect = false
 
         binding.emailTexttxt.doAfterTextChanged {
             emailCorrect =
                 android.util.Patterns.EMAIL_ADDRESS.matcher(binding.emailTexttxt.text.toString()).matches()
 
-            binding.loginbtn.isEnabled = emailCorrect && passCorrect
+            binding.registerButton.isEnabled = emailCorrect && passCorrect && repeatPassCorrect
         }
         binding.passwordTexttxt.doAfterTextChanged {
             passCorrect = binding.passwordTexttxt.text.toString() != ""
-
-            binding.loginbtn.isEnabled = emailCorrect && passCorrect
-        }
-
-
-        binding.loginbtn.setOnClickListener{
-
-            val bundle = bundleOf(ctUsername to binding.emailTexttxt.text.toString().substringBefore("@"))
-
-            findNavController().navigate(R.id.to_showsFragment,bundle)
-
-        }
-
-        binding.cbRememberMe.setOnCheckedChangeListener{
-            _, isChecked ->
-            sharedPreferences.edit {
-                putBoolean(IS_REMEMBERED, isChecked)
+            if(binding.passwordRepeatTexttxt.text.toString() != ""
+                && binding.passwordRepeatTexttxt.text.toString() == binding.passwordTexttxt.text.toString()){
+                repeatPassCorrect = true
             }
-            sharedPreferences.edit{
-                putString(REMEMBERED_USER, binding.emailTexttxt.text.toString().substringBefore("@"))
-            }
+
+            binding.registerButton.isEnabled = emailCorrect && passCorrect && repeatPassCorrect
         }
 
-        binding.registerbtn.setOnClickListener{
-            findNavController().navigate(R.id.to_registerFragment)
+        binding.passwordRepeatTexttxt.doAfterTextChanged {
+            if(binding.passwordRepeatTexttxt.text.toString() != ""
+                && binding.passwordRepeatTexttxt.text.toString() == binding.passwordTexttxt.text.toString()){
+                repeatPassCorrect = true
+            }
+
+            binding.registerButton.isEnabled = emailCorrect && passCorrect && repeatPassCorrect
+        }
+
+
+        binding.registerButton.setOnClickListener{
+
+            val bundle = bundleOf(ctEmail to binding.emailTexttxt.text.toString())
+
+            findNavController().navigate(R.id.reg_to_loginFraagment,bundle)
+
         }
     }
 

@@ -21,4 +21,6 @@
     <string name="string_no_shows_message">Your shows are not showing. Get it?</string>
     <string name="string_shows_title">Shows</string>
     <string name="string_hide_button">Hide</string>
+    <string name="registerText">Register</string>
+    <string name="repeat_password">Repeat password</string>
 </resources>
