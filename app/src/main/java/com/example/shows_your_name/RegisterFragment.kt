@@ -32,7 +32,6 @@ class RegisterFragment : Fragment() {
     private val REMEMBERED_USER = "REMEMBERED_USER"
     private val ctUser = "User"
     private val ctUsername = "Username"
-    private val ctEmail = "Email"
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -102,9 +101,8 @@ class RegisterFragment : Fragment() {
         binding.registerButton.setOnClickListener{
 
             viewModel.onRegisterButtonClicked(
-                binding.emailTexttxt.text.toString(),
-                binding.passwordTexttxt.text.toString(),
-                binding.passwordRepeatTexttxt.text.toString()
+                this,
+                binding
             )
 
             //val bundle = bundleOf(ctEmail to binding.emailTexttxt.text.toString())
