@@ -1,16 +1,15 @@
-package com.example.shows_your_name
+package com.example.shows_your_name.viewModels
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import com.example.shows_your_name.LoginFraagment
+import com.example.shows_your_name.R
 import com.example.shows_your_name.databinding.FragmentLoginFraagmentBinding
-import com.example.shows_your_name.databinding.FragmentRegisterFragmentBinding
 import com.example.shows_your_name.models.LoginRequest
 import com.example.shows_your_name.models.LoginResponse
-import com.example.shows_your_name.models.RegisterRequest
-import com.example.shows_your_name.models.RegisterResponse
 import com.example.shows_your_name.newtworking.ApiModule
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +25,7 @@ class LoginViewModel: ViewModel(){
         return loginResultLiveData
     }
 
-    fun onLoginButtonClicked(fragment: LoginFraagment,binding: FragmentLoginFraagmentBinding) {
+    fun onLoginButtonClicked(fragment: LoginFraagment, binding: FragmentLoginFraagmentBinding) {
         val loginRequest = LoginRequest(
             email = binding.emailTexttxt.text.toString(),
             password = binding.passwordTexttxt.text.toString()

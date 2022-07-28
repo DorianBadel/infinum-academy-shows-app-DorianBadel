@@ -1,10 +1,12 @@
-package com.example.shows_your_name
+package com.example.shows_your_name.viewModels
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import com.example.shows_your_name.R
+import com.example.shows_your_name.RegisterFragment
 import com.example.shows_your_name.databinding.FragmentRegisterFragmentBinding
 import com.example.shows_your_name.models.RegisterRequest
 import com.example.shows_your_name.models.RegisterResponse
@@ -23,7 +25,7 @@ class RegistrationViewModel: ViewModel(){
         return registrationResultLiveData
     }
 
-    fun onRegisterButtonClicked(fragment: RegisterFragment,binding: FragmentRegisterFragmentBinding) {
+    fun onRegisterButtonClicked(fragment: RegisterFragment, binding: FragmentRegisterFragmentBinding) {
         val registerRequest = RegisterRequest(
             email = binding.emailTexttxt.text.toString(),
             password = binding.passwordTexttxt.text.toString(),

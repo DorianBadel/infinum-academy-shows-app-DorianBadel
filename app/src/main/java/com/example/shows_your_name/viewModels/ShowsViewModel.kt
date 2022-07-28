@@ -1,4 +1,4 @@
-package com.example.shows_your_name
+package com.example.shows_your_name.viewModels
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -12,14 +12,24 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import androidx.core.content.edit
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import com.example.shows_your_name.R
+import com.example.shows_your_name.Show
+import com.example.shows_your_name.ShowsFragment
 import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
+import com.example.shows_your_name.models.RegisterRequest
+import com.example.shows_your_name.models.RegisterResponse
+import com.example.shows_your_name.newtworking.ApiModule
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.ByteArrayOutputStream
 
 class ShowsViewModel : ViewModel(){
@@ -52,11 +62,33 @@ class ShowsViewModel : ViewModel(){
 
 
     init {
+        //getAllShows()
         _listOfShowsLiveData.value = listOf(
-            Show(1,"The Office","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_office),
-            Show(2,"Stranger Things","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_stranger_things ),
-            Show(3,"Krv nije voda","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_krv_nije_voda )
+            Show(1,"The Office","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+                R.drawable.ic_office
+            ),
+            Show(2,"Stranger Things","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+                R.drawable.ic_stranger_things ),
+            Show(3,"Krv nije voda","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+                R.drawable.ic_krv_nije_voda )
         )
+    }
+
+    fun getAllShows(){
+        /*
+        ApiModule.retrofit.getShows(showsRequest)
+            .enqueue(object: Callback<ShowsResponse> {
+                override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
+                    showsResultLiveData.value = false
+                }
+
+                override fun onResponse(
+                    call: Call<ShowsResponse>,
+                    response: Response<ShowsResponse>
+                ) {
+                //Set the shows
+                }
+            })*/
     }
 
     fun initiateViewModel(arguments: Bundle?,binding: FragmentShowsBinding,fragment: ShowsFragment){
@@ -95,7 +127,9 @@ class ShowsViewModel : ViewModel(){
     }
 
     fun setProfileImage(sharedPreferences: SharedPreferences,binding: DialogProfileBinding,resources: Resources){
-        val encoded = getStringFromBitmap(BitmapFactory.decodeResource(resources, R.drawable.profile_ico))
+        val encoded = getStringFromBitmap(BitmapFactory.decodeResource(resources,
+            R.drawable.profile_ico
+        ))
         val profilePhoto = sharedPreferences.getString(REMEMBERED_PHOTO, encoded )
         val decoded = Base64.decode(profilePhoto, Base64.DEFAULT)
 

@@ -7,16 +7,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.shows_your_name.databinding.DialogRegistrationStateBinding
 import com.example.shows_your_name.databinding.FragmentRegisterFragmentBinding
 import com.example.shows_your_name.newtworking.ApiModule
+import com.example.shows_your_name.viewModels.RegistrationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class RegisterFragment : Fragment() {
