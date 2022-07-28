@@ -12,19 +12,18 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import androidx.core.content.edit
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.example.shows_your_name.R
-import com.example.shows_your_name.Show
 import com.example.shows_your_name.ShowsFragment
 import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
-import com.example.shows_your_name.models.RegisterRequest
-import com.example.shows_your_name.models.RegisterResponse
+import com.example.shows_your_name.models.ShowApi
+import com.example.shows_your_name.Show
+import com.example.shows_your_name.models.ShowsResponse
 import com.example.shows_your_name.newtworking.ApiModule
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import retrofit2.Call
@@ -50,9 +49,12 @@ class ShowsViewModel : ViewModel(){
     private val ctLogoutAlertNegativeText = "No"
     private val ctLogoutAlertPossitiveText = "Yes"
 
-    //The list of data
+    /*The list of data
     private val _listOfShowsLiveData = MutableLiveData<List<Show>>()
-    val listOfShowsLiveData: LiveData<List<Show>> = _listOfShowsLiveData
+    val listOfShowsLiveData: LiveData<List<Show>> = _listOfShowsLiveData*/
+
+    private val _listOfShowsLiveData1 = MutableLiveData<List<ShowApi>>()
+    val listOfShowsLiveData1: LiveData<List<ShowApi>> = _listOfShowsLiveData1
 
     private val _username = MutableLiveData<String>()
     val username: LiveData<String> = _username
@@ -61,8 +63,9 @@ class ShowsViewModel : ViewModel(){
     val fragment: LiveData<ShowsFragment> = _fragment
 
 
+
     init {
-        //getAllShows()
+        /*
         _listOfShowsLiveData.value = listOf(
             Show(1,"The Office","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
                 R.drawable.ic_office
@@ -71,24 +74,31 @@ class ShowsViewModel : ViewModel(){
                 R.drawable.ic_stranger_things ),
             Show(3,"Krv nije voda","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
                 R.drawable.ic_krv_nije_voda )
-        )
+        )*/
     }
 
-    fun getAllShows(){
-        /*
-        ApiModule.retrofit.getShows(showsRequest)
-            .enqueue(object: Callback<ShowsResponse> {
+    fun getAllShows(arguments: Bundle?,binding: FragmentShowsBinding){
+        val shows = true
+        ApiModule.retrofit.getShows(
+            arguments?.getString("accessToken").toString(),
+            arguments?.getString("client").toString(),
+            arguments?.getString("uid").toString(),
+            arguments?.getString("tokenType").toString()
+        )
+            .enqueue(object: Callback<ShowsResponse>{
                 override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
-                    showsResultLiveData.value = false
+                    showShows(binding)
                 }
 
                 override fun onResponse(
                     call: Call<ShowsResponse>,
                     response: Response<ShowsResponse>
                 ) {
-                //Set the shows
+                    _listOfShowsLiveData1.value = response.body()?.shows
+                    hideShows(binding)
+
                 }
-            })*/
+            })
     }
 
     fun initiateViewModel(arguments: Bundle?,binding: FragmentShowsBinding,fragment: ShowsFragment){

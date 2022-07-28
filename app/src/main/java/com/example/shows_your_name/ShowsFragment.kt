@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shows_your_name.databinding.FragmentShowsBinding
+import com.example.shows_your_name.newtworking.ApiModule
 import com.example.shows_your_name.viewModels.ShowsViewModel
 
 
@@ -29,6 +30,7 @@ class ShowsFragment : Fragment() {
     private val ctImage = "Image"
     private val ctDescription = "Description"
     private val ctID = "ID"
+    private val ctCurrentUser = "keyValuePairs"
     private val ctTitle = "Title"
     private val HAS_PHOTO = "HAS_PHOTO"
 
@@ -38,9 +40,14 @@ class ShowsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
 
+        ApiModule.initRetrofit(requireContext())
+
         sharedPreferences = requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
         sharedPreferences = requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
         sharedPreferences = requireContext().getSharedPreferences(ctImage,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(ctCurrentUser,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(HAS_PHOTO,Context.MODE_PRIVATE)
+
     }
 
     override fun onCreateView(
@@ -53,7 +60,8 @@ class ShowsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPreferences = requireContext().getSharedPreferences(HAS_PHOTO,Context.MODE_PRIVATE)
+
+        viewModel.getAllShows(arguments,binding)
 
         viewModel.initiateViewModel(arguments,binding,this)
         initShowsRecycler()
@@ -76,15 +84,15 @@ class ShowsFragment : Fragment() {
     }
 
     private fun initShowsRecycler(){
-        viewModel.listOfShowsLiveData.observe(viewLifecycleOwner){ Shows ->
+        viewModel.listOfShowsLiveData1.observe(viewLifecycleOwner){ ShowsApi ->
 
-            adapter = ShowsAdapter(Shows) { show ->
+            adapter = ShowsAdapter(ShowsApi) { show ->
 
                 val bundle = bundleOf(
                     ctTitle to show.title,
-                    ctDescription to show.desc,
-                    ctImage to show.imageResourceId,
-                    ctID to show.ID,
+                    ctDescription to show.description,
+                    ctImage to show.imageUrl,
+                    ctID to show.id,
                     ctUsername to viewModel.username.value
                 )
 

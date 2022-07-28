@@ -1,14 +1,8 @@
 package com.example.shows_your_name.newtworking
 
-import com.example.shows_your_name.models.LoginRequest
-import com.example.shows_your_name.models.LoginResponse
-import com.example.shows_your_name.models.RegisterRequest
-import com.example.shows_your_name.models.RegisterResponse
+import com.example.shows_your_name.models.*
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ShowsApiService {
  @POST("/users")
@@ -17,6 +11,9 @@ interface ShowsApiService {
  @POST("/users/sign_in")
  fun login(@Body request: LoginRequest): Call<LoginResponse>
 
- /*@GET("/shows")
- fun getShows(@Header )*/
+ @GET("/shows")
+ fun getShows(@Header("access-token") accessToken: String,
+              @Header("client") client: String,
+              @Header("uid") uid: String,
+              @Header("token-type") tokenType: String): Call<ShowsResponse>
 }
