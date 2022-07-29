@@ -107,7 +107,7 @@ class ShowDetailsFragment : Fragment() {
         dialog.setContentView(bottomSheetBinding.root)
 
         bottomSheetBinding.submitReviewButton.setOnClickListener {
-            //reviews += viewModel.addReview(bottomSheetBinding, adapter, reviews)
+            viewModel.addReview(binding,bottomSheetBinding, this)
             viewModel.updateStatistics(binding,arguments)
             dialog.dismiss()
         }
