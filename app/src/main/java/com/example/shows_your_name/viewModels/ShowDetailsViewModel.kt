@@ -27,13 +27,13 @@ class ShowDetailsViewModel : ViewModel() {
     private val _id = MutableLiveData<Int>()
     private val _title = MutableLiveData<String>()
     private val _description = MutableLiveData<String>()
-    private val _imageId = MutableLiveData<Int>()
+    private val _imageId = MutableLiveData<String>()
     private var _username = MutableLiveData<String>()
 
     val id: LiveData<Int> = _id
     val title: LiveData<String> = _title
     val description: LiveData<String> = _description
-    val imageId: LiveData<Int> = _imageId
+    val imageId: LiveData<String> = _imageId
     val username: LiveData<String> = _username
     val ctAccessToken = "accessToken"
     val ctClient = "client"
@@ -51,7 +51,7 @@ class ShowDetailsViewModel : ViewModel() {
       _id.value = bundle?.getInt("ID")
       _title.value = bundle?.getString("Title").toString()
       _description.value = bundle?.getString("Description").toString()
-      _imageId.value = bundle?.getInt("Image")
+      _imageId.value = bundle?.getString("Image")
       _username.value = bundle?.getString("Username")
 
         getReviews(binding, fragment)

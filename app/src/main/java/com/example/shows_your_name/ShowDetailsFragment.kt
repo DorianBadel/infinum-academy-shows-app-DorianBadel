@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.shows_your_name.databinding.DialogAddReviewBinding
 import com.example.shows_your_name.databinding.FragmentShowDetailsBinding
 import com.example.shows_your_name.newtworking.ApiModule
@@ -66,7 +67,10 @@ class ShowDetailsFragment : Fragment() {
         binding.showTitle.text = viewModel.title.value
         binding.showDescription.text = viewModel.description.value
 
-        binding.showCoverImage.setImageResource(viewModel.imageId.value!!)
+        Glide.with(this)
+            .load(viewModel.imageId.value)
+            .into(binding.showCoverImage)
+
 
         binding.toolbarBackBtn.setOnClickListener {
             val bundle = bundleOf("Username" to viewModel.username.value)

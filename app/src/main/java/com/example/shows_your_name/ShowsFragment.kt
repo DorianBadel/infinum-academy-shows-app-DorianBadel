@@ -30,6 +30,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.shows_your_name.R
 import com.example.shows_your_name.ShowsFragment
 import com.example.shows_your_name.databinding.DialogProfileBinding

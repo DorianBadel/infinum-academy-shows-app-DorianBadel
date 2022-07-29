@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.shows_your_name.databinding.ViewShowCardBinding
 import com.example.shows_your_name.models.ShowApi
 
@@ -33,7 +34,10 @@ class ShowsAdapter (
         fun bind(item: ShowApi){
             binding.cardTitle.text = item.title
             binding.cardDesc.text = item.description
-            binding.cardImage.setImageURI(item.imageUrl.toUri())
+            Glide.with(binding.root)
+                .load(item.imageUrl)
+                .into(binding.cardImage)
+            //binding.cardImage.setImageURI(item.imageUrl.toUri())
 
             binding.cardContainer.setOnClickListener{
                 onItemClickCallback(item)
