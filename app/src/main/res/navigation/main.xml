@@ -12,6 +12,9 @@
         <action
             android:id="@+id/to_showsFragment"
             app:destination="@id/showsFragment" />
+        <action
+            android:id="@+id/to_registerFragment"
+            app:destination="@id/registerFragment" />
     </fragment>
     <fragment
         android:id="@+id/showDetailsFragment"
@@ -32,6 +35,15 @@
             app:destination="@id/showDetailsFragment" />
         <action
             android:id="@+id/to_loginFraagment"
+            app:destination="@id/loginFraagment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.shows_your_name.RegisterFragment"
+        android:label="fragment_register_fragment"
+        tools:layout="@layout/fragment_register_fragment" >
+        <action
+            android:id="@+id/reg_to_loginFraagment"
             app:destination="@id/loginFraagment" />
     </fragment>
 </navigation>

@@ -1,7 +1,8 @@
-package com.example.shows_your_name
+package com.example.shows_your_name.viewModels
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,15 +12,25 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
+import android.widget.ProgressBar
 import androidx.core.content.edit
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import com.example.shows_your_name.R
+import com.example.shows_your_name.ShowsFragment
 import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
+import com.example.shows_your_name.models.ShowApi
+import com.example.shows_your_name.models.ShowsResponse
+import com.example.shows_your_name.newtworking.ApiModule
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.ByteArrayOutputStream
 
 class ShowsViewModel : ViewModel(){
@@ -39,10 +50,17 @@ class ShowsViewModel : ViewModel(){
     private val ctLogoutAlertDescription = "Are you sure you want to log out?"
     private val ctLogoutAlertNegativeText = "No"
     private val ctLogoutAlertPossitiveText = "Yes"
+    val ctAccessToken = "accessToken"
+    val ctClient = "client"
+    val ctUid = "uid"
+    val ctTokenType = "tokenType"
 
-    //The list of data
+    /*The list of data
     private val _listOfShowsLiveData = MutableLiveData<List<Show>>()
-    val listOfShowsLiveData: LiveData<List<Show>> = _listOfShowsLiveData
+    val listOfShowsLiveData: LiveData<List<Show>> = _listOfShowsLiveData*/
+
+    private val _listOfShowsLiveData1 = MutableLiveData<List<ShowApi>>()
+    val listOfShowsLiveData1: LiveData<List<ShowApi>> = _listOfShowsLiveData1
 
     private val _username = MutableLiveData<String>()
     val username: LiveData<String> = _username
@@ -51,18 +69,60 @@ class ShowsViewModel : ViewModel(){
     val fragment: LiveData<ShowsFragment> = _fragment
 
 
+
     init {
+        /*
         _listOfShowsLiveData.value = listOf(
-            Show(1,"The Office","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_office),
-            Show(2,"Stranger Things","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_stranger_things ),
-            Show(3,"Krv nije voda","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",R.drawable.ic_krv_nije_voda )
-        )
+            Show(1,"The Office","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+                R.drawable.ic_office
+            ),
+            Show(2,"Stranger Things","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+                R.drawable.ic_stranger_things ),
+            Show(3,"Krv nije voda","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+                R.drawable.ic_krv_nije_voda )
+        )*/
     }
 
-    fun initiateViewModel(arguments: Bundle?,binding: FragmentShowsBinding,fragment: ShowsFragment){
-        _username.value = arguments?.getString(ctUsername).toString()
-        showShows(binding)
+    fun getListOfShows(): LiveData<List<ShowApi>>{
+        return _listOfShowsLiveData1
+    }
+
+    fun getAllShows(arguments: Bundle?,binding: FragmentShowsBinding, activity: FragmentActivity,fragment: ShowsFragment){
+        binding.progressbar.isVisible = true
+        var sharedPreferences: SharedPreferences
+
+        sharedPreferences = fragment.requireContext().getSharedPreferences(ctAccessToken,Context.MODE_PRIVATE)
+        sharedPreferences = fragment.requireContext().getSharedPreferences(ctClient,Context.MODE_PRIVATE)
+        sharedPreferences = fragment.requireContext().getSharedPreferences(ctUid,Context.MODE_PRIVATE)
+        sharedPreferences = fragment.requireContext().getSharedPreferences(ctTokenType,Context.MODE_PRIVATE)
+        ApiModule.retrofit.getShows(
+            sharedPreferences.getString(ctAccessToken,"")!!,
+            sharedPreferences.getString(ctClient,"")!!,
+            sharedPreferences.getString(ctUid,"")!!,
+            sharedPreferences.getString(ctTokenType,"")!!
+        )
+            .enqueue(object: Callback<ShowsResponse>{
+                override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
+                    if(binding.progressbar.isVisible) binding.progressbar.isVisible = false
+                    _listOfShowsLiveData1.value = listOf(ShowApi(0,1.toFloat(),"t","",1,"str"))
+                    hideShows(binding)
+                }
+
+                override fun onResponse(
+                    call: Call<ShowsResponse>,
+                    response: Response<ShowsResponse>
+                ) {
+                    if(binding.progressbar.isVisible) binding.progressbar.isVisible = false
+                    _listOfShowsLiveData1.value = response.body()!!.shows
+                    showShows(binding)
+                }
+            })
+    }
+
+    fun initiateViewModel(arguments: Bundle?,binding: FragmentShowsBinding,fragment: ShowsFragment,sharedPreferences: SharedPreferences){
+        _username.value = sharedPreferences.getString("Username","")
         _fragment.value = fragment
+
     }
 
     fun getStringFromBitmap(bitmap: Bitmap): String {
@@ -92,10 +152,18 @@ class ShowsViewModel : ViewModel(){
         binding.noShowsText.isVisible = true
         binding.showsRecycler.isVisible = false
         binding.showHideShows.text = ctHideOn
+
+        initShowsRecycler()
+    }
+
+    fun initShowsRecycler(){
+
     }
 
     fun setProfileImage(sharedPreferences: SharedPreferences,binding: DialogProfileBinding,resources: Resources){
-        val encoded = getStringFromBitmap(BitmapFactory.decodeResource(resources, R.drawable.profile_ico))
+        val encoded = getStringFromBitmap(BitmapFactory.decodeResource(resources,
+            R.drawable.profile_ico
+        ))
         val profilePhoto = sharedPreferences.getString(REMEMBERED_PHOTO, encoded )
         val decoded = Base64.decode(profilePhoto, Base64.DEFAULT)
 

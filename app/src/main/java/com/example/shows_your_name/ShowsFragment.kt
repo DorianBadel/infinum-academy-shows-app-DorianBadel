@@ -1,25 +1,46 @@
 package com.example.shows_your_name
 
 import android.app.Activity
-import android.app.Activity.RESULT_OK
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
+import com.example.shows_your_name.newtworking.ApiModule
+import com.example.shows_your_name.viewModels.ShowsViewModel
+
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.provider.MediaStore
+import android.util.Base64
+import android.widget.ProgressBar
+import androidx.core.content.edit
+import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.example.shows_your_name.R
+import com.example.shows_your_name.ShowsFragment
+import com.example.shows_your_name.databinding.DialogProfileBinding
+import com.example.shows_your_name.models.ShowApi
+import com.example.shows_your_name.models.ShowsResponse
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.ByteArrayOutputStream
 
 
 class ShowsFragment : Fragment() {
@@ -34,6 +55,7 @@ class ShowsFragment : Fragment() {
     private val ctImage = "Image"
     private val ctDescription = "Description"
     private val ctID = "ID"
+    private val ctCurrentUser = "keyValuePairs"
     private val ctTitle = "Title"
     private val HAS_PHOTO = "HAS_PHOTO"
 
@@ -43,9 +65,19 @@ class ShowsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
 
+        ApiModule.initRetrofit(requireContext())
+
         sharedPreferences = requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
         sharedPreferences = requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
         sharedPreferences = requireContext().getSharedPreferences(ctImage,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(ctCurrentUser,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctAccessToken,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctClient,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctUid,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctTokenType,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(ctID,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(HAS_PHOTO,Context.MODE_PRIVATE)
+
     }
 
     override fun onCreateView(
@@ -58,10 +90,10 @@ class ShowsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPreferences = requireContext().getSharedPreferences(HAS_PHOTO,Context.MODE_PRIVATE)
-
-        viewModel.initiateViewModel(arguments,binding,this)
+        viewModel.initiateViewModel(arguments,binding,this,sharedPreferences)
+        viewModel.getAllShows(arguments,binding,activity!!,this)
         initShowsRecycler()
+
 
         binding.showHideShows.setOnClickListener{
             viewModel.showOrHideShows(binding)
@@ -81,26 +113,36 @@ class ShowsFragment : Fragment() {
     }
 
     private fun initShowsRecycler(){
-        viewModel.listOfShowsLiveData.observe(viewLifecycleOwner){ Shows ->
+        viewModel.getListOfShows().observe(viewLifecycleOwner){ ShowsApi ->
 
-            adapter = ShowsAdapter(Shows) { show ->
+            if(ShowsApi!= null){
+                adapter = ShowsAdapter(ShowsApi) { show ->
 
-                val bundle = bundleOf(
-                    ctTitle to show.title,
-                    ctDescription to show.desc,
-                    ctImage to show.imageResourceId,
-                    ctID to show.ID,
-                    ctUsername to viewModel.username.value
-                )
+                    val bundle = bundleOf(
+                        ctTitle to show.title,
+                        ctDescription to show.description,
+                        ctImage to show.imageUrl,
+                        ctID to show.id,
+                        "avgRating" to show.avgRating,
+                        "noRatings" to show.noOfReviews,
+                        ctUsername to viewModel.username.value
+                    )
 
-                findNavController().navigate(R.id.to_showDetailsFragment, bundle)
+                    sharedPreferences.edit{
+                        putInt(ctID, show.id)
+                        commit()
+                    }
+
+                    findNavController().navigate(R.id.to_showDetailsFragment, bundle)
+                }
+                binding.showsRecycler.layoutManager = LinearLayoutManager(activity,
+                    LinearLayoutManager.VERTICAL,false)
+
+                binding.showsRecycler.adapter = adapter
+
             }
-            binding.showsRecycler.layoutManager = LinearLayoutManager(activity,
-                LinearLayoutManager.VERTICAL,false)
+            }
 
-            binding.showsRecycler.adapter = adapter
-
-        }
     }
 
     private fun showProfileBottomSheet(){

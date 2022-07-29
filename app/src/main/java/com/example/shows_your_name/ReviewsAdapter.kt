@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shows_your_name.databinding.ViewItemReviewBinding
+import com.example.shows_your_name.models.ReviewApi
 
 class ReviewsAdapter(
-    private var items: List<Review>,
-    private var onItemClickCallback: (Review) -> Unit
+    private var items: List<ReviewApi>,
+    private var onItemClickCallback: (ReviewApi) -> Unit
 ): RecyclerView.Adapter<ReviewsAdapter.ReviewsViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewsViewHolder {
@@ -23,15 +24,15 @@ class ReviewsAdapter(
         return items.count()
     }
 
-    fun addItem(review: Review) {
+    fun addItem(review: ReviewApi) {
         items = items + review
         notifyItemInserted(items.lastIndex)
     }
 
     inner class ReviewsViewHolder(private val binding: ViewItemReviewBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: Review){
-            binding.reviewUsername.text = item.username
+        fun bind(item: ReviewApi){
+            binding.reviewUsername.text = item.user.email.substringBefore("@")
             binding.reviewText.text = item.comment
             binding.reviewRating.text = item.rating.toString()
 

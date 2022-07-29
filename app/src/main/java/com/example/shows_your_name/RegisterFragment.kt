@@ -7,23 +7,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.edit
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.shows_your_name.databinding.DialogRegistrationStateBinding
-import com.example.shows_your_name.databinding.FragmentLoginFraagmentBinding
+import com.example.shows_your_name.databinding.FragmentRegisterFragmentBinding
 import com.example.shows_your_name.newtworking.ApiModule
-import com.example.shows_your_name.viewModels.LoginViewModel
+import com.example.shows_your_name.viewModels.RegistrationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class LoginFraagment : Fragment() {
-    private var _binding: FragmentLoginFraagmentBinding? = null
+class RegisterFragment : Fragment() {
+    private var _binding: FragmentRegisterFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var sharedPreferences: SharedPreferences
+    private val viewModel: RegistrationViewModel by viewModels()
 
 
     //Constants
@@ -31,19 +30,17 @@ class LoginFraagment : Fragment() {
     private val REMEMBERED_USER = "REMEMBERED_USER"
     private val ctUser = "User"
     private val ctUsername = "Username"
-    private val ctEmail = "Email"
-
-    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
 
-        ApiModule.initRetrofit(requireContext())
-
         sharedPreferences = requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
         sharedPreferences = requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
-        viewModel.getLoginResultsLiveData().observe(this){ loginSuccess ->
-            displayLoginMessage(loginSuccess)
+
+        ApiModule.initRetrofit(requireContext())
+
+        viewModel.getRegistrationResultLiveData().observe(this){ registrationSuccess ->
+            displayRegistrationMessage(registrationSuccess)
 
         }
     }
@@ -52,7 +49,7 @@ class LoginFraagment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentLoginFraagmentBinding.inflate(inflater,container,false)
+        _binding = FragmentRegisterFragmentBinding.inflate(inflater,container,false)
         return binding.root
     }
 
@@ -60,11 +57,6 @@ class LoginFraagment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val isRemembered = sharedPreferences.getBoolean(IS_REMEMBERED, false)
-        binding.cbRememberMe.isChecked = isRemembered
-        if(!arguments?.getString(ctEmail).isNullOrBlank()){
-            binding.loginText.text = "Registration successfull!"
-            binding.registerbtn.isVisible = false
-        }
 
         val username = sharedPreferences.getString(REMEMBERED_USER, "")
 
@@ -73,55 +65,59 @@ class LoginFraagment : Fragment() {
             findNavController().navigate(R.id.to_showsFragment,bundle)
         }
 
-        binding.loginbtn.isEnabled = false
-        var emailCorrect = false;
-        var passCorrect = false;
+        binding.registerButton.isEnabled = false
+        var emailCorrect = false
+        var passCorrect = false
+        var repeatPassCorrect = false
 
         binding.emailTexttxt.doAfterTextChanged {
             emailCorrect =
                 android.util.Patterns.EMAIL_ADDRESS.matcher(binding.emailTexttxt.text.toString()).matches()
 
-            binding.loginbtn.isEnabled = emailCorrect && passCorrect
+            binding.registerButton.isEnabled = emailCorrect && passCorrect && repeatPassCorrect
         }
         binding.passwordTexttxt.doAfterTextChanged {
             passCorrect = binding.passwordTexttxt.text.toString() != ""
-
-            binding.loginbtn.isEnabled = emailCorrect && passCorrect
-        }
-
-
-        binding.loginbtn.setOnClickListener{
-            viewModel.onLoginButtonClicked(this,binding)
-
-            /*val bundle = bundleOf(ctUsername to binding.emailTexttxt.text.toString().substringBefore("@"))
-
-            findNavController().navigate(R.id.to_showsFragment,bundle)*/
-
-        }
-
-        binding.cbRememberMe.setOnCheckedChangeListener{
-            _, isChecked ->
-            sharedPreferences.edit {
-                putBoolean(IS_REMEMBERED, isChecked)
+            if(binding.passwordRepeatTexttxt.text.toString() != ""
+                && binding.passwordRepeatTexttxt.text.toString() == binding.passwordTexttxt.text.toString()){
+                repeatPassCorrect = true
             }
-            sharedPreferences.edit{
-                putString(REMEMBERED_USER, binding.emailTexttxt.text.toString().substringBefore("@"))
-            }
+
+            binding.registerButton.isEnabled = emailCorrect && passCorrect && repeatPassCorrect
         }
 
-        binding.registerbtn.setOnClickListener{
-            findNavController().navigate(R.id.to_registerFragment)
+        binding.passwordRepeatTexttxt.doAfterTextChanged {
+            if(binding.passwordRepeatTexttxt.text.toString() != ""
+                && binding.passwordRepeatTexttxt.text.toString() == binding.passwordTexttxt.text.toString()){
+                repeatPassCorrect = true
+            }
+
+            binding.registerButton.isEnabled = emailCorrect && passCorrect && repeatPassCorrect
+        }
+
+
+        binding.registerButton.setOnClickListener{
+
+            viewModel.onRegisterButtonClicked(
+                this,
+                binding
+            )
+
+            //val bundle = bundleOf(ctEmail to binding.emailTexttxt.text.toString())
+
+            //findNavController().navigate(R.id.reg_to_loginFraagment,bundle)
+
         }
     }
 
-    private fun displayLoginMessage(isSuccessful: Boolean) {
+    private fun displayRegistrationMessage(isSuccessful: Boolean) {
         val dialog = BottomSheetDialog(requireContext())
         val bottomSheetBinding = DialogRegistrationStateBinding.inflate(layoutInflater)
 
         if (isSuccessful) {
-            bottomSheetBinding.registrationMessage.text = "Login succesful"
+            bottomSheetBinding.registrationMessage.text = "Registration successful"
         } else {
-            bottomSheetBinding.registrationMessage.text = "Login not successful"
+            bottomSheetBinding.registrationMessage.text = "Registration not successful"
         }
         dialog.setContentView(bottomSheetBinding.root)
         dialog.show()

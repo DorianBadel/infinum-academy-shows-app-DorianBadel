@@ -1,13 +1,19 @@
 package com.example.shows_your_name
 
+import android.net.Uri
+import android.provider.MediaStore
+import android.provider.MediaStore.Images.Media.getBitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.shows_your_name.databinding.ViewShowCardBinding
+import com.example.shows_your_name.models.ShowApi
 
 class ShowsAdapter (
-    private var items: List<Show>,
-    private var onItemClickCallback: (Show) -> Unit
+    private var items: List<ShowApi>,
+    private var onItemClickCallback: (ShowApi) -> Unit
 ): RecyclerView.Adapter<ShowsAdapter.ShowViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
@@ -25,10 +31,13 @@ class ShowsAdapter (
 
     inner class ShowViewHolder(private val binding: ViewShowCardBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: Show){
+        fun bind(item: ShowApi){
             binding.cardTitle.text = item.title
-            binding.cardDesc.text = item.desc
-            binding.cardImage.setImageResource(item.imageResourceId)
+            binding.cardDesc.text = item.description
+            Glide.with(binding.root)
+                .load(item.imageUrl)
+                .into(binding.cardImage)
+            //binding.cardImage.setImageURI(item.imageUrl.toUri())
 
             binding.cardContainer.setOnClickListener{
                 onItemClickCallback(item)
