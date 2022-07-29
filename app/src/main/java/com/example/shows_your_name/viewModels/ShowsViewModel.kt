@@ -13,16 +13,19 @@ import android.provider.MediaStore
 import android.util.Base64
 import androidx.core.content.edit
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shows_your_name.R
 import com.example.shows_your_name.ShowsFragment
 import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
 import com.example.shows_your_name.models.ShowApi
 import com.example.shows_your_name.Show
+import com.example.shows_your_name.ShowsAdapter
 import com.example.shows_your_name.models.ShowsResponse
 import com.example.shows_your_name.newtworking.ApiModule
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -77,8 +80,11 @@ class ShowsViewModel : ViewModel(){
         )*/
     }
 
-    fun getAllShows(arguments: Bundle?,binding: FragmentShowsBinding){
-        val shows = true
+    fun getListOfShows(): LiveData<List<ShowApi>>{
+        return _listOfShowsLiveData1
+    }
+
+    fun getAllShows(arguments: Bundle?,binding: FragmentShowsBinding, activity: FragmentActivity){
         ApiModule.retrofit.getShows(
             arguments?.getString("accessToken").toString(),
             arguments?.getString("client").toString(),
@@ -87,7 +93,8 @@ class ShowsViewModel : ViewModel(){
         )
             .enqueue(object: Callback<ShowsResponse>{
                 override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
-                    showShows(binding)
+                    _listOfShowsLiveData1.value = listOf(ShowApi(0,1.toFloat(),"t","",1,"str"))
+                    hideShows(binding)
                 }
 
                 override fun onResponse(
@@ -95,15 +102,13 @@ class ShowsViewModel : ViewModel(){
                     response: Response<ShowsResponse>
                 ) {
                     _listOfShowsLiveData1.value = response.body()?.shows
-                    hideShows(binding)
-
+                    showShows(binding)
                 }
             })
     }
 
     fun initiateViewModel(arguments: Bundle?,binding: FragmentShowsBinding,fragment: ShowsFragment){
         _username.value = arguments?.getString(ctUsername).toString()
-        showShows(binding)
         _fragment.value = fragment
     }
 
@@ -134,6 +139,12 @@ class ShowsViewModel : ViewModel(){
         binding.noShowsText.isVisible = true
         binding.showsRecycler.isVisible = false
         binding.showHideShows.text = ctHideOn
+
+        initShowsRecycler()
+    }
+
+    fun initShowsRecycler(){
+
     }
 
     fun setProfileImage(sharedPreferences: SharedPreferences,binding: DialogProfileBinding,resources: Resources){

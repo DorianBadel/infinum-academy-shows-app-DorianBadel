@@ -47,7 +47,6 @@ class ShowsFragment : Fragment() {
         sharedPreferences = requireContext().getSharedPreferences(ctImage,Context.MODE_PRIVATE)
         sharedPreferences = requireContext().getSharedPreferences(ctCurrentUser,Context.MODE_PRIVATE)
         sharedPreferences = requireContext().getSharedPreferences(HAS_PHOTO,Context.MODE_PRIVATE)
-
     }
 
     override fun onCreateView(
@@ -60,11 +59,13 @@ class ShowsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initShowsRecycler()
 
-        viewModel.getAllShows(arguments,binding)
+
+        viewModel.getAllShows(arguments,binding,activity!!)
 
         viewModel.initiateViewModel(arguments,binding,this)
-        initShowsRecycler()
+
 
         binding.showHideShows.setOnClickListener{
             viewModel.showOrHideShows(binding)
@@ -84,7 +85,7 @@ class ShowsFragment : Fragment() {
     }
 
     private fun initShowsRecycler(){
-        viewModel.listOfShowsLiveData1.observe(viewLifecycleOwner){ ShowsApi ->
+        viewModel.getListOfShows().observe(viewLifecycleOwner){ ShowsApi ->
 
             adapter = ShowsAdapter(ShowsApi) { show ->
 
