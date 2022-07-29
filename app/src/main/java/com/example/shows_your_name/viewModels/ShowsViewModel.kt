@@ -87,8 +87,14 @@ class ShowsViewModel : ViewModel(){
         return _listOfShowsLiveData1
     }
 
-    fun getAllShows(arguments: Bundle?,binding: FragmentShowsBinding, activity: FragmentActivity,sharedPreferences: SharedPreferences){
+    fun getAllShows(arguments: Bundle?,binding: FragmentShowsBinding, activity: FragmentActivity,fragment: ShowsFragment){
         binding.progressbar.isVisible = true
+        var sharedPreferences: SharedPreferences
+
+        sharedPreferences = fragment.requireContext().getSharedPreferences(ctAccessToken,Context.MODE_PRIVATE)
+        sharedPreferences = fragment.requireContext().getSharedPreferences(ctClient,Context.MODE_PRIVATE)
+        sharedPreferences = fragment.requireContext().getSharedPreferences(ctUid,Context.MODE_PRIVATE)
+        sharedPreferences = fragment.requireContext().getSharedPreferences(ctTokenType,Context.MODE_PRIVATE)
         ApiModule.retrofit.getShows(
             sharedPreferences.getString(ctAccessToken,"")!!,
             sharedPreferences.getString(ctClient,"")!!,
@@ -97,7 +103,6 @@ class ShowsViewModel : ViewModel(){
         )
             .enqueue(object: Callback<ShowsResponse>{
                 override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
-                    println(t.message)
                     if(binding.progressbar.isVisible) binding.progressbar.isVisible = false
                     _listOfShowsLiveData1.value = listOf(ShowApi(0,1.toFloat(),"t","",1,"str"))
                     hideShows(binding)
@@ -108,23 +113,15 @@ class ShowsViewModel : ViewModel(){
                     response: Response<ShowsResponse>
                 ) {
                     if(binding.progressbar.isVisible) binding.progressbar.isVisible = false
-                    _listOfShowsLiveData1.value = response.body()?.shows
+                    _listOfShowsLiveData1.value = response.body()!!.shows
                     showShows(binding)
                 }
             })
     }
 
     fun initiateViewModel(arguments: Bundle?,binding: FragmentShowsBinding,fragment: ShowsFragment,sharedPreferences: SharedPreferences){
-        _username.value = arguments?.getString(ctUsername).toString()
+        _username.value = sharedPreferences.getString("Username","")
         _fragment.value = fragment
-        if (arguments != null){
-            sharedPreferences.edit{
-                putString(ctAccessToken,arguments.getString(ctAccessToken).toString())
-                putString(ctClient,arguments.getString(ctClient).toString())
-                putString(ctTokenType,arguments.getString(ctTokenType).toString())
-                putString(ctUid,arguments.getString(ctUid).toString())
-            }
-        }
 
     }
 

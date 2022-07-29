@@ -1,5 +1,8 @@
 package com.example.shows_your_name.viewModels
 
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,6 +21,10 @@ import retrofit2.Response
 class LoginViewModel: ViewModel(){
 
     private val ctUsername = "Username"
+    val ctAccessToken = "accessToken"
+    val ctClient = "client"
+    val ctUid = "uid"
+    val ctTokenType = "tokenType"
 
 
     private val loginResultLiveData: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
@@ -41,13 +48,19 @@ class LoginViewModel: ViewModel(){
                     call: Call<LoginResponse>,
                     response: Response<LoginResponse>
                 ) {
-                    val tokenType = "Bearer"
-                    val accessToken = response.headers().get("access-token")
-                    val client = response.headers().get("client")
-                    val uid = response.headers().get("uid")
+                    var sp: SharedPreferences = fragment.requireContext().getSharedPreferences(ctTokenType,
+                        Context.MODE_PRIVATE)
 
-                    val bundle = bundleOf(ctUsername to binding.emailTexttxt.text.toString().substringBefore("@"),
-                    "tokenType" to tokenType,"accessToken" to accessToken,"client" to client, "uid" to uid)
+                    sp.edit{
+                        putString(ctAccessToken,response.headers().get("access-token"))
+                        putString(ctClient,response.headers().get(ctClient).toString())
+                        putString(ctTokenType,"Bearer")
+                        putString(ctUid,response.headers().get(ctUid).toString())
+                        putString(ctUsername,binding.emailTexttxt.text.toString().substringBefore("@"))
+                        commit()
+                    }
+
+                    val bundle = bundleOf(ctUsername to binding.emailTexttxt.text.toString().substringBefore("@"))
 
                     fragment.findNavController().navigate(R.id.to_showsFragment,bundle)
 

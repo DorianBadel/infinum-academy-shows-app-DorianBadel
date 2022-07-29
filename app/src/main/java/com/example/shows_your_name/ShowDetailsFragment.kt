@@ -1,7 +1,9 @@
 package com.example.shows_your_name
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shows_your_name.databinding.DialogAddReviewBinding
 import com.example.shows_your_name.databinding.FragmentShowDetailsBinding
+import com.example.shows_your_name.newtworking.ApiModule
 import com.example.shows_your_name.viewModels.ShowDetailsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -30,7 +33,20 @@ class ShowDetailsFragment : Fragment() {
     private lateinit var adapter: ReviewsAdapter
 
     private val viewModel by viewModels<ShowDetailsViewModel>()
+    private lateinit var sharedPreferences: SharedPreferences
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        ApiModule.initRetrofit(requireContext())
+
+        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctAccessToken, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctClient, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctUid, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctTokenType, Context.MODE_PRIVATE)
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,10 +56,12 @@ class ShowDetailsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
 
-        viewModel.initiateViewModel(arguments)
-        reviews = viewModel.getReviews()
+
+        viewModel.initiateViewModel(arguments,binding, this)
+
+        initShowsRecycler()
 
         binding.showTitle.text = viewModel.title.value
         binding.showDescription.text = viewModel.description.value
@@ -55,7 +73,6 @@ class ShowDetailsFragment : Fragment() {
             findNavController().navigate(R.id.to_showsFragment, bundle)
         }
 
-        initShowsRecycler()
 
         binding.addReviewBtn.setOnClickListener {
             showAddReviewBottomSheet()
@@ -63,21 +80,24 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun initShowsRecycler() {
-        adapter = ReviewsAdapter(reviews) { review ->
+        viewModel.getReviewsList().observe(viewLifecycleOwner){ reviewsApi ->
+            adapter = ReviewsAdapter(reviewsApi) { review ->
+            }
+
+            binding.recyclerView.layoutManager = LinearLayoutManager(
+                requireView().context,
+                LinearLayoutManager.VERTICAL, false
+            )
+
+            viewModel.updateStatistics(binding,arguments)
+
+            binding.recyclerView.adapter = adapter
+
+            binding.recyclerView.addItemDecoration(
+                DividerItemDecoration(requireView().context, DividerItemDecoration.VERTICAL)
+            )
         }
 
-        binding.recyclerView.layoutManager = LinearLayoutManager(
-            requireView().context,
-            LinearLayoutManager.VERTICAL, false
-        )
-
-        viewModel.updateStatistics(binding,reviews)
-
-        binding.recyclerView.adapter = adapter
-
-        binding.recyclerView.addItemDecoration(
-            DividerItemDecoration(requireView().context, DividerItemDecoration.VERTICAL)
-        )
     }
 
     private fun showAddReviewBottomSheet() {
@@ -87,8 +107,8 @@ class ShowDetailsFragment : Fragment() {
         dialog.setContentView(bottomSheetBinding.root)
 
         bottomSheetBinding.submitReviewButton.setOnClickListener {
-            reviews += viewModel.addReview(bottomSheetBinding, adapter, reviews)
-            viewModel.updateStatistics(binding,reviews)
+            //reviews += viewModel.addReview(bottomSheetBinding, adapter, reviews)
+            viewModel.updateStatistics(binding,arguments)
             dialog.dismiss()
         }
 
