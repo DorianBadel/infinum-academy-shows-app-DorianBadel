@@ -23,7 +23,15 @@ fun getReviews(@Url url: String,
                @Header("client") client: String,
                @Header("uid") uid: String,
                @Header("token-type") tokenType: String): Call<ReviewsResponse>
+
+    @POST("/reviews")
+    fun addReview(@Body request: addReviewRequest,
+                  @Header("access-token") accessToken: String,
+                  @Header("client") client: String,
+                  @Header("uid") uid: String,
+                  @Header("token-type") tokenType: String): Call<AddReviewResponse>
 }
+
 
 
 
