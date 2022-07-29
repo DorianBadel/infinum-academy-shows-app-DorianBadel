@@ -46,7 +46,12 @@ class ShowsFragment : Fragment() {
         sharedPreferences = requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
         sharedPreferences = requireContext().getSharedPreferences(ctImage,Context.MODE_PRIVATE)
         sharedPreferences = requireContext().getSharedPreferences(ctCurrentUser,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctAccessToken,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctClient,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctUid,Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctTokenType,Context.MODE_PRIVATE)
         sharedPreferences = requireContext().getSharedPreferences(HAS_PHOTO,Context.MODE_PRIVATE)
+
     }
 
     override fun onCreateView(
@@ -59,12 +64,9 @@ class ShowsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.initiateViewModel(arguments,binding,this,sharedPreferences)
+        viewModel.getAllShows(arguments,binding,activity!!,sharedPreferences)
         initShowsRecycler()
-
-
-        viewModel.getAllShows(arguments,binding,activity!!)
-
-        viewModel.initiateViewModel(arguments,binding,this)
 
 
         binding.showHideShows.setOnClickListener{
