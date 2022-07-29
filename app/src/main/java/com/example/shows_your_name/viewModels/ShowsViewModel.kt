@@ -97,6 +97,7 @@ class ShowsViewModel : ViewModel(){
         )
             .enqueue(object: Callback<ShowsResponse>{
                 override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
+                    println(t.message)
                     if(binding.progressbar.isVisible) binding.progressbar.isVisible = false
                     _listOfShowsLiveData1.value = listOf(ShowApi(0,1.toFloat(),"t","",1,"str"))
                     hideShows(binding)
