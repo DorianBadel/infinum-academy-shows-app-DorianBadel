@@ -2,11 +2,12 @@ package com.example.shows_your_name.database
 
 import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
     entities = [
-        //TODO ShowEntity::class,
+        ShowEntity::class
         //TODO ReviewEntity::class
     ],
     version = 1
@@ -19,11 +20,18 @@ abstract class ShowsRoomDatabase: RoomDatabase(){
 
         fun getDatabase(context: Context): ShowsRoomDatabase? {
             return INSTANCE ?: synchronized(this) {
-                //TODO: instantiate database
-                null
+                val database = Room.databaseBuilder(
+                    context,
+                    ShowsRoomDatabase::class.java,
+                    "show_db"
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                INSTANCE = database
+                database
             }
         }
     }
 
-    //TODO: define DAO
+    abstract fun ShowDAO()
 }
