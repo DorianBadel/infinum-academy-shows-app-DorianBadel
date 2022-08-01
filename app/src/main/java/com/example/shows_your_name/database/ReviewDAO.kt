@@ -13,5 +13,5 @@ interface ReviewDAO {
     fun getReview(reviewID: Int): LiveData<ReviewEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllReviews(reviews: List<ReviewEntity>)
+    fun insertReview(review: ReviewEntity)
 }
