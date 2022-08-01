@@ -1,10 +1,12 @@
 package com.example.shows_your_name.database
 
 import androidx.lifecycle.LiveData
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
+@Dao
 interface ShowDAO {
     @Query("SELECT * FROM showTable")
     fun getAllShows() : LiveData<List<ShowEntity>>

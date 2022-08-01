@@ -7,8 +7,8 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [
-        ShowEntity::class
-        //TODO ReviewEntity::class
+        ShowEntity::class,
+        ReviewEntity::class
     ],
     version = 1
 )
@@ -33,5 +33,6 @@ abstract class ShowsRoomDatabase: RoomDatabase(){
         }
     }
 
-    abstract fun ShowDAO()
+    abstract fun ShowDAO(): ShowDAO
+    abstract fun ReviewDAO(): ReviewDAO
 }
