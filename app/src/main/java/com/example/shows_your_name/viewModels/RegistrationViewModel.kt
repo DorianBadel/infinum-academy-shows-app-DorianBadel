@@ -1,13 +1,8 @@
 package com.example.shows_your_name.viewModels
 
-import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.findNavController
-import com.example.shows_your_name.R
-import com.example.shows_your_name.RegisterFragment
-import com.example.shows_your_name.databinding.FragmentRegisterFragmentBinding
 import com.example.shows_your_name.models.RegisterRequest
 import com.example.shows_your_name.models.RegisterResponse
 import com.example.shows_your_name.newtworking.ApiModule
@@ -17,19 +12,17 @@ import retrofit2.Response
 
 class RegistrationViewModel: ViewModel(){
 
-    private val ctEmail = "Email"
-
     private val registrationResultLiveData: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
 
     fun getRegistrationResultLiveData(): LiveData<Boolean> {
         return registrationResultLiveData
     }
 
-    fun onRegisterButtonClicked(fragment: RegisterFragment, binding: FragmentRegisterFragmentBinding) {
+    fun onRegisterButtonClicked(email: String, password: String, passwordConfirmation: String) {
         val registerRequest = RegisterRequest(
-            email = binding.emailTexttxt.text.toString(),
-            password = binding.passwordTexttxt.text.toString(),
-            passwordConfirmation = binding.passwordRepeatTexttxt.text.toString()
+            email = email,
+            password = password,
+            passwordConfirmation =  passwordConfirmation
         )
         ApiModule.retrofit.register(registerRequest)
             .enqueue(object: Callback<RegisterResponse>{
@@ -41,10 +34,6 @@ class RegistrationViewModel: ViewModel(){
                     call: Call<RegisterResponse>,
                     response: Response<RegisterResponse>
                 ) {
-                    val bundle = bundleOf(ctEmail to binding.emailTexttxt.text.toString())
-
-                    fragment.findNavController().navigate(R.id.reg_to_loginFraagment,bundle)
-
                     registrationResultLiveData.value = response.isSuccessful
                 }
             })

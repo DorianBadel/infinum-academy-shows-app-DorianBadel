@@ -15,6 +15,10 @@
         <action
             android:id="@+id/to_registerFragment"
             app:destination="@id/registerFragment" />
+        <argument android:name="email"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
     </fragment>
     <fragment
         android:id="@+id/showDetailsFragment"
@@ -42,8 +46,9 @@
         android:name="com.example.shows_your_name.RegisterFragment"
         android:label="fragment_register_fragment"
         tools:layout="@layout/fragment_register_fragment" >
+
         <action
-            android:id="@+id/reg_to_loginFraagment"
-            app:destination="@id/loginFraagment" />
+            android:id="@+id/regToLogin"
+            app:destination="@id/loginFraagment"/>
     </fragment>
 </navigation>

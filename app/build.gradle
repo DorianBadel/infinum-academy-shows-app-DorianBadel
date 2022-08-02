@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.serialization'
     id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -47,7 +48,6 @@ dependencies {
     implementation"androidx.fragment:fragment-ktx:1.5.0"
     implementation"androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation"androidx.navigation:navigation-ui-ktx:$nav_version"
-    //SafeArgsclasspath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
 
 
     testImplementation 'junit:junit:4.13.2'

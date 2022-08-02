@@ -1,16 +1,12 @@
 package com.example.shows_your_name.viewModels
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import androidx.core.os.bundleOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.findNavController
-import com.example.shows_your_name.LoginFraagment
-import com.example.shows_your_name.R
-import com.example.shows_your_name.databinding.FragmentLoginFraagmentBinding
 import com.example.shows_your_name.models.LoginRequest
 import com.example.shows_your_name.models.LoginResponse
 import com.example.shows_your_name.newtworking.ApiModule
@@ -18,8 +14,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginViewModel: ViewModel(){
+class LoginViewModel(application: Application): AndroidViewModel(application){
 
+    private val sharedPrefs = "SHARED_STORAGE"
     private val ctUsername = "Username"
     val ctAccessToken = "accessToken"
     val ctClient = "client"
@@ -33,10 +30,10 @@ class LoginViewModel: ViewModel(){
         return loginResultLiveData
     }
 
-    fun onLoginButtonClicked(fragment: LoginFraagment, binding: FragmentLoginFraagmentBinding) {
+    fun onLoginButtonClicked(email: String,password: String) {
         val loginRequest = LoginRequest(
-            email = binding.emailTexttxt.text.toString(),
-            password = binding.passwordTexttxt.text.toString()
+            email = email,
+            password = password
         )
         ApiModule.retrofit.login(loginRequest)
             .enqueue(object: Callback<LoginResponse> {
@@ -48,21 +45,20 @@ class LoginViewModel: ViewModel(){
                     call: Call<LoginResponse>,
                     response: Response<LoginResponse>
                 ) {
-                    var sp: SharedPreferences = fragment.requireContext().getSharedPreferences(ctTokenType,
-                        Context.MODE_PRIVATE)
+                    var sp: SharedPreferences = getApplication<Application>().getSharedPreferences(sharedPrefs,Context.MODE_PRIVATE)
 
                     sp.edit{
                         putString(ctAccessToken,response.headers().get("access-token"))
                         putString(ctClient,response.headers().get(ctClient).toString())
                         putString(ctTokenType,"Bearer")
                         putString(ctUid,response.headers().get(ctUid).toString())
-                        putString(ctUsername,binding.emailTexttxt.text.toString().substringBefore("@"))
+                        putString(ctUsername,email.substringBefore("@"))
                         commit()
                     }
 
-                    val bundle = bundleOf(ctUsername to binding.emailTexttxt.text.toString().substringBefore("@"))
+                    //val bundle = bundleOf(ctUsername to binding.emailTexttxt.text.toString().substringBefore("@"))
 
-                    fragment.findNavController().navigate(R.id.to_showsFragment,bundle)
+                    //fragment.findNavController().navigate(R.id.to_showsFragment,bundle)
 
                     loginResultLiveData.value = response.isSuccessful
                 }

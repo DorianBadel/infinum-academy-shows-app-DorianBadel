@@ -11,10 +11,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    /*private val viewModel: ShowsViewModel by viewModels {
-        ShowsViewModelFactory((application as ShowsApp).database)
-    }*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)

@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.shows_your_name.databinding.DialogRegistrationStateBinding
 import com.example.shows_your_name.databinding.FragmentLoginFraagmentBinding
 import com.example.shows_your_name.newtworking.ApiModule
@@ -24,12 +25,13 @@ class LoginFraagment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var sharedPreferences: SharedPreferences
+    private val args by navArgs<LoginFraagmentArgs>()
 
 
     //Constants
+    private val sharedPrefs = "SHARED_STORAGE"
     private val IS_REMEMBERED = "IS_REMEMBERED"
     private val REMEMBERED_USER = "REMEMBERED_USER"
-    private val ctUser = "User"
     private val ctUsername = "Username"
     private val ctEmail = "Email"
 
@@ -40,11 +42,10 @@ class LoginFraagment : Fragment() {
 
         ApiModule.initRetrofit(requireContext())
 
-        sharedPreferences = requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
-        sharedPreferences = requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
+
         viewModel.getLoginResultsLiveData().observe(this){ loginSuccess ->
             displayLoginMessage(loginSuccess)
-
         }
     }
 
@@ -58,6 +59,10 @@ class LoginFraagment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if(args.email != "null"){
+            binding.emailTexttxt.setText(args.email)
+        }
 
         val isRemembered = sharedPreferences.getBoolean(IS_REMEMBERED, false)
         binding.cbRememberMe.isChecked = isRemembered
@@ -91,11 +96,11 @@ class LoginFraagment : Fragment() {
 
 
         binding.loginbtn.setOnClickListener{
-            viewModel.onLoginButtonClicked(this,binding)
 
-            /*val bundle = bundleOf(ctUsername to binding.emailTexttxt.text.toString().substringBefore("@"))
-
-            findNavController().navigate(R.id.to_showsFragment,bundle)*/
+            viewModel.onLoginButtonClicked(
+                binding.emailTexttxt.text.toString(),
+                binding.passwordTexttxt.text.toString()
+            )
 
         }
 
@@ -103,8 +108,6 @@ class LoginFraagment : Fragment() {
             _, isChecked ->
             sharedPreferences.edit {
                 putBoolean(IS_REMEMBERED, isChecked)
-            }
-            sharedPreferences.edit{
                 putString(REMEMBERED_USER, binding.emailTexttxt.text.toString().substringBefore("@"))
             }
         }
@@ -125,6 +128,8 @@ class LoginFraagment : Fragment() {
         }
         dialog.setContentView(bottomSheetBinding.root)
         dialog.show()
+
+        findNavController().navigate(R.id.to_showsFragment)
 
     }
 

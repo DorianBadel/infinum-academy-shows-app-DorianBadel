@@ -28,6 +28,8 @@ class ShowsFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
+
+    private val sharedPrefs = "SHARED_STORAGE"
     private val ctUser = "User"
     private val ctUsername = "Username"
     private val ctImage = "Image"
@@ -47,17 +49,7 @@ class ShowsFragment : Fragment() {
 
         ApiModule.initRetrofit(requireContext())
 
-        sharedPreferences = requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
-        sharedPreferences = requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
-        sharedPreferences = requireContext().getSharedPreferences(ctImage,Context.MODE_PRIVATE)
-        sharedPreferences = requireContext().getSharedPreferences(ctCurrentUser,Context.MODE_PRIVATE)
-        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctAccessToken,Context.MODE_PRIVATE)
-        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctClient,Context.MODE_PRIVATE)
-        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctUid,Context.MODE_PRIVATE)
-        sharedPreferences = requireContext().getSharedPreferences(viewModel.ctTokenType,Context.MODE_PRIVATE)
-        sharedPreferences = requireContext().getSharedPreferences(ctID,Context.MODE_PRIVATE)
-        sharedPreferences = requireContext().getSharedPreferences(HAS_PHOTO,Context.MODE_PRIVATE)
-
+        sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -70,7 +62,7 @@ class ShowsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.initiateViewModel(this,sharedPreferences)
+        viewModel.initiateViewModel(this,sharedPreferences.getString(ctUsername,"")!!)
         viewModel.getAllShows(binding,this)
         initShowsRecycler()
 
@@ -86,11 +78,11 @@ class ShowsFragment : Fragment() {
 
     }
 
-    companion object{
+    /*companion object{
         fun buildIntent(activity: Activity): Intent {
             return Intent(activity, ShowsFragment::class.java)
         }
-    }
+    }*/
 
     private fun initShowsRecycler(){
         viewModel.getListOfShows().observe(viewLifecycleOwner){ ShowsApi ->

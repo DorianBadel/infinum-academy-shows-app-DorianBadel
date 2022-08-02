@@ -107,8 +107,8 @@ class ShowsViewModel(
             })
     }
 
-    fun initiateViewModel(fragment: ShowsFragment,sharedPreferences: SharedPreferences){
-        _username.value = sharedPreferences.getString("Username","")
+    fun initiateViewModel(fragment: ShowsFragment,username: String){
+        _username.value = username
         _fragment.value = fragment
 
     }
@@ -194,12 +194,13 @@ class ShowsViewModel(
     }
 
     fun createProfileBottomSheet(resources: Resources,sharedPreferences: SharedPreferences){
+
         val dialog = BottomSheetDialog(_fragment.value!!.requireView().context)
 
         val bottomSheetBinding = DialogProfileBinding.inflate(_fragment.value!!.layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
 
-        bottomSheetBinding.txtUsername.text = username.value
+        bottomSheetBinding.txtUsername.text = _username.value
 
         //Change profile picture btn
 
