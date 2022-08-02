@@ -66,6 +66,23 @@ class ShowsViewModel(
     val fragment: LiveData<ShowsFragment> = _fragment
 
 
+    fun initiateViewModel(fragment: ShowsFragment,username: String){
+        _username.value = username
+        _fragment.value = fragment
+
+    }
+
+    //Change profile photo
+    fun encodeString(resources: Resources): String{
+        return getStringFromBitmap(BitmapFactory.decodeResource(resources, R.drawable.profile_ico))
+    }
+
+    fun encodeBitmapToString(data: Intent?): String{
+        return getStringFromBitmap(data?.extras?.get(ctExtrasData) as Bitmap)
+    }
+
+    //Shows
+
     fun getListOfShows(): LiveData<List<ShowApi>>{
        return _listOfShowsLiveData1
     }
@@ -107,11 +124,6 @@ class ShowsViewModel(
             })
     }
 
-    fun initiateViewModel(fragment: ShowsFragment,username: String){
-        _username.value = username
-        _fragment.value = fragment
-
-    }
 
     fun getStringFromBitmap(bitmap: Bitmap): String {
         val byteArr = ByteArrayOutputStream()
@@ -142,23 +154,7 @@ class ShowsViewModel(
         binding.showHideShows.text = ctHideOn
     }
 
-    fun setProfileImage(sharedPreferences: SharedPreferences,binding: DialogProfileBinding,resources: Resources){
-        val encoded = getStringFromBitmap(BitmapFactory.decodeResource(resources,
-            R.drawable.profile_ico
-        ))
-        val profilePhoto = sharedPreferences.getString(REMEMBERED_PHOTO, encoded )
-        val decoded = Base64.decode(profilePhoto, Base64.DEFAULT)
 
-        binding.imgProfile.setImageBitmap(BitmapFactory.decodeByteArray(decoded, 0, decoded.size))
-    }
-
-    fun encodeString(resources: Resources): String{
-        return getStringFromBitmap(BitmapFactory.decodeResource(resources, R.drawable.profile_ico))
-    }
-
-    fun encodeBitmapToString(data: Intent?): String{
-        return getStringFromBitmap(data?.extras?.get(ctExtrasData) as Bitmap)
-    }
 
     fun logOut(sharedPreferences: SharedPreferences, resources: Resources){
         sharedPreferences.edit {
@@ -191,47 +187,6 @@ class ShowsViewModel(
                 dialogInterface.cancel()
             }
             .show()
-    }
-
-    fun createProfileBottomSheet(resources: Resources,sharedPreferences: SharedPreferences){
-
-        val dialog = BottomSheetDialog(_fragment.value!!.requireView().context)
-
-        val bottomSheetBinding = DialogProfileBinding.inflate(_fragment.value!!.layoutInflater)
-        dialog.setContentView(bottomSheetBinding.root)
-
-        bottomSheetBinding.txtUsername.text = _username.value
-
-        //Change profile picture btn
-
-        bottomSheetBinding.btnChangeProfilePic.setOnClickListener {
-            val takePictureIntent =  Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-            if(true){
-                _fragment.value!!.startActivityForResult(takePictureIntent,123)
-                dialog.dismiss()
-            }
-        }
-
-        setProfileImage(sharedPreferences,bottomSheetBinding,resources)
-
-        bottomSheetBinding.btnDialogLogOut.setOnClickListener{
-            createAlert(resources,dialog)
-        }
-
-        dialog.show()
-    }
-
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        //super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == 123 && resultCode == Activity.RESULT_OK){
-
-            val sharedPreferences: SharedPreferences =
-                _fragment.value?.requireContext()!!.getSharedPreferences(ctImage,Context.MODE_PRIVATE)
-            sharedPreferences.edit{
-                putString(REMEMBERED_PHOTO,encodeBitmapToString(data))
-            }
-        }
     }
 
     fun hasInternet(): Boolean{
