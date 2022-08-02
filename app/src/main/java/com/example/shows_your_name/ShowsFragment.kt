@@ -5,42 +5,20 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.shows_your_name.ShowsFragment
+import com.example.shows_your_name.database.ShowsViewModelFactory
 import com.example.shows_your_name.databinding.FragmentShowsBinding
 import com.example.shows_your_name.newtworking.ApiModule
 import com.example.shows_your_name.viewModels.ShowsViewModel
-
-import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.provider.MediaStore
-import android.util.Base64
-import android.widget.ProgressBar
-import androidx.core.content.edit
-import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import com.example.shows_your_name.R
-import com.example.shows_your_name.ShowsFragment
-import com.example.shows_your_name.databinding.DialogProfileBinding
-import com.example.shows_your_name.models.ShowApi
-import com.example.shows_your_name.models.ShowsResponse
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.ByteArrayOutputStream
 
 
 class ShowsFragment : Fragment() {
@@ -59,7 +37,9 @@ class ShowsFragment : Fragment() {
     private val ctTitle = "Title"
     private val HAS_PHOTO = "HAS_PHOTO"
 
-    private val viewModel by viewModels<ShowsViewModel>()
+    private val viewModel: ShowsViewModel by viewModels {
+        ShowsViewModelFactory((requireActivity().application  as ShowsApp).database)
+    }
     private lateinit var adapter: ShowsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?){
@@ -90,8 +70,8 @@ class ShowsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.initiateViewModel(arguments,binding,this,sharedPreferences)
-        viewModel.getAllShows(arguments,binding,activity!!,this)
+        viewModel.initiateViewModel(this,sharedPreferences)
+        viewModel.getAllShows(binding,this)
         initShowsRecycler()
 
 

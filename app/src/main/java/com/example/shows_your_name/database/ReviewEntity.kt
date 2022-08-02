@@ -11,5 +11,5 @@ data class ReviewEntity (
     @ColumnInfo(name = "comment") val comment: String,
     @ColumnInfo(name = "rating") val rating: Int,
     @ColumnInfo(name = "show_id") val showID: Int,
-    @ColumnInfo(name = "user") val user: User
+    @ColumnInfo(name = "user_id") val userID: Int
     )
