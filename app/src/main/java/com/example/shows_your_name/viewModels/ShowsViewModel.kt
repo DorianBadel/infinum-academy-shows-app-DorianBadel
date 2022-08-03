@@ -66,7 +66,6 @@ class ShowsViewModel(
 
     fun initiateViewModel(username: String){
         _username.value = username
-
     }
 
     //Change profile photo
@@ -102,8 +101,7 @@ class ShowsViewModel(
             .enqueue(object: Callback<ShowsResponse>{
                 override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
                     if(binding.progressbar.isVisible) binding.progressbar.isVisible = false
-                    _listOfShowsLiveData1.value = listOf(ShowApi(0,1.toFloat(),"t","",1,"str"))
-                    hideShows(binding)
+                    getListOfShowsOffline()
                 }
 
                 override fun onResponse(
@@ -133,7 +131,7 @@ class ShowsViewModel(
         }
     }
 
-    private fun showShows(binding: FragmentShowsBinding){
+     fun showShows(binding: FragmentShowsBinding){
         binding.noShowsIco.isVisible = false
         binding.noShowsText.isVisible = false
         binding.showsRecycler.isVisible = true
@@ -145,10 +143,5 @@ class ShowsViewModel(
         binding.noShowsText.isVisible = true
         binding.showsRecycler.isVisible = false
         binding.showHideShows.text = ctHideOn
-    }
-
-
-    fun hasInternet(): Boolean{
-        return false
     }
 }

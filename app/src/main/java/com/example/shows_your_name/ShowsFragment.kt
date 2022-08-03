@@ -7,6 +7,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
@@ -16,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -25,6 +29,7 @@ import com.example.shows_your_name.ShowsFragment
 import com.example.shows_your_name.database.ShowsViewModelFactory
 import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
+import com.example.shows_your_name.models.ShowApi
 import com.example.shows_your_name.newtworking.ApiModule
 import com.example.shows_your_name.viewModels.ShowsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -82,8 +87,11 @@ class ShowsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.initiateViewModel(sharedPreferences.getString(ctUsername,"")!!)
-        viewModel.getAllShows(binding,this)
+
         initShowsRecycler()
+        if(!hasInternet()){
+            viewModel.getAllShows(binding,this)
+        }
 
 
         binding.showHideShows.setOnClickListener{
@@ -97,43 +105,77 @@ class ShowsFragment : Fragment() {
 
     }
 
-    /*companion object{
-        fun buildIntent(activity: Activity): Intent {
-            return Intent(activity, ShowsFragment::class.java)
-        }
-    }*/
-
     private fun initShowsRecycler(){
-        viewModel.getListOfShows().observe(viewLifecycleOwner){ ShowsApi ->
+        if(!hasInternet()){
+            viewModel.getListOfShows().observe(viewLifecycleOwner){ ShowsApi ->
 
-            if(ShowsApi!= null){
-                adapter = ShowsAdapter(ShowsApi) { show ->
+                if(ShowsApi!= null){
+                    adapter = ShowsAdapter(ShowsApi) { show ->
 
-                    val bundle = bundleOf(
-                        ctTitle to show.title,
-                        ctDescription to show.description,
-                        ctImage to show.imageUrl,
-                        ctID to show.id,
-                        "avgRating" to show.avgRating,
-                        "noRatings" to show.noOfReviews,
-                        ctUsername to viewModel.username.value
-                    )
+                        val bundle = bundleOf(
+                            ctTitle to show.title,
+                            ctDescription to show.description,
+                            ctImage to show.imageUrl,
+                            ctID to show.id,
+                            "avgRating" to show.avgRating,
+                            "noRatings" to show.noOfReviews,
+                            ctUsername to viewModel.username.value
+                        )
 
-                    sharedPreferences.edit{
-                        putInt(ctID, show.id)
-                        commit()
+                        sharedPreferences.edit{
+                            putInt(ctID, show.id)
+                            commit()
+                        }
+
+                        findNavController().navigate(R.id.to_showDetailsFragment, bundle)
                     }
+                    binding.showsRecycler.layoutManager = LinearLayoutManager(activity,
+                        LinearLayoutManager.VERTICAL,false)
 
-                    findNavController().navigate(R.id.to_showDetailsFragment, bundle)
+                    binding.showsRecycler.adapter = adapter
+
                 }
-                binding.showsRecycler.layoutManager = LinearLayoutManager(activity,
-                    LinearLayoutManager.VERTICAL,false)
-
-                binding.showsRecycler.adapter = adapter
-
             }
-            }
+        }
 
+
+        //If offline
+        else{
+            viewModel.getListOfShowsOffline().observe(viewLifecycleOwner){ Shows ->
+
+                if(Shows != null){
+                    viewModel.showShows(binding)
+                    binding.progressbar.isVisible = false
+                    adapter = ShowsAdapter(Shows.map { showEntity ->
+                        ShowApi(showEntity.id,showEntity.averageRating,showEntity.description,
+                            showEntity.imageUrl,showEntity.noOfReviews,showEntity.title)
+                    }) { show ->
+
+                        val bundle = bundleOf(
+                            ctTitle to show.title,
+                            ctDescription to show.description,
+                            ctImage to show.imageUrl,
+                            ctID to show.id,
+                            "avgRating" to show.avgRating,
+                            "noRatings" to show.noOfReviews,
+                            ctUsername to viewModel.username.value
+                        )
+
+                        sharedPreferences.edit{
+                            putInt(ctID, show.id)
+                            commit()
+                        }
+
+                        findNavController().navigate(R.id.to_showDetailsFragment, bundle)
+                    }
+                    binding.showsRecycler.layoutManager = LinearLayoutManager(activity,
+                        LinearLayoutManager.VERTICAL,false)
+
+                    binding.showsRecycler.adapter = adapter
+
+                }
+            }
+        }
 
 
     }
@@ -229,6 +271,28 @@ class ShowsFragment : Fragment() {
             putBoolean(IS_REMEMBERED, false)
             putString(REMEMBERED_USER, "")
             remove(REMEMBERED_PHOTO)
+        }
+    }
+
+    //Has internet check
+    fun hasInternet(): Boolean{
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                //TODO add getListOfOffline here
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                else -> false
+            }
+        } else {
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
         }
     }
 
