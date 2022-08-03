@@ -9,6 +9,24 @@ import java.util.concurrent.Executors
 
 class ShowsApp: Application() {
 
+    val IS_REMEMBERED = "IS_REMEMBERED"
+    val REMEMBERED_USER = "REMEMBERED_USER"
+    val REMEMBERED_PHOTO = "REMEMBERED_PHOTO"
+    val ctLogoutAlertTitle = "You will leave your shows behind"
+    val ctLogoutAlertDescription = "Are you sure you want to log out?"
+    val ctLogoutAlertNegativeText = "No"
+    val ctLogoutAlertPossitiveText = "Yes"
+    val ctUser = "User"
+    val ctUsername = "Username"
+    val ctHideOff = "Hide"
+    val ctHideOn = "Show"
+    val ctImage = "Image"
+    val ctExtrasData = "data"
+    val ctAccessToken = "accessToken"
+    val ctClient = "client"
+    val ctUid = "uid"
+    val ctTokenType = "tokenType"
+
     val database by lazy {
         ShowsRoomDatabase.getDatabase(this)
     }

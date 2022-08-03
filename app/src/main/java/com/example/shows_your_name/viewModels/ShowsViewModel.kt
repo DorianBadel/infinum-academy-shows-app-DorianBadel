@@ -17,6 +17,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.example.shows_your_name.R
+import com.example.shows_your_name.ShowsApp
 import com.example.shows_your_name.ShowsFragment
 import com.example.shows_your_name.database.ShowEntity
 import com.example.shows_your_name.database.ShowsRoomDatabase
@@ -46,14 +47,11 @@ class ShowsViewModel(
     private val ctHideOn = "Show"
     private val ctImage = "Image"
     private val ctExtrasData = "data"
-    private val ctLogoutAlertTitle = "You will leave your shows behind"
-    private val ctLogoutAlertDescription = "Are you sure you want to log out?"
-    private val ctLogoutAlertNegativeText = "No"
-    private val ctLogoutAlertPossitiveText = "Yes"
     val ctAccessToken = "accessToken"
     val ctClient = "client"
     val ctUid = "uid"
     val ctTokenType = "tokenType"
+
 
 
     private val _listOfShowsLiveData1 = MutableLiveData<List<ShowApi>>()
@@ -62,21 +60,16 @@ class ShowsViewModel(
     private val _username = MutableLiveData<String>()
     val username: LiveData<String> = _username
 
-    private val _fragment = MutableLiveData<ShowsFragment>()
-    val fragment: LiveData<ShowsFragment> = _fragment
+    private val _thisApp = MutableLiveData<ShowsApp>()
+    val thisApp: LiveData<ShowsApp> = _thisApp
 
 
-    fun initiateViewModel(fragment: ShowsFragment,username: String){
+    fun initiateViewModel(username: String){
         _username.value = username
-        _fragment.value = fragment
 
     }
 
     //Change profile photo
-    fun encodeString(resources: Resources): String{
-        return getStringFromBitmap(BitmapFactory.decodeResource(resources, R.drawable.profile_ico))
-    }
-
     fun encodeBitmapToString(data: Intent?): String{
         return getStringFromBitmap(data?.extras?.get(ctExtrasData) as Bitmap)
     }
@@ -154,40 +147,6 @@ class ShowsViewModel(
         binding.showHideShows.text = ctHideOn
     }
 
-
-
-    fun logOut(sharedPreferences: SharedPreferences, resources: Resources){
-        sharedPreferences.edit {
-            putBoolean(IS_REMEMBERED, false)
-            putString(REMEMBERED_USER, "")
-            putString(REMEMBERED_PHOTO,encodeString(resources))
-        }
-    }
-
-    fun createAlert(resources: Resources, dialog: BottomSheetDialog){
-
-        var builder = AlertDialog.Builder(_fragment.value!!.activity)
-        var sharedPreferences: SharedPreferences
-
-        builder.setTitle(ctLogoutAlertTitle)
-            .setMessage(ctLogoutAlertDescription)
-            .setCancelable(true)
-            .setPositiveButton(ctLogoutAlertPossitiveText){_,_ ->
-
-                sharedPreferences = _fragment.value!!.requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
-                sharedPreferences = _fragment.value!!.requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
-
-                logOut(sharedPreferences,resources)
-
-                _fragment.value!!.findNavController().navigate(R.id.to_loginFraagment)
-                dialog.dismiss()
-
-            }
-            .setNegativeButton(ctLogoutAlertNegativeText){dialogInterface,it ->
-                dialogInterface.cancel()
-            }
-            .show()
-    }
 
     fun hasInternet(): Boolean{
         return false

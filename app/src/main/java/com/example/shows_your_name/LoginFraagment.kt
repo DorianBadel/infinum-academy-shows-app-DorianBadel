@@ -71,11 +71,8 @@ class LoginFraagment : Fragment() {
             binding.registerbtn.isVisible = false
         }
 
-        val username = sharedPreferences.getString(REMEMBERED_USER, "")
-
         if(isRemembered){
-            val bundle = bundleOf(ctUsername to username)
-            findNavController().navigate(R.id.to_showsFragment,bundle)
+            findNavController().navigate(R.id.to_showsFragment)
         }
 
         binding.loginbtn.isEnabled = false
