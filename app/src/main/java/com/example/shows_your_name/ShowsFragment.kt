@@ -50,15 +50,18 @@ class ShowsFragment : Fragment() {
     val ctLogoutAlertNegativeText = "No"
     val ctLogoutAlertPossitiveText = "Yes"
     private val sharedPrefs = "SHARED_STORAGE"
-    private val ctUser = "User"
-    private val ctUsername = "Username"
-    private val ctImage = "Image"
     private val ctDescription = "Description"
     private val ctID = "ID"
-    private val ctCurrentUser = "keyValuePairs"
     private val ctTitle = "Title"
-    private val HAS_PHOTO = "HAS_PHOTO"
     private val REMEMBERED_PHOTO = "REMEMBERED_PHOTO"
+    private val ctHideOff = "Hide"
+    private val ctUsername = "Username"
+    private val ctHideOn = "Show"
+    private val ctImage = "Image"
+    val ctAccessToken = "accessToken"
+    val ctClient = "client"
+    val ctUid = "uid"
+    val ctTokenType = "tokenType"
     //val thisApp = (requireActivity().application as ShowsApp)
 
 
@@ -86,16 +89,23 @@ class ShowsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.initiateViewModel(sharedPreferences.getString(ctUsername,"")!!)
-
         initShowsRecycler()
         if(!hasInternet()){
-            viewModel.getAllShows(binding,this)
+            binding.progressbar.isVisible = true
+            viewModel.getAllShows(sharedPreferences.getString(ctAccessToken,"")!!,
+                sharedPreferences.getString(ctClient,"")!!,
+                sharedPreferences.getString(ctUid,"")!!,
+                sharedPreferences.getString(ctTokenType,"")!!
+                )
         }
 
 
         binding.showHideShows.setOnClickListener{
-            viewModel.showOrHideShows(binding)
+            if(binding.showHideShows.text == ctHideOn){
+                showShows()
+            } else if (binding.showHideShows.text == ctHideOff){
+                hideShows()
+            }
         }
 
         binding.btnProfile.setOnClickListener {
@@ -110,6 +120,8 @@ class ShowsFragment : Fragment() {
             viewModel.getListOfShows().observe(viewLifecycleOwner){ ShowsApi ->
 
                 if(ShowsApi!= null){
+                    showShows()
+                    binding.progressbar.isVisible = false
                     adapter = ShowsAdapter(ShowsApi) { show ->
 
                         val bundle = bundleOf(
@@ -119,7 +131,7 @@ class ShowsFragment : Fragment() {
                             ctID to show.id,
                             "avgRating" to show.avgRating,
                             "noRatings" to show.noOfReviews,
-                            ctUsername to viewModel.username.value
+                            ctUsername to sharedPreferences.getString(ctUsername,"")
                         )
 
                         sharedPreferences.edit{
@@ -144,8 +156,8 @@ class ShowsFragment : Fragment() {
             viewModel.getListOfShowsOffline().observe(viewLifecycleOwner){ Shows ->
 
                 if(Shows != null){
-                    viewModel.showShows(binding)
-                    binding.progressbar.isVisible = false
+                    showShows()
+                    if(binding.progressbar.isVisible) binding.progressbar.isVisible = false
                     adapter = ShowsAdapter(Shows.map { showEntity ->
                         ShowApi(showEntity.id,showEntity.averageRating,showEntity.description,
                             showEntity.imageUrl,showEntity.noOfReviews,showEntity.title)
@@ -158,7 +170,7 @@ class ShowsFragment : Fragment() {
                             ctID to show.id,
                             "avgRating" to show.avgRating,
                             "noRatings" to show.noOfReviews,
-                            ctUsername to viewModel.username.value
+                            ctUsername to sharedPreferences.getString(ctUsername,"")
                         )
 
                         sharedPreferences.edit{
@@ -178,6 +190,20 @@ class ShowsFragment : Fragment() {
         }
 
 
+    }
+
+    fun showShows(){
+        binding.noShowsIco.isVisible = false
+        binding.noShowsText.isVisible = false
+        binding.showsRecycler.isVisible = true
+        binding.showHideShows.text = ctHideOff
+    }
+
+    fun hideShows(){
+        binding.noShowsIco.isVisible = true
+        binding.noShowsText.isVisible = true
+        binding.showsRecycler.isVisible = false
+        binding.showHideShows.text = ctHideOn
     }
 
     //Profile bottom sheet
@@ -295,6 +321,8 @@ class ShowsFragment : Fragment() {
             return networkInfo.isConnected
         }
     }
+
+
 
 
 
