@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.shows_your_name.database.ReviewEntity
 import com.example.shows_your_name.database.ShowEntity
 import com.example.shows_your_name.database.ShowsRoomDatabase
+import com.example.shows_your_name.database.UserTypeConverter
 import com.example.shows_your_name.models.User
 import java.util.concurrent.Executors
 
@@ -26,6 +27,7 @@ class ShowsApp: Application() {
     val ctClient = "client"
     val ctUid = "uid"
     val ctTokenType = "tokenType"
+    val utc = UserTypeConverter()
 
     val database by lazy {
         ShowsRoomDatabase.getDatabase(this)
@@ -37,20 +39,21 @@ class ShowsApp: Application() {
         ShowEntity(3,"1".toFloat(),"This is the last description","https://yt3.ggpht.com/ytc/AMLnZu9APCgu8p6Tkhd1mKpAL-UC_MYUQ_JD4qA81w4sPA=s900-c-k-c0x00ffffff-no-rj",1,"Trailer Park Boys")
     )
     private val reviews = listOf(
-        ReviewEntity(1,"I love the office so much",5,1,1), //User("1","mateas@gmail.com","")),
-        ReviewEntity(2,"The camera angles make me disy",1,1,2), //User("2","mateo@gmail.com","")),
-        ReviewEntity(3,"Its funny somethimes",3,1,3), //User("3","marko@gmail.com","")),
+        ReviewEntity(1,"I love the office so much",5,1,utc.toUserJson(User("1","mateas@gmail.com",null))),
+        ReviewEntity(2,"The camera angles make me disy",1,1,utc.toUserJson(User("2","mateo@gmail.com",null))),
+        ReviewEntity(3,"Its funny somethimes",3,1,utc.toUserJson(User("3","marko@gmail.com",null))),
 
-        ReviewEntity(4,"Lovely show",5,2,4), //User("4","stjep@gmail.com","")),
-        ReviewEntity(5,"So inovative!!",5,2,5), //User("5","stjepan@gmail.com","")),
+        ReviewEntity(4,"Lovely show",5,2,utc.toUserJson(User("4","stjep@gmail.com",null))),
+        ReviewEntity(5,"So inovative!!",5,2,utc.toUserJson(User("5","stjepan@gmail.com",null))),
 
-        ReviewEntity(6,"This show is discusting!",1,3,6) //User("6","caren@gmail.com",""))
+        ReviewEntity(6,"This show is discusting!",1,3,utc.toUserJson(User("6","caren@gmail.com",null)))
     )
 
     override fun onCreate() {
         super.onCreate()
         Executors.newSingleThreadExecutor().execute{
-            database?.ShowDAO()?.insertAllShows(shows) //? shouldn't be there
+            database?.ShowDAO()?.insertAllShows(shows)
+            database?.ReviewDAO()?.insertAllReviews(reviews)
         }
     }
 }

@@ -97,6 +97,8 @@ class ShowsFragment : Fragment() {
                 sharedPreferences.getString(ctUid,"")!!,
                 sharedPreferences.getString(ctTokenType,"")!!
                 )
+        } else{
+            viewModel.getListOfShowsOffline()
         }
 
 
@@ -124,22 +126,10 @@ class ShowsFragment : Fragment() {
                     binding.progressbar.isVisible = false
                     adapter = ShowsAdapter(ShowsApi) { show ->
 
-                        val bundle = bundleOf(
-                            ctTitle to show.title,
-                            ctDescription to show.description,
-                            ctImage to show.imageUrl,
-                            ctID to show.id,
-                            "avgRating" to show.avgRating,
-                            "noRatings" to show.noOfReviews,
-                            ctUsername to sharedPreferences.getString(ctUsername,"")
-                        )
 
-                        sharedPreferences.edit{
-                            putInt(ctID, show.id)
-                            commit()
-                        }
 
-                        findNavController().navigate(R.id.to_showDetailsFragment, bundle)
+                        val action = ShowsFragmentDirections.toShowDetailsFragment(show.id)
+                        findNavController().navigate(action)
                     }
                     binding.showsRecycler.layoutManager = LinearLayoutManager(activity,
                         LinearLayoutManager.VERTICAL,false)
@@ -163,22 +153,8 @@ class ShowsFragment : Fragment() {
                             showEntity.imageUrl,showEntity.noOfReviews,showEntity.title)
                     }) { show ->
 
-                        val bundle = bundleOf(
-                            ctTitle to show.title,
-                            ctDescription to show.description,
-                            ctImage to show.imageUrl,
-                            ctID to show.id,
-                            "avgRating" to show.avgRating,
-                            "noRatings" to show.noOfReviews,
-                            ctUsername to sharedPreferences.getString(ctUsername,"")
-                        )
-
-                        sharedPreferences.edit{
-                            putInt(ctID, show.id)
-                            commit()
-                        }
-
-                        findNavController().navigate(R.id.to_showDetailsFragment, bundle)
+                        val action = ShowsFragmentDirections.toShowDetailsFragment(show.id)
+                        findNavController().navigate(action)
                     }
                     binding.showsRecycler.layoutManager = LinearLayoutManager(activity,
                         LinearLayoutManager.VERTICAL,false)

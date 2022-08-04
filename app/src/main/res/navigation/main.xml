@@ -28,6 +28,9 @@
         <action
             android:id="@+id/to_showsFragment"
             app:destination="@id/showsFragment" />
+        <argument
+            android:name="showID"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/showsFragment"

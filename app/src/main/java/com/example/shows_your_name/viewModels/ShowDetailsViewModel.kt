@@ -10,6 +10,9 @@ import androidx.lifecycle.ViewModel
 import com.example.shows_your_name.Review
 import com.example.shows_your_name.ReviewsAdapter
 import com.example.shows_your_name.ShowDetailsFragment
+import com.example.shows_your_name.database.ReviewEntity
+import com.example.shows_your_name.database.ShowEntity
+import com.example.shows_your_name.database.ShowsRoomDatabase
 import com.example.shows_your_name.databinding.DialogAddReviewBinding
 import com.example.shows_your_name.databinding.FragmentShowDetailsBinding
 import com.example.shows_your_name.models.*
@@ -19,7 +22,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ShowDetailsViewModel : ViewModel() {
+class ShowDetailsViewModel(
+    private val database: ShowsRoomDatabase
+) : ViewModel() {
     private val _listOfReviewsLiveData = MutableLiveData<List<ReviewApi>>()
     /*private val _listOfReviewsLiveData1 = MutableLiveData<List<Review>>()
     private val _listOfReviewsLiveData2 = MutableLiveData<List<Review>>()
@@ -43,50 +48,45 @@ class ShowDetailsViewModel : ViewModel() {
 
 
 
+    fun initValues(id: Int){
+        _id.value = id
+    }
+
     fun getReviewsList(): LiveData<List<ReviewApi>>{
         return _listOfReviewsLiveData
     }
 
-    fun initiateViewModel(bundle: Bundle?,binding: FragmentShowDetailsBinding,fragment: ShowDetailsFragment){
-      _id.value = bundle?.getInt("ID")
-      _title.value = bundle?.getString("Title").toString()
-      _description.value = bundle?.getString("Description").toString()
-      _imageId.value = bundle?.getString("Image")
-      _username.value = bundle?.getString("Username")
-
-        getReviews(binding, fragment)
-
-
+    fun getReviewsOffline(id: Int): LiveData<List<ReviewEntity>>{
+        //TODO filter the reviews based on id
+        return database.ReviewDAO().getAllReviews()
+    }
+    fun getShowInfoOffline(id: Int): LiveData<ShowEntity>{
+        //showID needs to be public
+        return database.ShowDAO().getShow(id)
     }
 
-    fun getReviews(binding: FragmentShowDetailsBinding, fragment: ShowDetailsFragment){
-        binding.progressbar.isVisible = true
 
 
-        var sharedPreferences: SharedPreferences
-        sharedPreferences = fragment.requireContext().getSharedPreferences(ctAccessToken, Context.MODE_PRIVATE)
-        sharedPreferences = fragment.requireContext().getSharedPreferences(ctClient, Context.MODE_PRIVATE)
-        sharedPreferences = fragment.requireContext().getSharedPreferences(ctUid, Context.MODE_PRIVATE)
-        sharedPreferences = fragment.requireContext().getSharedPreferences(ctTokenType, Context.MODE_PRIVATE)
+    fun getReviews(ID: Int,accessToken: String,client: String,UID: String,tokenType: String){
 
-        val url = "/shows/${_id.value}/reviews"
+        val url = "/shows/${ID}/reviews"
         ApiModule.retrofit.getReviews(
             url,
-            sharedPreferences.getString(ctAccessToken,"")!!,
-            sharedPreferences.getString(ctClient,"")!!,
-            sharedPreferences.getString(ctUid,"")!!,
-            sharedPreferences.getString(ctTokenType,"")!!
+            accessToken,
+            client,
+            UID,
+            tokenType
         )
             .enqueue(object: Callback<ReviewsResponse> {
                 override fun onFailure(call: Call<ReviewsResponse>, t: Throwable) {
-                    if(binding.progressbar.isVisible) binding.progressbar.isVisible = false
+                    getReviewsOffline(ID)
+                    getShowInfoOffline(ID)
                 }
 
                 override fun onResponse(
                     call: Call<ReviewsResponse>,
                     response: Response<ReviewsResponse>
                 ) {
-                    if(binding.progressbar.isVisible) binding.progressbar.isVisible = false
                     _listOfReviewsLiveData.value = response.body()?.reviews
                 }
             })
@@ -129,11 +129,5 @@ class ShowDetailsViewModel : ViewModel() {
                     getReviewsList()
                 }
             })
-    }
-
-    fun updateStatistics(binding: FragmentShowDetailsBinding,arguments: Bundle?){
-        binding.reviewsText.text =
-            arguments?.getInt("noRatings").toString() + " REVIEWS, " + arguments?.getFloat("avgRating").toString() + " AVERAGE"
-        binding.ratingBar.rating = arguments!!.getFloat("avgRating")
     }
 }
