@@ -21,55 +21,83 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.concurrent.Executors
 
 class ShowDetailsViewModel(
     private val database: ShowsRoomDatabase
 ) : ViewModel() {
     private val _listOfReviewsLiveData = MutableLiveData<List<ReviewApi>>()
-    /*private val _listOfReviewsLiveData1 = MutableLiveData<List<Review>>()
-    private val _listOfReviewsLiveData2 = MutableLiveData<List<Review>>()
-    private val _listOfReviewsLiveData3 = MutableLiveData<List<Review>>()*/
-    private val _id = MutableLiveData<Int>()
+    private val _showInfo = MutableLiveData<ShowApi>()
     private val _title = MutableLiveData<String>()
     private val _description = MutableLiveData<String>()
     private val _imageId = MutableLiveData<String>()
     private var _username = MutableLiveData<String>()
+    private var _reviewId = MutableLiveData<Int>()
 
-    val id: LiveData<Int> = _id
-    val title: LiveData<String> = _title
+    /*val title: LiveData<String> = _title
     val description: LiveData<String> = _description
     val imageId: LiveData<String> = _imageId
-    val username: LiveData<String> = _username
+    val username: LiveData<String> = _username*/
+
     val ctAccessToken = "accessToken"
     val ctClient = "client"
     val ctUid = "uid"
     val ctTokenType = "tokenType"
+    val ctShowId = "showId"
+
     val listOfReviewsLiveData: LiveData<List<ReviewApi>> = _listOfReviewsLiveData
+    val showInfo: LiveData<ShowApi> = _showInfo
 
-
-
-    fun initValues(id: Int){
-        _id.value = id
-    }
 
     fun getReviewsList(): LiveData<List<ReviewApi>>{
         return _listOfReviewsLiveData
     }
 
     fun getReviewsOffline(id: Int): LiveData<List<ReviewEntity>>{
-        //TODO filter the reviews based on id
-        return database.ReviewDAO().getAllReviews()
+        return database.ReviewDAO().getAllReviews(id)
     }
     fun getShowInfoOffline(id: Int): LiveData<ShowEntity>{
-        //showID needs to be public
         return database.ShowDAO().getShow(id)
     }
 
+    fun getShowInfoOnline(): LiveData<ShowApi>{
+        return _showInfo
+    }
 
+    fun getShowInfo(id: Int,accessToken: String,client: String,UID: String,tokenType: String){
+        val url = "/shows/${id}"
+        ApiModule.retrofit.getShow(
+            url,
+            accessToken,
+            client,
+            UID,
+            tokenType
+        )
+            .enqueue(object: Callback<ShowResponse> {
+                override fun onFailure(call: Call<ShowResponse>, t: Throwable) {
+                    /*getReviewsOffline(id)
+                    getShowInfoOffline(id)*/
+                }
 
-    fun getReviews(ID: Int,accessToken: String,client: String,UID: String,tokenType: String){
+                override fun onResponse(
+                    call: Call<ShowResponse>,
+                    response: Response<ShowResponse>
+                ) {
+                    _showInfo.value = response.body()?.show
+                }
+            })
 
-        val url = "/shows/${ID}/reviews"
+    }
+
+    fun updateDB(list: List<ReviewEntity>){
+        Executors.newSingleThreadExecutor().execute {
+            database.ReviewDAO().insertAllReviews(list)
+        }
+    }
+
+    fun getReviews(id: Int,accessToken: String,client: String,UID: String,tokenType: String){
+
+        val url = "/shows/${id}/reviews"
         ApiModule.retrofit.getReviews(
             url,
             accessToken,
@@ -79,8 +107,8 @@ class ShowDetailsViewModel(
         )
             .enqueue(object: Callback<ReviewsResponse> {
                 override fun onFailure(call: Call<ReviewsResponse>, t: Throwable) {
-                    getReviewsOffline(ID)
-                    getShowInfoOffline(ID)
+                    getReviewsOffline(id)
+                    getShowInfoOffline(id)
                 }
 
                 override fun onResponse(
@@ -93,39 +121,32 @@ class ShowDetailsViewModel(
 
     }
 
-    fun addReview(binding: FragmentShowDetailsBinding,bottomSheetDialog: DialogAddReviewBinding,fragment: ShowDetailsFragment){
-        binding.progressbar.isVisible = true
-
-
-        var sharedPreferences: SharedPreferences
-        sharedPreferences = fragment.requireContext().getSharedPreferences(ctAccessToken, Context.MODE_PRIVATE)
-        sharedPreferences = fragment.requireContext().getSharedPreferences(ctClient, Context.MODE_PRIVATE)
-        sharedPreferences = fragment.requireContext().getSharedPreferences(ctUid, Context.MODE_PRIVATE)
-        sharedPreferences = fragment.requireContext().getSharedPreferences(ctTokenType, Context.MODE_PRIVATE)
-
-        val url = "/shows/${_id.value}/reviews"
-
+    fun addReview(
+        id: Int,
+        accessToken: String,client: String,UID: String,tokenType: String,
+        reviewRating: Int, reviewComment: String
+    ){
         val addReviewReq = addReviewRequest(
-            rating = bottomSheetDialog.reviewSetRating.rating.toInt(),
-            comment = bottomSheetDialog.commentText.text.toString(),
-            showId = _id.value!!
+            rating = reviewRating,
+            comment = reviewComment,
+            showId = id
         )
         ApiModule.retrofit.addReview(addReviewReq,
-            sharedPreferences.getString(ctAccessToken,"")!!,
-            sharedPreferences.getString(ctClient,"")!!,
-            sharedPreferences.getString(ctUid,"")!!,
-            sharedPreferences.getString(ctTokenType,"")!!
+            accessToken,
+            client,
+            UID,
+            tokenType
         )
             .enqueue(object: Callback<AddReviewResponse> {
                 override fun onFailure(call: Call<AddReviewResponse>, t: Throwable) {
-                    if(binding.progressbar.isVisible) binding.progressbar.isVisible = false
+                    getReviewsOffline(id)
+                    getShowInfoOffline(id)
                 }
 
                 override fun onResponse(
                     call: Call<AddReviewResponse>,
                     response: Response<AddReviewResponse>
                 ) {
-                    if(binding.progressbar.isVisible) binding.progressbar.isVisible = false
                     getReviewsList()
                 }
             })

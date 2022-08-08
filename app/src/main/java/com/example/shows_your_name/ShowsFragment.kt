@@ -26,6 +26,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.shows_your_name.ShowsFragment
+import com.example.shows_your_name.database.ShowEntity
 import com.example.shows_your_name.database.ShowsViewModelFactory
 import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
@@ -49,6 +50,7 @@ class ShowsFragment : Fragment() {
     val ctLogoutAlertDescription = "Are you sure you want to log out?"
     val ctLogoutAlertNegativeText = "No"
     val ctLogoutAlertPossitiveText = "Yes"
+    val ctShowId = "showId"
     private val sharedPrefs = "SHARED_STORAGE"
     private val ctDescription = "Description"
     private val ctID = "ID"
@@ -90,7 +92,7 @@ class ShowsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initShowsRecycler()
-        if(!hasInternet()){
+        if(hasInternet()){
             binding.progressbar.isVisible = true
             viewModel.getAllShows(sharedPreferences.getString(ctAccessToken,"")!!,
                 sharedPreferences.getString(ctClient,"")!!,
@@ -118,10 +120,21 @@ class ShowsFragment : Fragment() {
     }
 
     private fun initShowsRecycler(){
-        if(!hasInternet()){
+        if(hasInternet()){
             viewModel.getListOfShows().observe(viewLifecycleOwner){ ShowsApi ->
 
                 if(ShowsApi!= null){
+                    val showsEntity = ShowsApi.map{ show ->
+                        ShowEntity(
+                            id = show.id,
+                            averageRating = show.avgRating,
+                            title = show.title,
+                            imageUrl = show.imageUrl,
+                            description = show.description,
+                            noOfReviews = show.noOfReviews
+                        )
+                    }
+                    viewModel.updateDB(showsEntity)
                     showShows()
                     binding.progressbar.isVisible = false
                     adapter = ShowsAdapter(ShowsApi) { show ->
@@ -152,7 +165,9 @@ class ShowsFragment : Fragment() {
                         ShowApi(showEntity.id,showEntity.averageRating,showEntity.description,
                             showEntity.imageUrl,showEntity.noOfReviews,showEntity.title)
                     }) { show ->
-
+                        sharedPreferences.edit{
+                            putInt(ctShowId,show.id)
+                        }
                         val action = ShowsFragmentDirections.toShowDetailsFragment(show.id)
                         findNavController().navigate(action)
                     }

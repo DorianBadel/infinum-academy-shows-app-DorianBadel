@@ -31,6 +31,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
+import java.util.concurrent.Executors
 
 class ShowsViewModel(
     private val database: ShowsRoomDatabase
@@ -78,6 +79,13 @@ class ShowsViewModel(
                     _listOfShowsLiveData1.value = response.body()!!.shows
                 }
             })
+    }
+
+    fun updateDB(shows: List<ShowEntity>){
+
+        Executors.newSingleThreadExecutor().execute {
+            database.ShowDAO().insertAllShows(shows)
+        }
     }
 
 

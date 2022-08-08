@@ -18,11 +18,13 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.shows_your_name.database.ReviewEntity
 import com.example.shows_your_name.database.ShowDetailsViewModelFactory
 import com.example.shows_your_name.database.UserTypeConverter
 import com.example.shows_your_name.databinding.DialogAddReviewBinding
 import com.example.shows_your_name.databinding.FragmentShowDetailsBinding
 import com.example.shows_your_name.models.ReviewApi
+import com.example.shows_your_name.models.User
 import com.example.shows_your_name.newtworking.ApiModule
 import com.example.shows_your_name.viewModels.ShowDetailsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -32,7 +34,7 @@ class ShowDetailsFragment : Fragment() {
     private var _binding: FragmentShowDetailsBinding? = null
     private val binding get() = _binding!!
     private val sharedPrefs = "SHARED_STORAGE"
-    val utc = UserTypeConverter()
+    private val utc = UserTypeConverter()
     private val args by navArgs<ShowDetailsFragmentArgs>()
 
 
@@ -51,11 +53,7 @@ class ShowDetailsFragment : Fragment() {
 
         sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
 
-        /*viewModel.getShowInfoOnline(args.showID).observe(this){ Show ->
-
-        }*/
         viewModel.getShowInfoOffline(args.showID).observe(this){ Show ->
-            viewModel.initValues(args.showID) //TODO this makes issues
             binding.showDescription.text = Show.description
             binding.showTitle.text = Show.title
             Glide.with(this)
@@ -66,8 +64,19 @@ class ShowDetailsFragment : Fragment() {
 
             binding.ratingBar.rating = Show.averageRating!!
             binding.reviewsText.text = Show.noOfReviews.toString() + " REVIEWS, " + Show.averageRating+ " AVERAGE"
+        }
 
+        viewModel.getShowInfoOnline().observe(this){ Show ->
+            binding.showDescription.text = Show.description
+            binding.showTitle.text = Show.title
+            Glide.with(this)
+                .load(Show.imageUrl)
+                .into(binding.showCoverImage)
 
+            updateStatistics(Show.avgRating!!,Show.noOfReviews)
+
+            binding.ratingBar.rating = Show.avgRating!!
+            binding.reviewsText.text = Show.noOfReviews.toString() + " REVIEWS, " + Show.avgRating+ " AVERAGE"
         }
     }
     override fun onCreateView(
@@ -81,8 +90,17 @@ class ShowDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(!hasInternet()){
+        if(hasInternet()){
             binding.progressbar.isVisible = true
+            viewModel.getShowInfo(
+                args.showID,
+                sharedPreferences.getString(viewModel.ctAccessToken,"")!!,
+                sharedPreferences.getString(viewModel.ctClient,"")!!,
+                sharedPreferences.getString(viewModel.ctUid,"")!!,
+                sharedPreferences.getString(viewModel.ctTokenType,"")!!
+
+            )
+
             viewModel.getReviews(
                 args.showID,
                 sharedPreferences.getString(viewModel.ctAccessToken,"")!!,
@@ -97,17 +115,11 @@ class ShowDetailsFragment : Fragment() {
 
         initShowsRecycler()
 
-        binding.showTitle.text = viewModel.title.value
-        binding.showDescription.text = viewModel.description.value
-
-        Glide.with(this)
-            .load(viewModel.imageId.value)
-            .into(binding.showCoverImage)
 
 
         binding.toolbarBackBtn.setOnClickListener {
-            val bundle = bundleOf("Username" to viewModel.username.value)
-            findNavController().navigate(R.id.to_showsFragment, bundle)
+            //TODO send user id back
+            findNavController().navigate(R.id.to_showsFragment)
         }
 
 
@@ -120,27 +132,16 @@ class ShowDetailsFragment : Fragment() {
         viewModel.getReviewsList().observe(viewLifecycleOwner){ reviewsApi ->
             adapter = ReviewsAdapter(reviewsApi) { review ->
             }
-
-            binding.recyclerView.layoutManager = LinearLayoutManager(
-                requireView().context,
-                LinearLayoutManager.VERTICAL, false
-            )
-
-            binding.recyclerView.adapter = adapter
-
-            binding.recyclerView.addItemDecoration(
-                DividerItemDecoration(requireView().context, DividerItemDecoration.VERTICAL)
-            )
-        }
-
-        viewModel.getReviewsOffline(args.showID).observe(viewLifecycleOwner){ reviewsEntity ->
-            adapter = ReviewsAdapter(reviewsEntity.filter { reviewEntity -> reviewEntity.showID == args.showID  }.map { showReview ->
-                ReviewApi(
-                    showReview.id,showReview.comment,showReview.rating,showReview.showID,utc.toUser(showReview.user)
+            val reviewEntity = reviewsApi.map{ review ->
+                ReviewEntity(
+                    id = review.id,
+                    comment = review.comment,
+                    rating = review.rating,
+                    showID = review.showId,
+                    user = utc.toUserJson(review.user)
                 )
-            }) { review ->
             }
-
+            viewModel.updateDB(reviewEntity)
             binding.progressbar.isVisible = false
 
             binding.recyclerView.layoutManager = LinearLayoutManager(
@@ -155,6 +156,36 @@ class ShowDetailsFragment : Fragment() {
             )
         }
 
+
+        if(!hasInternet()){
+            viewModel.getReviewsOffline(args.showID).observe(viewLifecycleOwner){ reviewsEntity ->
+                adapter = ReviewsAdapter(reviewsEntity.filter { reviewEntity -> reviewEntity.showID == args.showID  }.map { showReview ->
+                    ReviewApi(
+                        id = showReview.id,
+                        comment = showReview.comment,
+                        rating = showReview.rating,
+                        showId = showReview.showID,
+                        user = utc.toUser(showReview.user)
+                    )
+                }) { review ->
+                }
+
+                binding.progressbar.isVisible = false
+
+                binding.recyclerView.layoutManager = LinearLayoutManager(
+                    requireView().context,
+                    LinearLayoutManager.VERTICAL, false
+                )
+
+                binding.recyclerView.adapter = adapter
+
+                binding.recyclerView.addItemDecoration(
+                    DividerItemDecoration(requireView().context, DividerItemDecoration.VERTICAL)
+                )
+            }
+        }
+
+
     }
 
     private fun showAddReviewBottomSheet() {
@@ -164,7 +195,18 @@ class ShowDetailsFragment : Fragment() {
         dialog.setContentView(bottomSheetBinding.root)
 
         bottomSheetBinding.submitReviewButton.setOnClickListener {
-            viewModel.addReview(binding,bottomSheetBinding, this)
+            binding.progressbar.isVisible = true
+            if(hasInternet()){
+                viewModel.addReview(
+                    args.showID,
+                    sharedPreferences.getString(viewModel.ctAccessToken,"")!!,
+                    sharedPreferences.getString(viewModel.ctClient,"")!!,
+                    sharedPreferences.getString(viewModel.ctUid,"")!!,
+                    sharedPreferences.getString(viewModel.ctTokenType,"")!!,
+                    bottomSheetBinding.reviewSetRating.rating.toInt(),
+                    bottomSheetBinding.commentText.text.toString()
+                )
+            }
             dialog.dismiss()
         }
 
@@ -188,7 +230,6 @@ class ShowDetailsFragment : Fragment() {
             val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
 
             return when {
-                //TODO add getListOfOffline here
                 activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
                 activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
                 else -> false
@@ -205,6 +246,21 @@ class ShowDetailsFragment : Fragment() {
         binding.reviewsText.text =
             arguments?.getInt("noRatings").toString() + " REVIEWS, " + arguments?.getFloat("avgRating").toString() + " AVERAGE"
         binding.ratingBar.rating = arguments!!.getFloat("avgRating")
+    }
+
+    private fun getUser(): User {
+        return utc.toUser(
+            sharedPreferences.getString(
+                "REMEMBERED_USERR",
+                utc.toUserJson(
+                    User(
+                        "999",
+                        "test@gmail.com",
+                        null
+                    )
+                )
+            )!!
+        )
     }
 
 }

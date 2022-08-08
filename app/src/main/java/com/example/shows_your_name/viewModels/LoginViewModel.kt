@@ -7,6 +7,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.shows_your_name.database.UserTypeConverter
 import com.example.shows_your_name.models.LoginRequest
 import com.example.shows_your_name.models.LoginResponse
 import com.example.shows_your_name.newtworking.ApiModule
@@ -22,6 +23,7 @@ class LoginViewModel(application: Application): AndroidViewModel(application){
     val ctClient = "client"
     val ctUid = "uid"
     val ctTokenType = "tokenType"
+    val utc = UserTypeConverter()
 
 
     private val loginResultLiveData: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
@@ -48,17 +50,17 @@ class LoginViewModel(application: Application): AndroidViewModel(application){
                     var sp: SharedPreferences = getApplication<Application>().getSharedPreferences(sharedPrefs,Context.MODE_PRIVATE)
 
                     sp.edit{
-                        putString(ctAccessToken,response.headers().get("access-token"))
-                        putString(ctClient,response.headers().get(ctClient).toString())
+                        putString(ctAccessToken, response.headers()["access-token"])
+                        putString(ctClient, response.headers()[ctClient].toString())
                         putString(ctTokenType,"Bearer")
-                        putString(ctUid,response.headers().get(ctUid).toString())
+                        putString(ctUid, response.headers()[ctUid].toString())
                         putString(ctUsername,email.substringBefore("@"))
+                        putString("REMEMBERED_USERR",
+                            response.body()?.let { utc.toUserJson(it.user) })
                         commit()
                     }
 
-                    //val bundle = bundleOf(ctUsername to binding.emailTexttxt.text.toString().substringBefore("@"))
-
-                    //fragment.findNavController().navigate(R.id.to_showsFragment,bundle)
+                    response.body()?.user
 
                     loginResultLiveData.value = response.isSuccessful
                 }
