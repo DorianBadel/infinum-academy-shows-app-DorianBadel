@@ -13,7 +13,7 @@ class UserTypeConverter {
             if(user.imageUrl == null){
                 put("image_url","no_photo")
             }else{
-                put("image url",user.imageUrl)
+                put("image_url",user.imageUrl)
             }
         }.toString()
     }
@@ -21,6 +21,10 @@ class UserTypeConverter {
     @TypeConverter
     fun toUser(user: String): User{
         val json = JSONObject(user)
-        return User(json.getString("id"),json.getString("email"),json.getString("image_url"))
+        var image = "no"
+        if(json.has("image_url")){
+            image = json.getString("image_url")
+        }
+        return User(json.getString("id"),json.getString("email"),image )
     }
 }

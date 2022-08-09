@@ -118,7 +118,6 @@ class ShowDetailsFragment : Fragment() {
 
 
         binding.toolbarBackBtn.setOnClickListener {
-            //TODO send user id back
             findNavController().navigate(R.id.to_showsFragment)
         }
 
@@ -159,7 +158,7 @@ class ShowDetailsFragment : Fragment() {
 
         if(!hasInternet()){
             viewModel.getReviewsOffline(args.showID).observe(viewLifecycleOwner){ reviewsEntity ->
-                adapter = ReviewsAdapter(reviewsEntity.filter { reviewEntity -> reviewEntity.showID == args.showID  }.map { showReview ->
+                adapter = ReviewsAdapter(reviewsEntity.map { showReview ->
                     ReviewApi(
                         id = showReview.id,
                         comment = showReview.comment,

@@ -300,7 +300,6 @@ class ShowsFragment : Fragment() {
             val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
 
             return when {
-                //TODO add getListOfOffline here
                 activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
                 activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
                 else -> false
