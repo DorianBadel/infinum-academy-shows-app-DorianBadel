@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.view.animation.BounceInterpolator
+import android.view.animation.OvershootInterpolator
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -40,6 +43,7 @@ class LoginFraagment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
+        //
 
         ApiModule.initRetrofit(requireContext())
 
@@ -60,6 +64,10 @@ class LoginFraagment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        /*val animate = AnimationUtils.loadAnimation(context,R.anim.ttbbounce)
+        binding.playicon.startAnimation(animate)*/
+        animateLogo()
+        animateLogoText()
 
         if(args.email != "null"){
             binding.emailTexttxt.setText(args.email)
@@ -143,5 +151,26 @@ class LoginFraagment : Fragment() {
     private fun changeLoginBtn(){
         binding.loginbtn.isEnabled = true
         binding.loginbtn.alpha = 1F
+    }
+
+    fun animateLogo() = with(binding.playicon){
+        translationY = -200f
+        animate()
+            .translationY(0f)
+            .setDuration(1000)
+            .setInterpolator(BounceInterpolator())
+            .start()
+    }
+
+    fun animateLogoText() = with(binding.loginTitleText){
+        scaleX = 0f
+        scaleY = 0f
+        animate()
+            .setStartDelay(1000)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(1000)
+            .setInterpolator(OvershootInterpolator())
+            .start()
     }
 }
