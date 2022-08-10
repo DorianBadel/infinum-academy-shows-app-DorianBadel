@@ -13,4 +13,11 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon" gravity="center">@drawable/ic_triangle_inset</item>
+        <item name="postSplashScreenTheme">@style/Theme.Showsyourname</item>
+        <item name="windowSplashScreenBackground">@color/purple_500</item>
+
+    </style>
 </resources>
