@@ -6,7 +6,7 @@
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondary">@color/purple_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
@@ -17,7 +17,7 @@
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimatedIcon" gravity="center">@drawable/ic_triangle_inset</item>
         <item name="postSplashScreenTheme">@style/Theme.Showsyourname</item>
-        <item name="windowSplashScreenBackground">@color/purple_500</item>
+        <item name="windowSplashScreenBackground">@color/purple_700</item>
 
     </style>
 </resources>

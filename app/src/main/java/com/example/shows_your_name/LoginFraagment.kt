@@ -1,5 +1,6 @@
 package com.example.shows_your_name
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -83,12 +84,16 @@ class LoginFraagment : Fragment() {
             emailCorrect =
                 android.util.Patterns.EMAIL_ADDRESS.matcher(binding.emailTexttxt.text.toString()).matches()
 
-            binding.loginbtn.isEnabled = emailCorrect && passCorrect
+            if(emailCorrect && passCorrect){
+                changeLoginBtn()
+            }
         }
         binding.passwordTexttxt.doAfterTextChanged {
             passCorrect = binding.passwordTexttxt.text.toString() != ""
 
-            binding.loginbtn.isEnabled = emailCorrect && passCorrect
+            if(emailCorrect && passCorrect){
+                changeLoginBtn()
+            }
         }
 
 
@@ -133,5 +138,10 @@ class LoginFraagment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun changeLoginBtn(){
+        binding.loginbtn.isEnabled = true
+        binding.loginbtn.alpha = 1F
     }
 }
