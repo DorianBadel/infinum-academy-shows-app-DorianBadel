@@ -243,23 +243,8 @@ class ShowDetailsFragment : Fragment() {
 
     fun updateStatistics(avg: Float, total: Int){
         binding.reviewsText.text =
-            arguments?.getInt("noRatings").toString() + " REVIEWS, " + arguments?.getFloat("avgRating").toString() + " AVERAGE"
-        binding.ratingBar.rating = arguments!!.getFloat("avgRating")
-    }
-
-    private fun getUser(): User {
-        return utc.toUser(
-            sharedPreferences.getString(
-                "REMEMBERED_USERR",
-                utc.toUserJson(
-                    User(
-                        "999",
-                        "test@gmail.com",
-                        null
-                    )
-                )
-            )!!
-        )
+            total.toString() + " REVIEWS, " + avg.toString() + " AVERAGE"
+        binding.ratingBar.rating = avg
     }
 
 }
