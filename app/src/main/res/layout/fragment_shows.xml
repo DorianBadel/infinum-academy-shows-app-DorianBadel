@@ -31,7 +31,7 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="24dp"
-                android:src="@drawable/profile_ico"
+                android:src="@drawable/ic_profile_icon"
                 />
 
         </com.google.android.material.navigation.NavigationView>

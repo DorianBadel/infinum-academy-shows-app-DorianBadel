@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/top_left_illustration"
+            android:src="@drawable/ic_top_left"
             app:layout_constraintStart_toStartOf="parent"
             android:contentDescription="Top left image"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/top_right_illustration"
+            android:src="@drawable/ic_top_right"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -204,7 +204,7 @@ class ShowsFragment : Fragment() {
 
         val bottomSheetBinding = DialogProfileBinding.inflate(this.layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
-        setProfileImage(bottomSheetBinding)
+        setProfileImage(bottomSheetBinding,binding)
 
         bottomSheetBinding.txtUsername.text = sharedPreferences.getString(ctUsername,"")
 
@@ -213,7 +213,7 @@ class ShowsFragment : Fragment() {
         bottomSheetBinding.btnChangeProfilePic.setOnClickListener {
             val takePictureIntent =  Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-            setProfileImage(bottomSheetBinding)
+            setProfileImage(bottomSheetBinding,binding)
 
             if(true){ //takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null
                 startActivityForResult(takePictureIntent,123)
@@ -244,7 +244,7 @@ class ShowsFragment : Fragment() {
         }
     }
 
-    fun setProfileImage(binding: DialogProfileBinding){
+    fun setProfileImage(binding: DialogProfileBinding,bindingMain: FragmentShowsBinding){
         val encoded = viewModel.getStringFromBitmap(
             BitmapFactory.decodeResource(resources,
             R.drawable.profile_ico
@@ -256,6 +256,11 @@ class ShowsFragment : Fragment() {
             .load(BitmapFactory.decodeByteArray(decoded, 0, decoded.size))
             .circleCrop()
             .into(binding.imgProfile)
+
+        Glide.with(this)
+            .load(BitmapFactory.decodeByteArray(decoded,0,decoded.size))
+            .circleCrop()
+            .into(bindingMain.btnProfile)
 
         //binding.imgProfile.setImageBitmap(BitmapFactory.decodeByteArray(decoded, 0, decoded.size))
     }
