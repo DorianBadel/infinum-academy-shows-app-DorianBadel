@@ -43,7 +43,6 @@ class LoginFraagment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
-        //
 
         ApiModule.initRetrofit(requireContext())
 
@@ -133,13 +132,14 @@ class LoginFraagment : Fragment() {
 
         if (isSuccessful) {
             bottomSheetBinding.registrationMessage.text = "Login succesful"
+            findNavController().navigate(R.id.to_showsFragment)
         } else {
             bottomSheetBinding.registrationMessage.text = "Login not successful"
         }
         dialog.setContentView(bottomSheetBinding.root)
         dialog.show()
 
-        findNavController().navigate(R.id.to_showsFragment)
+
 
     }
 
