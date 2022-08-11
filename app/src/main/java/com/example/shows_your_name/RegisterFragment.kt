@@ -1,13 +1,10 @@
 package com.example.shows_your_name
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,21 +18,10 @@ class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var sharedPreferences: SharedPreferences
     private val viewModel: RegistrationViewModel by viewModels()
-
-
-    //Constants
-    private val IS_REMEMBERED = "IS_REMEMBERED"
-    private val REMEMBERED_USER = "REMEMBERED_USER"
-    private val ctUser = "User"
-    private val ctUsername = "Username"
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
-
-        sharedPreferences = requireContext().getSharedPreferences(ctUser, Context.MODE_PRIVATE)
-        sharedPreferences = requireContext().getSharedPreferences(ctUsername, Context.MODE_PRIVATE)
 
         ApiModule.initRetrofit(requireContext())
 
@@ -55,15 +41,6 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val isRemembered = sharedPreferences.getBoolean(IS_REMEMBERED, false)
-
-        val username = sharedPreferences.getString(REMEMBERED_USER, "")
-
-        if(isRemembered){
-            val bundle = bundleOf(ctUsername to username)
-            findNavController().navigate(R.id.to_showsFragment,bundle)
-        }
 
         binding.registerButton.isEnabled = false
         var emailCorrect = false
@@ -99,13 +76,10 @@ class RegisterFragment : Fragment() {
         binding.registerButton.setOnClickListener{
 
             viewModel.onRegisterButtonClicked(
-                this,
-                binding
+                binding.emailTexttxt.text.toString(),
+                binding.passwordTexttxt.text.toString(),
+                binding.passwordRepeatTexttxt.text.toString()
             )
-
-            //val bundle = bundleOf(ctEmail to binding.emailTexttxt.text.toString())
-
-            //findNavController().navigate(R.id.reg_to_loginFraagment,bundle)
 
         }
     }
@@ -121,6 +95,11 @@ class RegisterFragment : Fragment() {
         }
         dialog.setContentView(bottomSheetBinding.root)
         dialog.show()
+
+
+        val action = RegisterFragmentDirections.regToLogin(binding.emailTexttxt.text.toString())
+        findNavController().navigate(action)
+
 
     }
 

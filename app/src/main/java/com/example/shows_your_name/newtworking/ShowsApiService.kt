@@ -18,6 +18,14 @@ interface ShowsApiService {
               @Header("token-type") tokenType: String): Call<ShowsResponse>
 
 @GET
+fun getShow(@Url url: String,
+               @Header("access-token") accessToken: String,
+               @Header("client") client: String,
+               @Header("uid") uid: String,
+               @Header("token-type") tokenType: String): Call<ShowResponse>
+
+
+@GET
 fun getReviews(@Url url: String,
                @Header("access-token") accessToken: String,
                @Header("client") client: String,
@@ -30,6 +38,7 @@ fun getReviews(@Url url: String,
                   @Header("client") client: String,
                   @Header("uid") uid: String,
                   @Header("token-type") tokenType: String): Call<AddReviewResponse>
+
 }
 
 
