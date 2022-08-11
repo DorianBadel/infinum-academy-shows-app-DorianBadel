@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
+    <cache-path
+        name="cached_files"
+        path="." />
+    <files-path
+        name="images"
+        path="." />
+</paths>

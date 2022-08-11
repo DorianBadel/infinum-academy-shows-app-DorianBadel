@@ -16,7 +16,9 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -26,10 +28,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.shows_your_name.ShowsFragment
+import com.example.shows_your_name.compoundView.NavigationBarView
 import com.example.shows_your_name.database.ShowEntity
 import com.example.shows_your_name.database.ShowsViewModelFactory
 import com.example.shows_your_name.databinding.DialogProfileBinding
 import com.example.shows_your_name.databinding.FragmentShowsBinding
+import com.example.shows_your_name.databinding.NavigationBarBinding
 import com.example.shows_your_name.models.ShowApi
 import com.example.shows_your_name.newtworking.ApiModule
 import com.example.shows_your_name.viewModels.ShowsViewModel
@@ -78,18 +82,20 @@ class ShowsFragment : Fragment() {
         ApiModule.initRetrofit(requireContext())
 
         sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentShowsBinding.inflate(inflater,container,false)
+        _binding = FragmentShowsBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         initShowsRecycler()
         if(hasInternet()){
@@ -112,11 +118,10 @@ class ShowsFragment : Fragment() {
             }
         }
 
-        binding.btnProfile.setOnClickListener {
+
+        binding.btnEditProfile.setOnClickListener {
             showProfileBottomSheet()
         }
-
-
     }
 
     private fun initShowsRecycler(){
@@ -199,12 +204,12 @@ class ShowsFragment : Fragment() {
 
     //Profile bottom sheet
 
-    private fun showProfileBottomSheet(){
+    fun showProfileBottomSheet(){
         val dialog = BottomSheetDialog(this.requireView().context)
 
         val bottomSheetBinding = DialogProfileBinding.inflate(this.layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
-        setProfileImage(bottomSheetBinding,binding)
+        setProfileImagePopup(bottomSheetBinding)
 
         bottomSheetBinding.txtUsername.text = sharedPreferences.getString(ctUsername,"")
 
@@ -213,7 +218,8 @@ class ShowsFragment : Fragment() {
         bottomSheetBinding.btnChangeProfilePic.setOnClickListener {
             val takePictureIntent =  Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-            setProfileImage(bottomSheetBinding,binding)
+            setProfileImage(bottomSheetBinding)
+            setProfileImagePopup(bottomSheetBinding)
 
             if(true){ //takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null
                 startActivityForResult(takePictureIntent,123)
@@ -233,6 +239,8 @@ class ShowsFragment : Fragment() {
     }
 
     //Changing photo
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 123 && resultCode == Activity.RESULT_OK){
@@ -244,7 +252,7 @@ class ShowsFragment : Fragment() {
         }
     }
 
-    fun setProfileImage(binding: DialogProfileBinding,bindingMain: FragmentShowsBinding){
+    fun setProfileImagePopup(binding: DialogProfileBinding){
         val encoded = viewModel.getStringFromBitmap(
             BitmapFactory.decodeResource(resources,
             R.drawable.profile_ico
@@ -257,17 +265,30 @@ class ShowsFragment : Fragment() {
             .circleCrop()
             .into(binding.imgProfile)
 
-        Glide.with(this)
+        //binding.imgProfile.setImageBitmap(BitmapFactory.decodeByteArray(decoded, 0, decoded.size))
+    }
+
+    fun setProfileImage(binding: DialogProfileBinding){
+        val encoded = viewModel.getStringFromBitmap(
+            BitmapFactory.decodeResource(resources,
+                R.drawable.profile_ico
+            ))
+        val profilePhoto = sharedPreferences.getString(REMEMBERED_PHOTO, encoded )
+        val decoded = Base64.decode(profilePhoto, Base64.DEFAULT)
+
+        /*Glide.with(this)
             .load(BitmapFactory.decodeByteArray(decoded,0,decoded.size))
             .circleCrop()
-            .into(bindingMain.btnProfile)
+            .into(_navBinding.btnProfile)*/
 
-        //binding.imgProfile.setImageBitmap(BitmapFactory.decodeByteArray(decoded, 0, decoded.size))
     }
 
     //Loging off
 
+
+
     fun createAlert(dialog: BottomSheetDialog){
+
 
         var builder = AlertDialog.Builder(activity)
 
@@ -296,6 +317,7 @@ class ShowsFragment : Fragment() {
         }
     }
 
+
     //Has internet check
     fun hasInternet(): Boolean{
         val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -316,10 +338,4 @@ class ShowsFragment : Fragment() {
             return networkInfo.isConnected
         }
     }
-
-
-
-
-
-
 }

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="offset_1x" tools:ignore="MissingDefaultResource">16dp</dimen>
+    <dimen name="offset_2x" tools:ignore="MissingDefaultResource">32dp</dimen>
+</resources>
