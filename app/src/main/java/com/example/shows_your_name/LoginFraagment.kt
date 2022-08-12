@@ -67,9 +67,7 @@ class LoginFraagment : Fragment() {
         animateLogo()
         animateLogoText()
 
-        if(args.email != "null"){
-            binding.emailTexttxt.setText(args.email)
-        }
+
 
         val isRemembered = sharedPreferences.getBoolean(getString(R.string.IS_REMEMBERED), false)
         binding.cbRememberMe.isChecked = isRemembered
@@ -85,6 +83,11 @@ class LoginFraagment : Fragment() {
         binding.loginbtn.isEnabled = false
         var emailCorrect = false
         var passCorrect = false
+
+        if(args.email != "null"){
+            binding.emailTexttxt.setText(args.email)
+            emailCorrect = true
+        }
 
         binding.emailTexttxt.doAfterTextChanged {
             emailCorrect =

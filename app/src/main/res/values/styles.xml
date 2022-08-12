@@ -3,11 +3,15 @@
 
     <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/white</item>
+        <item name="hintTextColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
         <item name="boxStrokeWidth">2dp</item>
     </style>
 
     <style name="LoginTextInputLayoutStyleAlt" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">#52368C</item>
+        <item name="boxStrokeColor">@color/purple_500</item>
+        <item name="hintTextColor">@color/purple_200</item>
+        <item name="android:textColorHint">@color/purple_700</item>
         <item name="boxStrokeWidth">2dp</item>
     </style>
 

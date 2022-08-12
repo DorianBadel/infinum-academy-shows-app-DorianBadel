@@ -64,5 +64,7 @@
     <string name="rating">rating</string>
         <!-- Extras -->
         <string name="hint_comment">Comment</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="online">ONLINE</string>
 
 </resources>

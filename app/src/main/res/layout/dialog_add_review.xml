@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#FFFFFF">
+    android:background="@color/white">
 
     <LinearLayout
         android:orientation="vertical"
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5"
-            android:progressTint="#52368C"
+            android:progressTint="@color/purple_500"
             android:rating="1"
             android:stepSize="1" />
 
@@ -57,8 +57,8 @@
             android:layout_marginTop="24dp"
             android:layout_marginRight="24dp"
             android:hint="@string/hint_comment"
-            android:textColorHint="#52368C"
-            app:boxStrokeColor="#52368C"
+            app:hintTextColor="@color/purple_500"
+            app:boxStrokeColor="@color/purple_500"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/reviewSetRating">
@@ -72,8 +72,7 @@
                 android:inputType="textEmailAddress"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
-                android:textColor="#000000"
-                android:textColorHint="#52368C"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -84,7 +83,7 @@
             android:layout_height="match_parent"
             android:layout_margin="24dp"
             android:text="@string/write_a_review"
-            android:background="#52368C"
+            android:background="@color/purple_500"
             />
 
 

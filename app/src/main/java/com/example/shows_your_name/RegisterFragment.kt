@@ -51,7 +51,9 @@ class RegisterFragment : Fragment() {
             emailCorrect =
                 android.util.Patterns.EMAIL_ADDRESS.matcher(binding.emailTexttxt.text.toString()).matches()
 
-            binding.registerButton.isEnabled = emailCorrect && passCorrect && repeatPassCorrect
+            if(emailCorrect && passCorrect && repeatPassCorrect){
+                changeRegisterButton()
+            }
         }
         binding.passwordTexttxt.doAfterTextChanged {
             passCorrect = binding.passwordTexttxt.text.toString() != ""
@@ -60,7 +62,9 @@ class RegisterFragment : Fragment() {
                 repeatPassCorrect = true
             }
 
-            binding.registerButton.isEnabled = emailCorrect && passCorrect && repeatPassCorrect
+            if(emailCorrect && passCorrect && repeatPassCorrect){
+                changeRegisterButton()
+            }
         }
 
         binding.passwordRepeatTexttxt.doAfterTextChanged {
@@ -69,7 +73,9 @@ class RegisterFragment : Fragment() {
                 repeatPassCorrect = true
             }
 
-            binding.registerButton.isEnabled = emailCorrect && passCorrect && repeatPassCorrect
+            if(emailCorrect && passCorrect && repeatPassCorrect){
+                changeRegisterButton()
+            }
         }
 
 
@@ -106,5 +112,10 @@ class RegisterFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun changeRegisterButton(){
+        binding.registerButton.isEnabled = true
+        binding.registerButton.alpha = 1F
     }
 }
