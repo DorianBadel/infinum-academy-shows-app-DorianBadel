@@ -24,10 +24,10 @@ class ReviewsAdapter(
         return items.count()
     }
 
-    fun addItem(review: ReviewApi) {
+    /*fun addItem(review: ReviewApi) {
         items = items + review
         notifyItemInserted(items.lastIndex)
-    }
+    }*/
 
     inner class ReviewsViewHolder(private val binding: ViewItemReviewBinding) : RecyclerView.ViewHolder(binding.root){
 

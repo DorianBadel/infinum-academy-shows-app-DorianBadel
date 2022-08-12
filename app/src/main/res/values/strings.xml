@@ -21,8 +21,13 @@
     <string name="ct_show_hide_btn_title_off">Hide</string>
     <string name="ct_show_hide_btn_title_on">Show</string>
     <string name="ct_show_camera_app_fail">Can\'t open the camera app</string>
-
+    <string name="ct_show_data">data</string>
     <!-- Other -->
+    <string name="review_text_first_pt"> REVIEWS ,</string>
+    <string name="review_text_second_pt"> AVERAGE</string>
+    <string name="REMEMBERED_USERR">REMEMBERED_USERR</string>
+    <string name="ct_bearer">Bearer</string>
+    <string name="ct_access_token">access-token</string>
     <!-- Login screen strings -->
     <string name="app_name">ShowsApp</string>
     <string name="login_app_title">Shows</string>

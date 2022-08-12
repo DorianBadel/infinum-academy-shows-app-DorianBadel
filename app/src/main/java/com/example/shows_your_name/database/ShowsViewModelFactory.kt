@@ -2,10 +2,10 @@ package com.example.shows_your_name.database
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.shows_your_name.Show
-import com.example.shows_your_name.viewModels.ShowDetailsViewModel
 import com.example.shows_your_name.viewModels.ShowsViewModel
 import java.lang.IllegalArgumentException
+
+private const val errorMessage = "Something went wrong UH, OH"
 
 class ShowsViewModelFactory (
     val database: ShowsRoomDatabase?
@@ -14,6 +14,5 @@ class ShowsViewModelFactory (
         if(modelClass.isAssignableFrom(ShowsViewModel::class.java)){
             return ShowsViewModel(database!!) as T
         }
-        throw IllegalArgumentException("Something went wrong UH, OH")
-    }
-    }
+        throw IllegalArgumentException(errorMessage)
+    } }

@@ -28,13 +28,6 @@ class LoginFraagment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private val args by navArgs<LoginFraagmentArgs>()
 
-    //Constants
-    /*private val sharedPrefs = "SHARED_STORAGE"
-    private val IS_REMEMBERED = "IS_REMEMBERED"
-    private val REMEMBERED_USER = "REMEMBERED_USER"
-    private val ctUsername = "Username"
-    private val ctEmail = "Email"*/
-
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?){
@@ -43,6 +36,18 @@ class LoginFraagment : Fragment() {
         ApiModule.initRetrofit(requireContext())
 
         sharedPreferences = requireContext().getSharedPreferences(getString(R.string.sharedPreferences), Context.MODE_PRIVATE)
+
+        viewModel.initLoginViewModel(
+            getString(R.string.sharedPreferences),
+            getString(R.string.ct_username),
+            getString(R.string.ACCESS_TOKEN),
+            getString(R.string.CLIENT),
+            getString(R.string.UID),
+            getString(R.string.TOKEN_TYPE),
+            getString(R.string.ct_access_token),
+            getString(R.string.ct_bearer),
+            getString(R.string.REMEMBERED_USERR)
+        )
 
         viewModel.getLoginResultsLiveData().observe(this){ loginSuccess ->
             displayLoginMessage(loginSuccess)

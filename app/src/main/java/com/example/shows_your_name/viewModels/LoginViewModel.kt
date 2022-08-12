@@ -17,16 +17,35 @@ import retrofit2.Response
 
 class LoginViewModel(application: Application): AndroidViewModel(application){
 
-    private val sharedPrefs = "SHARED_STORAGE"
-    private val ctUsername = "Username"
-    val ctAccessToken = "accessToken"
-    val ctClient = "client"
-    val ctUid = "uid"
-    val ctTokenType = "tokenType"
+    private lateinit var sharedPrefs: String
+    private lateinit var ctUsername: String
+    private lateinit var ctAccessToken: String
+    private lateinit var ctClient: String
+    private lateinit var ctUid: String
+    private lateinit var ctTokenType: String
+    private lateinit var strAccessToken: String
+    private lateinit var strBearer: String
+    private lateinit var rememberedUser: String
     val utc = UserTypeConverter()
 
 
     private val loginResultLiveData: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
+
+    fun initLoginViewModel(
+        sharedPreferences: String,username: String,accessToken: String,
+        client: String,uid: String,tokenType: String,
+        strAccessToken: String,bearerStr: String,rememberedUser: String
+    ){
+        sharedPrefs = sharedPreferences
+        ctUsername = username
+        ctAccessToken = accessToken
+        ctClient = client
+        ctUid = uid
+        ctTokenType = tokenType
+        this.strAccessToken = strAccessToken
+        strBearer = bearerStr
+        this.rememberedUser = rememberedUser
+    }
 
     fun getLoginResultsLiveData(): LiveData<Boolean> {
         return loginResultLiveData
@@ -47,15 +66,15 @@ class LoginViewModel(application: Application): AndroidViewModel(application){
                     call: Call<LoginResponse>,
                     response: Response<LoginResponse>
                 ) {
-                    var sp: SharedPreferences = getApplication<Application>().getSharedPreferences(sharedPrefs,Context.MODE_PRIVATE)
+                    val sp: SharedPreferences = getApplication<Application>().getSharedPreferences(sharedPrefs,Context.MODE_PRIVATE)
 
                     sp.edit{
-                        putString(ctAccessToken, response.headers()["access-token"])
+                        putString(ctAccessToken, response.headers()[strAccessToken])
                         putString(ctClient, response.headers()[ctClient].toString())
-                        putString(ctTokenType,"Bearer")
+                        putString(ctTokenType,strBearer)
                         putString(ctUid, response.headers()[ctUid].toString())
                         putString(ctUsername,email.substringBefore("@"))
-                        putString("REMEMBERED_USERR",
+                        putString(rememberedUser,
                             response.body()?.let { utc.toUserJson(it.user) })
                         commit()
                     }

@@ -50,7 +50,7 @@
             android:stepSize="1" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/LoginTextInputLayoutStyleAlt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
@@ -59,7 +59,6 @@
             android:hint="@string/hint_comment"
             android:textColorHint="#52368C"
             app:boxStrokeColor="#52368C"
-            app:hintTextColor="#52368C"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/reviewSetRating">

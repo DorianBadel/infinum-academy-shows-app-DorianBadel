@@ -41,7 +41,6 @@ class ShowsViewModel(
     private val ctExtrasData = "data"
 
 
-
     private val _listOfShowsLiveData1 = MutableLiveData<List<ShowApi>>()
     val listOfShowsLiveData1: LiveData<List<ShowApi>> = _listOfShowsLiveData1
 
