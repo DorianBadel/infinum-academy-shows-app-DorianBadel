@@ -1,6 +1,5 @@
 package com.example.shows_your_name
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -8,11 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.view.animation.BounceInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.content.edit
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
@@ -55,15 +52,13 @@ class LoginFraagment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentLoginFraagmentBinding.inflate(inflater,container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*val animate = AnimationUtils.loadAnimation(context,R.anim.ttbbounce)
-        binding.playicon.startAnimation(animate)*/
         animateLogo()
         animateLogoText()
 
@@ -83,8 +78,8 @@ class LoginFraagment : Fragment() {
         }
 
         binding.loginbtn.isEnabled = false
-        var emailCorrect = false;
-        var passCorrect = false;
+        var emailCorrect = false
+        var passCorrect = false
 
         binding.emailTexttxt.doAfterTextChanged {
             emailCorrect =
@@ -133,7 +128,7 @@ class LoginFraagment : Fragment() {
             bottomSheetBinding.registrationMessage.text = getString(R.string.login_success_message)
             findNavController().navigate(R.id.to_showsFragment)
         } else {
-            bottomSheetBinding.registrationMessage.text = getString(R.string.login_failiure_message)
+            bottomSheetBinding.registrationMessage.text = getString(R.string.login_failure_message)
         }
         dialog.setContentView(bottomSheetBinding.root)
         dialog.show()

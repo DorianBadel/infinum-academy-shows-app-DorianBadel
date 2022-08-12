@@ -34,7 +34,7 @@ class RegisterFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentRegisterFragmentBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -89,9 +89,9 @@ class RegisterFragment : Fragment() {
         val bottomSheetBinding = DialogRegistrationStateBinding.inflate(layoutInflater)
 
         if (isSuccessful) {
-            bottomSheetBinding.registrationMessage.text = "Registration successful"
+            bottomSheetBinding.registrationMessage.text = getString(R.string.registration_success_message)
         } else {
-            bottomSheetBinding.registrationMessage.text = "Registration not successful"
+            bottomSheetBinding.registrationMessage.text = getString(R.string.registration_failure_message)
         }
         dialog.setContentView(bottomSheetBinding.root)
         dialog.show()

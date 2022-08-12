@@ -1,11 +1,28 @@
 <resources>
     <!-- Global constants -->
+    <!-- Shared preferences titles -->
     <string name="sharedPreferences">SHARED_STORAGE</string>
     <string name="IS_REMEMBERED">IS_REMEMBERED</string>
     <string name="REMEMBERED_USER">REMEMBERED_USER</string>
+    <string name="REMEMBERED_PHOTO">REMEMBERED_PHOTO</string>
+    <string name="ACCESS_TOKEN">accessToken</string>
+    <string name="CLIENT">client</string>
+    <string name="UID">uid</string>
+    <string name="TOKEN_TYPE">tokenType</string>
+
+    <!-- Just regular strings -->
     <string name="ct_username">Username</string>
     <string name="ct_email">Email</string>
+    <string name="ct_alert_logout_title">You will leave your shows behind</string>
+    <string name="ct_alert_logout_description">Are you sure you want to log out?</string>
+    <string name="ct_alert_logout_negative">No</string>
+    <string name="ct_alert_logout_positive">Yes</string>
+    <string name="ct_show_id">showId</string>
+    <string name="ct_show_hide_btn_title_off">Hide</string>
+    <string name="ct_show_hide_btn_title_on">Show</string>
+    <string name="ct_show_camera_app_fail">Can\'t open the camera app</string>
 
+    <!-- Other -->
     <!-- Login screen strings -->
     <string name="app_name">ShowsApp</string>
     <string name="login_app_title">Shows</string>
@@ -19,13 +36,14 @@
         <string name="login_password_hint">Password</string>
 
     <!-- Login and logout related strings -->
-    <string name="login_success_message">Login succesful</string>
-    <string name="login_failiure_message">Unable to log in!</string>
+    <string name="login_success_message">Login successful</string>
+    <string name="login_failure_message">Unable to log in!</string>
     <string name="logout_txt">Logout</string>
     <string name="login_txt">Login</string>
 
     <!-- Registration -->
-    <string name="registration_success_message">Registration successfull!</string>
+    <string name="registration_success_message">Registration successful!</string>
+    <string name="registration_failure_message">Unable to register!</string>
     <string name="registerText">Register</string>
     <string name="repeat_password">Repeat password</string>
 
