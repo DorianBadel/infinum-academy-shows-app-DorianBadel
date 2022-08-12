@@ -18,9 +18,10 @@ import java.io.ByteArrayOutputStream
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    val sharedPrefs = "SHARED_STORAGE"
+    public val sharedPrefs = "SHARED_STORAGE"
     val REMEMBERED_PHOTO = "REMEMBERED_PHOTO"
     val ctExtrasData = "data"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()

@@ -31,13 +31,12 @@ class LoginFraagment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private val args by navArgs<LoginFraagmentArgs>()
 
-
     //Constants
-    private val sharedPrefs = "SHARED_STORAGE"
+    /*private val sharedPrefs = "SHARED_STORAGE"
     private val IS_REMEMBERED = "IS_REMEMBERED"
     private val REMEMBERED_USER = "REMEMBERED_USER"
     private val ctUsername = "Username"
-    private val ctEmail = "Email"
+    private val ctEmail = "Email"*/
 
     private val viewModel: LoginViewModel by viewModels()
 
@@ -46,7 +45,7 @@ class LoginFraagment : Fragment() {
 
         ApiModule.initRetrofit(requireContext())
 
-        sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(getString(R.string.sharedPreferences), Context.MODE_PRIVATE)
 
         viewModel.getLoginResultsLiveData().observe(this){ loginSuccess ->
             displayLoginMessage(loginSuccess)
@@ -72,10 +71,10 @@ class LoginFraagment : Fragment() {
             binding.emailTexttxt.setText(args.email)
         }
 
-        val isRemembered = sharedPreferences.getBoolean(IS_REMEMBERED, false)
+        val isRemembered = sharedPreferences.getBoolean(getString(R.string.IS_REMEMBERED), false)
         binding.cbRememberMe.isChecked = isRemembered
-        if(!arguments?.getString(ctEmail).isNullOrBlank()){
-            binding.loginText.text = "Registration successfull!"
+        if(!arguments?.getString(getString(R.string.ct_email)).isNullOrBlank()){
+            binding.loginText.text = getString(R.string.registration_success_message)
             binding.registerbtn.isVisible = false
         }
 
@@ -116,8 +115,8 @@ class LoginFraagment : Fragment() {
         binding.cbRememberMe.setOnCheckedChangeListener{
             _, isChecked ->
             sharedPreferences.edit {
-                putBoolean(IS_REMEMBERED, isChecked)
-                putString(REMEMBERED_USER, binding.emailTexttxt.text.toString().substringBefore("@"))
+                putBoolean(getString(R.string.IS_REMEMBERED), isChecked)
+                putString(getString(R.string.REMEMBERED_USER), binding.emailTexttxt.text.toString().substringBefore("@"))
             }
         }
 
@@ -131,10 +130,10 @@ class LoginFraagment : Fragment() {
         val bottomSheetBinding = DialogRegistrationStateBinding.inflate(layoutInflater)
 
         if (isSuccessful) {
-            bottomSheetBinding.registrationMessage.text = "Login succesful"
+            bottomSheetBinding.registrationMessage.text = getString(R.string.login_success_message)
             findNavController().navigate(R.id.to_showsFragment)
         } else {
-            bottomSheetBinding.registrationMessage.text = "Login not successful"
+            bottomSheetBinding.registrationMessage.text = getString(R.string.login_failiure_message)
         }
         dialog.setContentView(bottomSheetBinding.root)
         dialog.show()

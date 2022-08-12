@@ -160,7 +160,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="24dp"
-                android:text="@string/string_write_a_review"
+                android:text="@string/write_a_review"
                 />
 
         </androidx.cardview.widget.CardView>
