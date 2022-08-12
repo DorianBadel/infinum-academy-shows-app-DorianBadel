@@ -7,6 +7,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 
 object ApiModule {
         private const val BASE_URL = "https://tv-shows.infinum.academy/"
@@ -15,8 +16,11 @@ object ApiModule {
 
         fun initRetrofit(context: Context) {
             val okhttp = OkHttpClient.Builder()
+                .readTimeout(60,TimeUnit.SECONDS)
+                .connectTimeout(60,TimeUnit.SECONDS)
                 .addInterceptor(ChuckerInterceptor.Builder(context).build())
                 .build()
+
 
             retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)

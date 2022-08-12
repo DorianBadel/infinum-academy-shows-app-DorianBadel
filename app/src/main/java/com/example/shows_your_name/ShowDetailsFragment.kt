@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -24,7 +24,6 @@ import com.example.shows_your_name.database.UserTypeConverter
 import com.example.shows_your_name.databinding.DialogAddReviewBinding
 import com.example.shows_your_name.databinding.FragmentShowDetailsBinding
 import com.example.shows_your_name.models.ReviewApi
-import com.example.shows_your_name.models.User
 import com.example.shows_your_name.newtworking.ApiModule
 import com.example.shows_your_name.viewModels.ShowDetailsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -33,7 +32,6 @@ class ShowDetailsFragment : Fragment() {
 
     private var _binding: FragmentShowDetailsBinding? = null
     private val binding get() = _binding!!
-    private val sharedPrefs = "SHARED_STORAGE"
     private val utc = UserTypeConverter()
     private val args by navArgs<ShowDetailsFragmentArgs>()
 
@@ -51,7 +49,12 @@ class ShowDetailsFragment : Fragment() {
 
         ApiModule.initRetrofit(requireContext())
 
-        sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(getString(R.string.sharedPreferences), Context.MODE_PRIVATE)
+
+        viewModel.initiateVariables(getString(R.string.ACCESS_TOKEN),
+            getString(R.string.CLIENT),
+            getString(R.string.UID),
+            getString(R.string.TOKEN_TYPE))
 
         viewModel.getShowInfoOffline(args.showID).observe(this){ Show ->
             binding.showDescription.text = Show.description
@@ -60,10 +63,11 @@ class ShowDetailsFragment : Fragment() {
                 .load(Show.imageUrl)
                 .into(binding.showCoverImage)
 
-            updateStatistics(Show.averageRating!!,Show.noOfReviews)
 
-            binding.ratingBar.rating = Show.averageRating!!
-            binding.reviewsText.text = Show.noOfReviews.toString() + " REVIEWS, " + Show.averageRating+ " AVERAGE"
+            updateStatistics(Show.averageRating!!,Show.noOfReviews)
+            /*binding.ratingBar.rating = Show.averageRating
+            val reviewsText = Show.noOfReviews.toString() + getString(R.string.review_text_first_pt) + Show.averageRating + getString(R.string.review_text_second_pt)
+            binding.reviewsText.text =  reviewsText*/
         }
 
         viewModel.getShowInfoOnline().observe(this){ Show ->
@@ -75,14 +79,15 @@ class ShowDetailsFragment : Fragment() {
 
             updateStatistics(Show.avgRating!!,Show.noOfReviews)
 
-            binding.ratingBar.rating = Show.avgRating!!
-            binding.reviewsText.text = Show.noOfReviews.toString() + " REVIEWS, " + Show.avgRating+ " AVERAGE"
+            /*binding.ratingBar.rating = Show.avgRating
+            val reviewsText = Show.noOfReviews.toString() + getString(R.string.review_text_first_pt) + Show.avgRating + getString(R.string.review_text_second_pt)
+            binding.reviewsText.text = reviewsText*/
         }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentShowDetailsBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -129,8 +134,7 @@ class ShowDetailsFragment : Fragment() {
 
     private fun initShowsRecycler() {
         viewModel.getReviewsList().observe(viewLifecycleOwner){ reviewsApi ->
-            adapter = ReviewsAdapter(reviewsApi) { review ->
-            }
+            adapter = ReviewsAdapter(reviewsApi) {}
             val reviewEntity = reviewsApi.map{ review ->
                 ReviewEntity(
                     id = review.id,
@@ -166,7 +170,8 @@ class ShowDetailsFragment : Fragment() {
                         showId = showReview.showID,
                         user = utc.toUser(showReview.user)
                     )
-                }) { review ->
+                }) {
+                    //Toast.makeText(requireContext(), it.user.imageUrl.toString(), Toast.LENGTH_SHORT).show()
                 }
 
                 binding.progressbar.isVisible = false
@@ -221,7 +226,7 @@ class ShowDetailsFragment : Fragment() {
     }
 
     //Has internet check
-    fun hasInternet(): Boolean{
+    private fun hasInternet(): Boolean{
         val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -241,9 +246,9 @@ class ShowDetailsFragment : Fragment() {
         }
     }
 
-    fun updateStatistics(avg: Float, total: Int){
-        binding.reviewsText.text =
-            total.toString() + " REVIEWS, " + avg.toString() + " AVERAGE"
+    private fun updateStatistics(avg: Float, total: Int){
+        val string = total.toString() + getString(R.string.review_text_first_pt) + avg.toString() + getString(R.string.review_text_second_pt)
+        binding.reviewsText.text = string
         binding.ratingBar.rating = avg
     }
 

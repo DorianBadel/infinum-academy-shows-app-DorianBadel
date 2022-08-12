@@ -34,7 +34,7 @@ class RegisterFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentRegisterFragmentBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -51,7 +51,9 @@ class RegisterFragment : Fragment() {
             emailCorrect =
                 android.util.Patterns.EMAIL_ADDRESS.matcher(binding.emailTexttxt.text.toString()).matches()
 
-            binding.registerButton.isEnabled = emailCorrect && passCorrect && repeatPassCorrect
+            if(emailCorrect && passCorrect && repeatPassCorrect){
+                changeRegisterButton()
+            }
         }
         binding.passwordTexttxt.doAfterTextChanged {
             passCorrect = binding.passwordTexttxt.text.toString() != ""
@@ -60,7 +62,9 @@ class RegisterFragment : Fragment() {
                 repeatPassCorrect = true
             }
 
-            binding.registerButton.isEnabled = emailCorrect && passCorrect && repeatPassCorrect
+            if(emailCorrect && passCorrect && repeatPassCorrect){
+                changeRegisterButton()
+            }
         }
 
         binding.passwordRepeatTexttxt.doAfterTextChanged {
@@ -69,7 +73,9 @@ class RegisterFragment : Fragment() {
                 repeatPassCorrect = true
             }
 
-            binding.registerButton.isEnabled = emailCorrect && passCorrect && repeatPassCorrect
+            if(emailCorrect && passCorrect && repeatPassCorrect){
+                changeRegisterButton()
+            }
         }
 
 
@@ -89,9 +95,9 @@ class RegisterFragment : Fragment() {
         val bottomSheetBinding = DialogRegistrationStateBinding.inflate(layoutInflater)
 
         if (isSuccessful) {
-            bottomSheetBinding.registrationMessage.text = "Registration successful"
+            bottomSheetBinding.registrationMessage.text = getString(R.string.registration_success_message)
         } else {
-            bottomSheetBinding.registrationMessage.text = "Registration not successful"
+            bottomSheetBinding.registrationMessage.text = getString(R.string.registration_failure_message)
         }
         dialog.setContentView(bottomSheetBinding.root)
         dialog.show()
@@ -106,5 +112,10 @@ class RegisterFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun changeRegisterButton(){
+        binding.registerButton.isEnabled = true
+        binding.registerButton.alpha = 1F
     }
 }

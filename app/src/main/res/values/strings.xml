@@ -1,26 +1,70 @@
 <resources>
-    <string name="app_name">Shows-your-name</string>
-    <string name="developers_name">DorianBadel</string>
+    <!-- Global constants -->
+    <!-- Shared preferences titles -->
+    <string name="sharedPreferences">SHARED_STORAGE</string>
+    <string name="IS_REMEMBERED">IS_REMEMBERED</string>
+    <string name="REMEMBERED_USER">REMEMBERED_USER</string>
+    <string name="REMEMBERED_PHOTO">REMEMBERED_PHOTO</string>
+    <string name="ACCESS_TOKEN">accessToken</string>
+    <string name="CLIENT">client</string>
+    <string name="UID">uid</string>
+    <string name="TOKEN_TYPE">tokenType</string>
+
+    <!-- Just regular strings -->
+    <string name="ct_username">Username</string>
+    <string name="ct_email">Email</string>
+    <string name="ct_alert_logout_title">You will leave your shows behind</string>
+    <string name="ct_alert_logout_description">Are you sure you want to log out?</string>
+    <string name="ct_alert_logout_negative">No</string>
+    <string name="ct_alert_logout_positive">Yes</string>
+    <string name="ct_show_id">showId</string>
+    <string name="ct_show_hide_btn_title_off">Hide</string>
+    <string name="ct_show_hide_btn_title_on">Show</string>
+    <string name="ct_show_camera_app_fail">Can\'t open the camera app</string>
+    <string name="ct_show_data">data</string>
+    <!-- Other -->
+    <string name="review_text_first_pt"> REVIEWS ,</string>
+    <string name="review_text_second_pt"> AVERAGE</string>
+    <string name="REMEMBERED_USERR">REMEMBERED_USERR</string>
+    <string name="ct_bearer">Bearer</string>
+    <string name="ct_access_token">access-token</string>
+    <!-- Login screen strings -->
+    <string name="app_name">ShowsApp</string>
     <string name="login_app_title">Shows</string>
     <string name="login_action_title">Login</string>
-    <string name="login_description">In order to continue please log in</string>
-    <string name="login_email_hint">Email</string>
-    <string name="login_password_hint">Password</string>
-    <string name="login_password_desc">Your account password</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="write_a_review">Write a review</string>
-    <string name="hint_comment">Comment</string>
-    <string name="change_profile_photo_txt">Change profile photo</string>
-    <string name="logout_txt">Logout</string>
     <string name="remember_me_txt">Remember Me</string>
+    <string name="login_description">In order to continue please log in</string>
+        <!-- Extras -->
+        <string name="login_password_desc">Your account password</string>
+        <string name="developers_name">DorianBadel</string>
+        <string name="login_email_hint">Email</string>
+        <string name="login_password_hint">Password</string>
+
+    <!-- Login and logout related strings -->
+    <string name="login_success_message">Login successful</string>
+    <string name="login_failure_message">Unable to log in!</string>
+    <string name="logout_txt">Logout</string>
     <string name="login_txt">Login</string>
-    <string name="string_detail_show_review_title">Reviews</string>
-    <string name="rating">rating</string>
-    <string name="string_write_a_review">Write a review</string>
-    <string name="string_no_shows_message">Your shows are not showing. Get it?</string>
-    <string name="string_shows_title">Shows</string>
-    <string name="string_hide_button">Hide</string>
+
+    <!-- Registration -->
+    <string name="registration_success_message">Registration successful!</string>
+    <string name="registration_failure_message">Unable to register!</string>
     <string name="registerText">Register</string>
     <string name="repeat_password">Repeat password</string>
+
+    <!-- Show -->
+    <string name="string_shows_title">Shows</string>
+    <string name="string_hide_button">Hide</string>
+    <string name="change_profile_photo_txt">Change profile photo</string>
+    <string name="string_no_shows_message">Your shows are not showing. Get it?</string>
+
+    <!-- Reviews -->
+    <string name="write_a_review">Write a review</string>
+    <string name="string_detail_show_review_title">Reviews</string>
+    <string name="rating">rating</string>
+        <!-- Extras -->
+        <string name="hint_comment">Comment</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="online">ONLINE</string>
+
 </resources>

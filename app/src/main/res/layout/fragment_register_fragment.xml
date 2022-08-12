@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#3D1D72"
+    android:background="@color/purple_700"
     tools:context=".RegisterFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +14,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/top_left_illustration"
+            android:src="@drawable/ic_top_left"
             app:layout_constraintStart_toStartOf="parent"
             android:contentDescription="Top left image"
             app:layout_constraintTop_toTopOf="parent" />
@@ -22,17 +22,17 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/top_right_illustration"
+            android:src="@drawable/ic_top_right"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/playicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginStart="56dp"
             android:layout_marginTop="184dp"
-            android:src="@drawable/triangle"
+            android:src="@drawable/ic_triangle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,7 +43,7 @@
             android:layout_marginTop="184dp"
             android:fontFamily="@font/robotobold"
             android:text="@string/login_app_title"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="32sp"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/playicon"
@@ -57,7 +57,7 @@
             android:layout_marginTop="81dp"
             android:fontFamily="@font/robotoblack"
             android:text="@string/registerText"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="32sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/playicon"/>
@@ -65,16 +65,13 @@
         <com.google.android.material.textfield.TextInputLayout
 
             android:id="@+id/emailText"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/LoginTextInputLayoutStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginRight="24dp"
             android:hint="@string/login_email_hint"
-            android:textColorHint="#FFFFFF"
-            app:boxStrokeColor="#FFFFFF"
-            app:hintTextColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registerText"
@@ -88,78 +85,67 @@
                 android:inputType="textEmailAddress"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF"/>
+                android:textColor="@color/white"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
 
             android:id="@+id/passwordText"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/LoginTextInputLayoutStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginRight="24dp"
             android:hint="@string/login_password_hint"
-            android:textColorHint="#FFFFFF"
-            app:boxStrokeColor="#FFFFFF"
-            app:hintTextColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailText"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="#FFFFFF">
+            app:passwordToggleTint="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordTexttxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/input_bg"
                 android:contentDescription="@string/login_password_desc"
                 android:fontFamily="@font/robotoregular"
                 android:inputType="textPassword"
                 android:padding="16dp"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF"/>
+                android:textColor="@color/white"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
 
             android:id="@+id/passwordRepeatText"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/LoginTextInputLayoutStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginRight="24dp"
             android:hint="@string/repeat_password"
-            android:textColorHint="#FFFFFF"
-            app:boxStrokeColor="#FFFFFF"
-            app:hintTextColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/passwordText"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="#FFFFFF">
+            app:passwordToggleTint="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordRepeatTexttxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/input_bg"
                 android:contentDescription="@string/login_password_desc"
                 android:fontFamily="@font/robotoregular"
                 android:inputType="textPassword"
                 android:padding="16dp"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
+                android:textColor="#FFFFFF" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -173,13 +159,12 @@
             android:layout_marginBottom="32dp"
             android:alpha="0.5"
             android:background="@drawable/btn_bg"
-            android:backgroundTint="#BBBBBB"
             android:backgroundTintMode="add"
             android:fontFamily="@font/robotobold"
             android:text="@string/registerText"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

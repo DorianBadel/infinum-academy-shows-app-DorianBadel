@@ -33,7 +33,7 @@
                 android:fontFamily="@font/robotobold"
                 android:textSize="24sp"
                 android:layout_marginTop="16dp"
-                android:layout_marginLeft="72dp"
+                android:layout_marginStart="72dp"
                 android:textColor="@color/black"
                 tools:text="The Office"
                 />
@@ -45,7 +45,7 @@
             android:id="@+id/showScrollView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#FFFFFF"
+            android:background="@color/white"
             app:layout_constraintTop_toBottomOf="@+id/detailShowsNav"
             app:layout_constraintBottom_toTopOf="@id/addNewBar"
             app:layout_constraintEnd_toEndOf="parent"
@@ -83,15 +83,14 @@
                         android:id="@+id/showCoverImage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        tools:src="@drawable/ic_office" />
+                        android:scaleType="centerCrop" />
                 </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/showDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
                     tools:text="The Office is an American mockumentary sitcom television series that depicts the everyday work lives of office employees in the Scranton, Pennsylvania, branch of the fictional Dunder Mifflin Paper Company. It aired on NBC from March 24, 2005, to May 16, 2013, lasting a total of nine seasons."
                     android:textColor="@color/black"
@@ -101,7 +100,7 @@
                     android:id="@+id/reviewTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="32dp"
                     android:fontFamily="@font/robotobold"
                     android:text="@string/string_detail_show_review_title"
@@ -112,7 +111,7 @@
                     android:id="@+id/reviewsText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/robotoregular"
                     tools:text="REVIEWS"
@@ -130,7 +129,7 @@
                     android:isIndicator="true"
                     android:max="5"
                     android:numStars="5"
-                    android:progressTint="#52368C"
+                    android:progressTint="@color/purple_500"
                     android:rating="3.7"
                     android:stepSize="0.1" />
 
@@ -151,7 +150,7 @@
             android:layout_width="0dp"
             android:layout_height="96dp"
             android:background="@color/black"
-            app:cardBackgroundColor="#FFFFFF"
+            app:cardBackgroundColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -160,7 +159,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="24dp"
-                android:text="@string/string_write_a_review"
+                android:text="@string/write_a_review"
                 />
 
         </androidx.cardview.widget.CardView>

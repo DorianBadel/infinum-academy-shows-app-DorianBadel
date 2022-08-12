@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/white">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/reviewProfileImage"
@@ -17,7 +17,7 @@
             android:layout_height="56dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/profile_ico"
+            android:src="@drawable/ic_new_profile"
             />
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_marginTop="32dp"
             android:fontFamily="@font/robotoregular"
             tools:text="neil.the.navy.seal"
-            android:textColor="#52368C"
+            android:textColor="@color/purple_500"
             android:textSize="16sp" />
 
         <TextView
@@ -39,7 +39,7 @@
             android:layout_marginTop="32dp"
             android:fontFamily="@font/robotoregular"
             tools:text="3"
-            android:textColor="#52368C"
+            android:textColor="@color/purple_500"
             android:textSize="16sp" />
 
         <RatingBar
@@ -51,7 +51,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:numStars="1"
-            android:progressTint="#52368C"
+            android:progressTint="@color/purple_500"
             android:rating="1" />
 
         <TextView

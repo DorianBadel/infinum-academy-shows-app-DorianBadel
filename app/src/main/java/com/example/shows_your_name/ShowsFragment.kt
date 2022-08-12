@@ -5,7 +5,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -18,14 +17,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.edit
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.shows_your_name.ShowsFragment
 import com.example.shows_your_name.database.ShowEntity
 import com.example.shows_your_name.database.ShowsViewModelFactory
 import com.example.shows_your_name.databinding.DialogProfileBinding
@@ -43,30 +40,6 @@ class ShowsFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
-
-    val IS_REMEMBERED = "IS_REMEMBERED"
-    val REMEMBERED_USER = "REMEMBERED_USER"
-    val ctLogoutAlertTitle = "You will leave your shows behind"
-    val ctLogoutAlertDescription = "Are you sure you want to log out?"
-    val ctLogoutAlertNegativeText = "No"
-    val ctLogoutAlertPossitiveText = "Yes"
-    val ctShowId = "showId"
-    private val sharedPrefs = "SHARED_STORAGE"
-    private val ctDescription = "Description"
-    private val ctID = "ID"
-    private val ctTitle = "Title"
-    private val REMEMBERED_PHOTO = "REMEMBERED_PHOTO"
-    private val ctHideOff = "Hide"
-    private val ctUsername = "Username"
-    private val ctHideOn = "Show"
-    private val ctImage = "Image"
-    val ctAccessToken = "accessToken"
-    val ctClient = "client"
-    val ctUid = "uid"
-    val ctTokenType = "tokenType"
-    //val thisApp = (requireActivity().application as ShowsApp)
-
-
     private val viewModel: ShowsViewModel by viewModels {
         ShowsViewModelFactory((requireActivity().application  as ShowsApp).database)
     }
@@ -77,27 +50,29 @@ class ShowsFragment : Fragment() {
 
         ApiModule.initRetrofit(requireContext())
 
-        sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(getString(R.string.sharedPreferences), Context.MODE_PRIVATE)
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentShowsBinding.inflate(inflater,container,false)
+    ): View {
+        _binding = FragmentShowsBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         initShowsRecycler()
         if(hasInternet()){
             binding.progressbar.isVisible = true
-            viewModel.getAllShows(sharedPreferences.getString(ctAccessToken,"")!!,
-                sharedPreferences.getString(ctClient,"")!!,
-                sharedPreferences.getString(ctUid,"")!!,
-                sharedPreferences.getString(ctTokenType,"")!!
+            viewModel.getAllShows(sharedPreferences.getString(getString(R.string.ACCESS_TOKEN),"")!!,
+                sharedPreferences.getString(getString(R.string.CLIENT),"")!!,
+                sharedPreferences.getString(getString(R.string.UID),"")!!,
+                sharedPreferences.getString(getString(R.string.TOKEN_TYPE),"")!!
                 )
         } else{
             viewModel.getListOfShowsOffline()
@@ -105,18 +80,17 @@ class ShowsFragment : Fragment() {
 
 
         binding.showHideShows.setOnClickListener{
-            if(binding.showHideShows.text == ctHideOn){
+            if(binding.showHideShows.text == getString(R.string.ct_show_hide_btn_title_on)){
                 showShows()
-            } else if (binding.showHideShows.text == ctHideOff){
+            } else if (binding.showHideShows.text == getString(R.string.ct_show_hide_btn_title_off)){
                 hideShows()
             }
         }
 
-        binding.btnProfile.setOnClickListener {
+
+        binding.btnEditProfile.setOnClickListener {
             showProfileBottomSheet()
         }
-
-
     }
 
     private fun initShowsRecycler(){
@@ -166,7 +140,7 @@ class ShowsFragment : Fragment() {
                             showEntity.imageUrl,showEntity.noOfReviews,showEntity.title)
                     }) { show ->
                         sharedPreferences.edit{
-                            putInt(ctShowId,show.id)
+                            putInt(getString(R.string.ct_show_id),show.id) //TODO Not sure this is used
                         }
                         val action = ShowsFragmentDirections.toShowDetailsFragment(show.id)
                         findNavController().navigate(action)
@@ -183,18 +157,18 @@ class ShowsFragment : Fragment() {
 
     }
 
-    fun showShows(){
+    private fun showShows(){
         binding.noShowsIco.isVisible = false
         binding.noShowsText.isVisible = false
         binding.showsRecycler.isVisible = true
-        binding.showHideShows.text = ctHideOff
+        binding.showHideShows.text = getString(R.string.ct_show_hide_btn_title_off)
     }
 
-    fun hideShows(){
+    private fun hideShows(){
         binding.noShowsIco.isVisible = true
         binding.noShowsText.isVisible = true
         binding.showsRecycler.isVisible = false
-        binding.showHideShows.text = ctHideOn
+        binding.showHideShows.text = getString(R.string.ct_show_hide_btn_title_on)
     }
 
     //Profile bottom sheet
@@ -204,24 +178,21 @@ class ShowsFragment : Fragment() {
 
         val bottomSheetBinding = DialogProfileBinding.inflate(this.layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
-        setProfileImage(bottomSheetBinding)
+        setProfileImagePopup(bottomSheetBinding)
 
-        bottomSheetBinding.txtUsername.text = sharedPreferences.getString(ctUsername,"")
+        bottomSheetBinding.txtUsername.text = sharedPreferences.getString(getString(R.string.ct_username),"")
 
         //Change profile picture btn
 
         bottomSheetBinding.btnChangeProfilePic.setOnClickListener {
             val takePictureIntent =  Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-            setProfileImage(bottomSheetBinding)
+            //setProfileImage(bottomSheetBinding)
+            setProfileImagePopup(bottomSheetBinding)
 
-            if(true){ //takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null
-                startActivityForResult(takePictureIntent,123)
-                dialog.dismiss()
-            }
-            else{
-                Toast.makeText(context,"Can't open the camera app",Toast.LENGTH_SHORT).show()
-            }
+            //if(takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null)
+            startActivityForResult(takePictureIntent,123)
+            dialog.dismiss()
         }
 
 
@@ -233,66 +204,85 @@ class ShowsFragment : Fragment() {
     }
 
     //Changing photo
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 123 && resultCode == Activity.RESULT_OK){
 
             sharedPreferences.edit{
-                putString(REMEMBERED_PHOTO,viewModel.encodeBitmapToString(data))
+                putString(getString(R.string.REMEMBERED_PHOTO),viewModel.encodeBitmapToString(data))
             }
             Toast.makeText(context,"Profile photo set !",Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun setProfileImage(binding: DialogProfileBinding){
+    private fun setProfileImagePopup(binding: DialogProfileBinding){
         val encoded = viewModel.getStringFromBitmap(
             BitmapFactory.decodeResource(resources,
-            R.drawable.profile_ico
+            R.drawable.ic_new_profile_large
         ))
-        val profilePhoto = sharedPreferences.getString(REMEMBERED_PHOTO, encoded )
+        val profilePhoto = sharedPreferences.getString(getString(R.string.REMEMBERED_PHOTO), encoded )
         val decoded = Base64.decode(profilePhoto, Base64.DEFAULT)
 
         Glide.with(this)
             .load(BitmapFactory.decodeByteArray(decoded, 0, decoded.size))
             .circleCrop()
             .into(binding.imgProfile)
-
-        //binding.imgProfile.setImageBitmap(BitmapFactory.decodeByteArray(decoded, 0, decoded.size))
     }
 
-    //Loging off
+    /*fun setProfileImage(binding: DialogProfileBinding){
+        val encoded = viewModel.getStringFromBitmap(
+            BitmapFactory.decodeResource(resources,
+                R.drawable.profile_ico
+            ))
+        val profilePhoto = sharedPreferences.getString(getString(R.string.REMEMBERED_PHOTO), encoded )
+        val decoded = Base64.decode(profilePhoto, Base64.DEFAULT)
 
-    fun createAlert(dialog: BottomSheetDialog){
+        /*Glide.with(this)
+            .load(BitmapFactory.decodeByteArray(decoded,0,decoded.size))
+            .circleCrop()
+            .into(_navBinding.btnProfile)*/
 
-        var builder = AlertDialog.Builder(activity)
+    }*/
 
-        builder.setTitle(ctLogoutAlertTitle)
-            .setMessage(ctLogoutAlertDescription)
+    //Logging off
+
+
+
+    private fun createAlert(dialog: BottomSheetDialog){
+
+
+        val builder = AlertDialog.Builder(activity)
+
+        builder.setTitle(getString(R.string.ct_alert_logout_title))
+            .setMessage(getString(R.string.ct_alert_logout_description))
             .setCancelable(true)
-            .setPositiveButton(ctLogoutAlertPossitiveText){_,_ ->
+            .setPositiveButton(getString(R.string.ct_alert_logout_positive)){_,_ ->
                 logOut()
 
                 findNavController().navigate(R.id.to_loginFraagment)
                 dialog.dismiss()
 
             }
-            .setNegativeButton(ctLogoutAlertNegativeText){dialogInterface,it ->
+            .setNegativeButton(getString(R.string.ct_alert_logout_negative)){dialogInterface,it ->
                 dialogInterface.cancel()
             }
             .show()
     }
 
-    fun logOut(){
-        val sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
+    private fun logOut(){
+        val sharedPreferences = requireContext().getSharedPreferences(getString(R.string.sharedPreferences), Context.MODE_PRIVATE)
         sharedPreferences.edit {
-            putBoolean(IS_REMEMBERED, false)
-            putString(REMEMBERED_USER, "")
-            remove(REMEMBERED_PHOTO)
+            putBoolean(getString(R.string.IS_REMEMBERED), false)
+            putString(getString(R.string.REMEMBERED_USER), "")
+            remove(getString(R.string.REMEMBERED_PHOTO))
         }
     }
 
+
     //Has internet check
-    fun hasInternet(): Boolean{
+    private fun hasInternet(): Boolean{
         val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -311,10 +301,4 @@ class ShowsFragment : Fragment() {
             return networkInfo.isConnected
         }
     }
-
-
-
-
-
-
 }
