@@ -130,7 +130,7 @@ class ShowDetailsViewModel(
                     call: Call<AddReviewResponse>,
                     response: Response<AddReviewResponse>
                 ) {
-                    getReviewsList()
+                    getReviews(id,accessToken,client,UID,tokenType)
                 }
             })
     }
