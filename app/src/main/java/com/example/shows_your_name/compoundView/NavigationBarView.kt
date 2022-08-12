@@ -47,7 +47,7 @@ class NavigationBarView @JvmOverloads constructor(
         val encoded = getStringFromBitmap(
             BitmapFactory.decodeResource(
                 resources,
-                R.drawable.profile_ico
+                R.drawable.ic_new_profile
             )
         )
 

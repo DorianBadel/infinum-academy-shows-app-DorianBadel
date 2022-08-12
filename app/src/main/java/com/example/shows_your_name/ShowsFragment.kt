@@ -220,7 +220,7 @@ class ShowsFragment : Fragment() {
     private fun setProfileImagePopup(binding: DialogProfileBinding){
         val encoded = viewModel.getStringFromBitmap(
             BitmapFactory.decodeResource(resources,
-            R.drawable.profile_ico
+            R.drawable.ic_new_profile_large
         ))
         val profilePhoto = sharedPreferences.getString(getString(R.string.REMEMBERED_PHOTO), encoded )
         val decoded = Base64.decode(profilePhoto, Base64.DEFAULT)

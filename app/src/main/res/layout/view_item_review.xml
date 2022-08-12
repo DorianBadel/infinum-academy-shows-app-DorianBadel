@@ -17,7 +17,7 @@
             android:layout_height="56dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/profile_ico"
+            android:src="@drawable/ic_new_profile"
             />
 
         <TextView
